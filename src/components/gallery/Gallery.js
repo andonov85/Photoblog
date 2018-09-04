@@ -38,7 +38,7 @@ function Gallery(props) {
       <GridList cellHeight={160} className={classes.gridList} cols={3}>
         {tileData.map(tile => (
           <GridListTile key={tile.id} cols={tile.cols || 1}>
-            <img src={tile.url} alt={tile.category} />
+            <img src={tile.url} alt={tile.name} />
           </GridListTile>
         ))}
       </GridList>
