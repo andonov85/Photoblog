@@ -17,7 +17,9 @@ function imageSource() {
                 id: doc.data().id,
                 name: doc.data().name,
                 url: doc.data().url,
-                category: doc.data().category
+                thumbFileUrl: doc.data().thumbFileUrl,
+                category: doc.data().category,
+                description: doc.data().description
             });
         });
     });
