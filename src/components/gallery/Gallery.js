@@ -16,14 +16,18 @@ const styles = theme => ({
   },
   gridList: {
     width: 800,
-    height: 450,
-  },
-  blurred: {
-    webkitFilter: 'blur(4px)', /* Chrome, Safari, Opera */
-    filter: 'blur(4px)'
+    height: 500,
   },
   subheader: {
     width: '100%'
+  },
+  blurredON: {
+    webkitFilter: 'blur(4px)', /* Chrome, Safari, Opera */
+    filter: 'blur(4px)'
+  },
+  blurredOFF: {
+    webkitFilter: '', /* Chrome, Safari, Opera */
+    filter: ''
   }
 });
 
@@ -33,7 +37,7 @@ class Gallery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      
+      blurred: 'blurredOFF'
     };
     this.handleOnMouseEnter = this.handleOnMouseEnter.bind(this);
     this.handleOnMouseLeave = this.handleOnMouseLeave.bind(this);
@@ -41,15 +45,23 @@ class Gallery extends React.Component {
   }
 
   handleOnMouseEnter(e) {
-    this.setState();
+    e.currentTarget.classList.remove(this.props.classes.blurredOFF);
+    e.currentTarget.classList.add(this.props.classes.blurredON);
+    // this.setState({
+    //   blurred: 'blurredON'
+    // });
   }
 
   handleOnMouseLeave(e) {
-    this.setState();
+    e.currentTarget.classList.remove(this.props.classes.blurredON);
+    e.currentTarget.classList.add(this.props.classes.blurredOFF);
+    // this.setState({
+    //   blurred: 'blurredOFF'
+    // });
   }
 
-  handleOnClick(e) {
-    this.setState();
+  handleOnClick() {
+
   }
 
   render() {
@@ -58,7 +70,9 @@ class Gallery extends React.Component {
         <GridList cellHeight={160} className={this.props.classes.gridList} cols={4}>
           {tileData.map(tile => (
             <GridListTile key={tile.id} cols={tile.cols || 1}>
-              <img src={tile.thumbFileUrl} alt={tile.name} onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} onClick={this.handleOnClick}/>
+              <img src={tile.thumbFileUrl} alt={tile.name}
+                onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} onClick={this.handleOnClick} 
+                className={this.props.classes.blurredOFF}/>
             </GridListTile>
           ))}
         </GridList>
