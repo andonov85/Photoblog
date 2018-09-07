@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import imageSource from './imageSource';
+import './galleryStyles.css'
 
 const styles = theme => ({
   root: {
@@ -45,16 +46,16 @@ class Gallery extends React.Component {
   }
 
   handleOnMouseEnter(e) {
-    e.currentTarget.classList.remove(this.props.classes.blurredOFF);
-    e.currentTarget.classList.add(this.props.classes.blurredON);
+    // e.currentTarget.classList.remove(this.props.classes.blurredOFF);
+    // e.currentTarget.classList.add(this.props.classes.blurredON);
     // this.setState({
     //   blurred: 'blurredON'
     // });
   }
 
   handleOnMouseLeave(e) {
-    e.currentTarget.classList.remove(this.props.classes.blurredON);
-    e.currentTarget.classList.add(this.props.classes.blurredOFF);
+    // e.currentTarget.classList.remove(this.props.classes.blurredON);
+    // e.currentTarget.classList.add(this.props.classes.blurredOFF);
     // this.setState({
     //   blurred: 'blurredOFF'
     // });
@@ -72,7 +73,7 @@ class Gallery extends React.Component {
             <GridListTile key={tile.id} cols={tile.cols || 1}>
               <img src={tile.thumbFileUrl} alt={tile.name}
                 onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} onClick={this.handleOnClick} 
-                className={this.props.classes.blurredOFF}/>
+                />
             </GridListTile>
           ))}
         </GridList>
