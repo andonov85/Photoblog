@@ -4,8 +4,22 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
+import Typography from '@material-ui/core/Typography';
+import Modal from '@material-ui/core/Modal';
+
 import imageSource from './imageSource';
 import './galleryStyles.css'
+
+function getModalStyle() {
+  const top = 50;
+  const left = 50;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 const styles = theme => ({
   root: {
@@ -22,13 +36,12 @@ const styles = theme => ({
   subheader: {
     width: '100%'
   },
-  blurredON: {
-    webkitFilter: 'blur(4px)', /* Chrome, Safari, Opera */
-    filter: 'blur(4px)'
-  },
-  blurredOFF: {
-    webkitFilter: '', /* Chrome, Safari, Opera */
-    filter: ''
+  paper: {
+    position: 'absolute',
+    width: theme.spacing.unit * 50,
+    backgroundColor: theme.palette.background.paper,
+    boxShadow: theme.shadows[5],
+    padding: theme.spacing.unit * 4,
   }
 });
 
@@ -38,42 +51,44 @@ class Gallery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      blurred: 'blurredOFF'
+      openModal: false
     };
-    this.handleOnMouseEnter = this.handleOnMouseEnter.bind(this);
-    this.handleOnMouseLeave = this.handleOnMouseLeave.bind(this);
     this.handleOnClick = this.handleOnClick.bind(this);
-  }
-
-  handleOnMouseEnter(e) {
-    // e.currentTarget.classList.remove(this.props.classes.blurredOFF);
-    // e.currentTarget.classList.add(this.props.classes.blurredON);
-    // this.setState({
-    //   blurred: 'blurredON'
-    // });
-  }
-
-  handleOnMouseLeave(e) {
-    // e.currentTarget.classList.remove(this.props.classes.blurredON);
-    // e.currentTarget.classList.add(this.props.classes.blurredOFF);
-    // this.setState({
-    //   blurred: 'blurredOFF'
-    // });
+    this.handleClose = this.handleClose.bind(this);
   }
 
   handleOnClick() {
-
+    this.setState({openModal: true});
   }
 
+  handleClose = () => {
+    this.setState({openModal: false});
+  };
+
   render() {
+    const { classes } = this.props;
+
     return (
-      <div className={this.props.classes.root}>
-        <GridList cellHeight={160} className={this.props.classes.gridList} cols={4}>
+      <div className={classes.root}>
+        <Modal
+          aria-labelledby="simple-modal-title"
+          aria-describedby="simple-modal-description"
+          open={this.state.openModal}
+          onClose={this.handleClose}>
+          <div style={getModalStyle()} className={classes.paper}>
+            <Typography variant="title" id="modal-title">
+              Text in a modal
+            </Typography>
+            <Typography variant="subheading" id="simple-modal-description">
+              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
+            </Typography>
+            <img src={tileData[1].url} alt={tileData[1].name}/>
+          </div>
+        </Modal>
+        <GridList cellHeight={160} className={classes.gridList} cols={4}>
           {tileData.map(tile => (
             <GridListTile key={tile.id} cols={tile.cols || 1}>
-              <img src={tile.thumbFileUrl} alt={tile.name}
-                onMouseEnter={this.handleOnMouseEnter} onMouseLeave={this.handleOnMouseLeave} onClick={this.handleOnClick} 
-                />
+              <img src={tile.thumbFileUrl} alt={tile.name} onClick={this.handleOnClick}/>
             </GridListTile>
           ))}
         </GridList>
