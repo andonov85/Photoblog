@@ -48,7 +48,7 @@ const styles = theme => ({
     maxWidth: 1000,
   },
   media: {
-    height: 600,
+    height: 530,
   }
 });
 
