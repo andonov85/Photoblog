@@ -49,6 +49,7 @@ const styles = theme => ({
   },
   media: {
     height: 530,
+    backgroundSize: 'contain'
   }
 });
 
