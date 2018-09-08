@@ -4,8 +4,9 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
-import Typography from '@material-ui/core/Typography';
 import Modal from '@material-ui/core/Modal';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
 
 import imageSource from './imageSource';
 import './galleryStyles.css'
@@ -38,10 +39,16 @@ const styles = theme => ({
   },
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 50,
+    width: theme.spacing.unit * 100,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 4,
+    padding: theme.spacing.unit * 2,
+  },
+  card: {
+    maxWidth: 1000,
+  },
+  media: {
+    height: 600,
   }
 });
 
@@ -51,14 +58,18 @@ class Gallery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openModal: false
+      openModal: false,
+      url: ''
     };
     this.handleOnClick = this.handleOnClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
   }
 
-  handleOnClick() {
-    this.setState({openModal: true});
+  handleOnClick(e) {
+    this.setState({
+      openModal: true,
+      url: e.currentTarget.getAttribute('alt')
+    });
   }
 
   handleClose = () => {
@@ -76,19 +87,18 @@ class Gallery extends React.Component {
           open={this.state.openModal}
           onClose={this.handleClose}>
           <div style={getModalStyle()} className={classes.paper}>
-            <Typography variant="title" id="modal-title">
-              Text in a modal
-            </Typography>
-            <Typography variant="subheading" id="simple-modal-description">
-              Duis mollis, est non commodo luctus, nisi erat porttitor ligula.
-            </Typography>
-            <img src={tileData[1].url} alt={tileData[1].name}/>
+            <Card className={classes.card}>
+              <CardMedia
+                className={classes.media}
+                image={this.state.url}
+              />
+            </Card>
           </div>
         </Modal>
         <GridList cellHeight={160} className={classes.gridList} cols={4}>
           {tileData.map(tile => (
             <GridListTile key={tile.id} cols={tile.cols || 1}>
-              <img src={tile.thumbFileUrl} alt={tile.name} onClick={this.handleOnClick}/>
+              <img src={tile.thumbFileUrl} alt={tile.url} onClick={this.handleOnClick}/>
             </GridListTile>
           ))}
         </GridList>
