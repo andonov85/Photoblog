@@ -6,7 +6,6 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Modal from '@material-ui/core/Modal';
 import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
 
 import imageSource from './imageSource';
 import './galleryStyles.css'
@@ -39,17 +38,20 @@ const styles = theme => ({
   },
   paper: {
     position: 'absolute',
-    width: theme.spacing.unit * 100,
+    maxWidth: theme.spacing.unit * 200,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
     padding: theme.spacing.unit * 2,
   },
   card: {
-    maxWidth: 1000,
+    margin: '0px auto',
+    display: 'inline-block',
   },
   media: {
-    height: 530,
-    backgroundSize: 'contain'
+    maxHeight: '800px',
+    display: 'block',
+    marginLeft: 'auto',
+    marginRight: 'auto'
   }
 });
 
@@ -60,7 +62,8 @@ class Gallery extends React.Component {
     super(props);
     this.state = {
       openModal: false,
-      url: ''
+      url: '',
+      name: ''
     };
     this.handleOnClick = this.handleOnClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -69,7 +72,8 @@ class Gallery extends React.Component {
   handleOnClick(e) {
     this.setState({
       openModal: true,
-      url: e.currentTarget.getAttribute('alt')
+      url: e.currentTarget.getAttribute('alt'),
+      name: e.currentTarget.getAttribute('name'),
     });
   }
 
@@ -89,9 +93,10 @@ class Gallery extends React.Component {
           onClose={this.handleClose}>
           <div style={getModalStyle()} className={classes.paper}>
             <Card className={classes.card}>
-              <CardMedia
+              <img
                 className={classes.media}
-                image={this.state.url}
+                src={this.state.url}
+                alt={this.state.name}
               />
             </Card>
           </div>
@@ -99,7 +104,7 @@ class Gallery extends React.Component {
         <GridList cellHeight={160} className={classes.gridList} cols={4}>
           {tileData.map(tile => (
             <GridListTile key={tile.id} cols={tile.cols || 1}>
-              <img src={tile.thumbFileUrl} alt={tile.url} onClick={this.handleOnClick}/>
+              <img className="thumbs" src={tile.thumbFileUrl} alt={tile.url} name={tile.name} onClick={this.handleOnClick}/>
             </GridListTile>
           ))}
         </GridList>
