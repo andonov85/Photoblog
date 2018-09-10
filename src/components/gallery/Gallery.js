@@ -41,17 +41,16 @@ const styles = theme => ({
     maxWidth: theme.spacing.unit * 200,
     backgroundColor: theme.palette.background.paper,
     boxShadow: theme.shadows[5],
-    padding: theme.spacing.unit * 2,
+    padding: '0.5vw',
   },
-  card: {
+  containerFlexImage: {
     margin: '0px auto',
-    display: 'inline-block',
+    display: 'flex',
+    alignItems: 'flex-start'
   },
-  media: {
-    maxHeight: '800px',
-    display: 'block',
-    marginLeft: 'auto',
-    marginRight: 'auto'
+  image: {
+    maxHeight: 800,
+    maxWidth: '100%'
   }
 });
 
@@ -92,9 +91,9 @@ class Gallery extends React.Component {
           open={this.state.openModal}
           onClose={this.handleClose}>
           <div style={getModalStyle()} className={classes.paper}>
-            <Card className={classes.card}>
+            <Card className={classes.containerFlexImage}>
               <img
-                className={classes.media}
+                className={classes.image}
                 src={this.state.url}
                 alt={this.state.name}
               />
