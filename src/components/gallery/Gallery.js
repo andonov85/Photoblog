@@ -38,19 +38,19 @@ const styles = theme => ({
   },
   paper: {
     position: 'absolute',
-    maxWidth: theme.spacing.unit * 200,
+    maxWidth: theme.spacing.unit * 400,
     backgroundColor: theme.palette.background.paper,
-    boxShadow: theme.shadows[5],
-    padding: '0.5vw',
+    boxShadow: '',
+    outline: 'none'
   },
-  containerFlexImage: {
-    margin: '0px auto',
-    display: 'flex',
-    alignItems: 'flex-start'
+  containerImage: {
+    display: 'grid',
+    height: '100%'
   },
   image: {
-    maxHeight: 800,
-    maxWidth: '100%'
+    maxHeight: '100vh',
+    maxWidth: '100vw',
+    borderRadius: 0
   }
 });
 
@@ -91,7 +91,7 @@ class Gallery extends React.Component {
           open={this.state.openModal}
           onClose={this.handleClose}>
           <div style={getModalStyle()} className={classes.paper}>
-            <Card className={classes.containerFlexImage}>
+            <Card className={classes.containerImage}>
               <img
                 className={classes.image}
                 src={this.state.url}
