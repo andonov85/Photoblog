@@ -12,8 +12,13 @@ const styles = theme => ({
   root: {
     // flexGrow: 1,
   },
-  flex: {
-    flexGrow: 1,
+  flexLogo: {
+    flexGrow: 1
+  },
+  flexMenuItems: {
+    display: 'flex',
+    flexWrap: 'wrap',
+    justifyContent: 'flex-end'
   },
   appbar: {
     boxShadow: 'none',
@@ -27,12 +32,14 @@ function NavBar(props) {
     <div className={classes.root}>
       <AppBar position="static" color="default" className={classes.appbar}>
         <Toolbar>
-          <Typography variant="title" className={classes.flex}>
+          <Typography variant="title" className={classes.flexLogo}>
             <NavLink to="/main" buttonName="Andon Andonov Photography" />
           </Typography>
+          <div className={classes.flexMenuItems}>
           <NavLink to="/about" buttonName="About" />
           <NavLink to="/gallery" buttonName="Gallery" />
           <NavLink to="/blog" buttonName="Blog" />
+          </div>
         </Toolbar>
       </AppBar>
     </div>
