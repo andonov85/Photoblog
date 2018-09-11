@@ -45,12 +45,12 @@ const styles = theme => ({
   },
   containerImage: {
     display: 'grid',
-    height: '100%'
+    height: '100%',
+    borderRadius: '0px'
   },
   image: {
     maxHeight: '100vh',
-    maxWidth: '100vw',
-    borderRadius: 0
+    maxWidth: '100vw'
   }
 });
 
