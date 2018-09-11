@@ -40,7 +40,7 @@ const styles = theme => ({
     position: 'absolute',
     maxWidth: theme.spacing.unit * 400,
     backgroundColor: theme.palette.background.paper,
-    boxShadow: '',
+    boxShadow: 'none',
     outline: 'none'
   },
   containerImage: {
