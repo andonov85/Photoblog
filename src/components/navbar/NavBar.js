@@ -12,17 +12,25 @@ const styles = theme => ({
   root: {
     // flexGrow: 1,
   },
+  appbar: {
+    boxShadow: 'none',
+    borderBottom: "solid 1px"
+  },
   flexLogo: {
     flexGrow: 1
   },
   flexMenuItems: {
+    [theme.breakpoints.down('sm')]: {
+      display: 'none'
+    },
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'flex-end'
   },
-  appbar: {
-    boxShadow: 'none',
-    borderBottom: "solid 1px"
+  shortMenu: {
+    [theme.breakpoints.up('md')]: {
+      display: 'none'
+    }
   }
 });
 
@@ -36,9 +44,13 @@ function NavBar(props) {
             <NavLink to="/main" buttonName="Andon Andonov Photography" />
           </Typography>
           <div className={classes.flexMenuItems}>
-          <NavLink to="/about" buttonName="About" />
-          <NavLink to="/gallery" buttonName="Gallery" />
-          <NavLink to="/blog" buttonName="Blog" />
+            <NavLink to="/main" buttonName="Home" />
+            <NavLink to="/blog" buttonName="Blog" />
+            <NavLink to="/gallery" buttonName="Gallery" />
+            <NavLink to="/about" buttonName="About" />
+          </div>
+          <div className={classes.shortMenu}>
+            <NavLink to="/main" buttonName={<i class="material-icons">menu</i>} />
           </div>
         </Toolbar>
       </AppBar>
