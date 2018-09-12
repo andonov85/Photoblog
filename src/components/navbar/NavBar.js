@@ -7,6 +7,7 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 
 import NavLink from './NavLink';
+import DrawerMenu from './DrawerMenu';
 
 const styles = theme => ({
   root: {
@@ -50,7 +51,7 @@ function NavBar(props) {
             <NavLink to="/about" buttonName="About" />
           </div>
           <div className={classes.shortMenu}>
-            <NavLink to="/main" buttonName={<i class="material-icons">menu</i>} />
+            <DrawerMenu />
           </div>
         </Toolbar>
       </AppBar>
