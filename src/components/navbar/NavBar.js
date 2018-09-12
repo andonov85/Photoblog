@@ -8,17 +8,19 @@ import Typography from '@material-ui/core/Typography';
 
 import NavLink from './NavLink';
 import DrawerMenu from './DrawerMenu';
+import './navbar.css';
 
 const styles = theme => ({
   root: {
-    // flexGrow: 1,
+    
   },
   appbar: {
     boxShadow: 'none',
     borderBottom: "solid 1px"
   },
   flexLogo: {
-    flexGrow: 1
+    flexGrow: 1,
+    fontFamily: 'Courgette, cursive'
   },
   flexMenuItems: {
     [theme.breakpoints.down('sm')]: {
@@ -42,7 +44,7 @@ function NavBar(props) {
       <AppBar position="static" color="default" className={classes.appbar}>
         <Toolbar>
           <Typography variant="title" className={classes.flexLogo}>
-            <NavLink to="/main" buttonName="Andon Andonov Photography" />
+            Andon Andonov Photography
           </Typography>
           <div className={classes.flexMenuItems}>
             <NavLink to="/main" buttonName="Home" />

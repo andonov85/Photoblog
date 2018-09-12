@@ -44,7 +44,7 @@ class DrawerMenu extends React.Component {
     return (
       <div>
         <Button onClick={this.toggleDrawer('top', true)}>
-            <i class="material-icons">menu</i>
+            <i className="material-icons">menu</i>
         </Button>
         <Drawer anchor="top" open={this.state.top} onClose={this.toggleDrawer('top', false)}>
           <div
