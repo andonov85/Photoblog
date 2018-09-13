@@ -10,8 +10,6 @@ import Card from '@material-ui/core/Card';
 import imageSource from './imageSource';
 import './galleryStyles.css'
 
-const tileData = imageSource();
-
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -62,10 +60,19 @@ class Gallery extends React.Component {
     this.state = {
       openModal: false,
       url: '',
-      name: ''
+      name: '',
+      tileData: []
     };
     this.handleOnClick = this.handleOnClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
+  }
+
+  componentDidMount() {
+    imageSource().then((images) => {
+      this.setState({
+        tileData: images
+      });
+    });
   }
 
   handleOnClick(e) {
@@ -101,7 +108,7 @@ class Gallery extends React.Component {
           </div>
         </Modal>
         <GridList cellHeight={160} className={classes.gridList} cols={4}>
-          {tileData.map(tile => (
+          {this.state.tileData.map(tile => (
             <GridListTile key={tile.id} cols={tile.cols || 1}>
               <img className="thumbs" src={tile.thumbFileUrl} alt={tile.url} name={tile.name} onClick={this.handleOnClick}/>
             </GridListTile>
