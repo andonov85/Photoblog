@@ -8,16 +8,14 @@ import MainTitle from './MainTitle';
 import MainFeaturedPost from './FeaturedPost';
 
 const styles = theme => ({
-  layout: {
+  layoutGrid: {
+    marginTop: '1%',
     marginLeft: '25%',
     marginRight: '25%',
     [theme.breakpoints.down('sm')]: {
       marginLeft: '0%',
       marginRight: '0%'
     }
-  },
-  content: {
-    justifyContent: 'center'
   }
 });
 
@@ -25,17 +23,16 @@ function Main(props) {
   const { classes } = props;
   return (
     <div className={classes.layout}>
-      <Grid container spacing={16} justify="center">
-        <Grid item xs={12}>
-          <MainTitle />
+      <MainTitle />
+      <div className={classes.layoutGrid}>
+        <Grid container spacing={16} justify="center">
+          <Grid item xs={12} lg={6}>
+            <MainFeaturedPost />
+          </Grid>
+          <Grid item xs={12} lg={6}>
+          </Grid>
         </Grid>
-        <Grid item xs={12} lg={6}>
-          <MainFeaturedPost />
-        </Grid>
-        <Grid item xs={12} lg={6}>
-          <MainFeaturedPost />
-        </Grid>
-      </Grid>
+      </div>
     </div>
 )}
 

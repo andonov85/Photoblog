@@ -16,7 +16,7 @@ class App extends Component {
     return (
       <HashRouter>
         <div>
-          <Grid container spacing={16}>
+          <Grid container spacing={0}>
             <Grid item xs={12}>
               <NavBar />
             </Grid>

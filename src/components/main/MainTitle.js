@@ -13,8 +13,8 @@ const styles = theme => ({
    
   },
   mainFeaturedPost: {
-    // height: '100%',
-    height: '400px',
+    width: '100%',
+    height: '500px',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
@@ -22,11 +22,7 @@ const styles = theme => ({
     boxShadow: 'none'
   },
   mainFeaturedPostContent: {
-    padding: '5%'
-  },
-  progress: {
-    margin: theme.spacing.unit * 2,
-  },
+  }
 });
 
 class MainTitle extends React.Component {
@@ -55,7 +51,6 @@ class MainTitle extends React.Component {
               <Grid item md={6}>
                 <div className={classes.mainFeaturedPostContent}>
                   <Typography variant="display1" color="inherit" gutterBottom>
-                    Random image from gallery :)
                   </Typography>
                 </div>
               </Grid>

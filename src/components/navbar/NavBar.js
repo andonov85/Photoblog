@@ -15,8 +15,7 @@ const styles = theme => ({
     
   },
   appbar: {
-    boxShadow: 'none',
-    borderBottom: "solid 1px"
+    boxShadow: 'none'
   },
   flexLogo: {
     flexGrow: 1,

@@ -1,3 +1,9 @@
 div>a:hover {
     border-bottom: 4px solid grey;
 }
+ul {
+    display: flex;
+}
+ul>a {
+    flex-grow: 1;
+}
