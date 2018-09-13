@@ -14,13 +14,14 @@ function imageSource() {
 
         db.collection('images').get().then((snapshot) => {
             snapshot.forEach((doc) => {
+                const image = doc.data();
                 images.push({
-                    id: doc.data().id,
-                    name: doc.data().name,
-                    url: doc.data().url,
-                    thumbFileUrl: doc.data().thumbFileUrl,
-                    category: doc.data().category,
-                    description: doc.data().description
+                    id: image.id,
+                    name: image.name,
+                    url: image.url,
+                    thumbFileUrl: image.thumbFileUrl,
+                    category: image.category,
+                    description: image.description
                 });
             });
             resolve(images);
