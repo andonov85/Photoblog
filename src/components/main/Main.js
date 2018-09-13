@@ -9,8 +9,8 @@ import MainFeaturedPost from './FeaturedPost';
 
 const styles = theme => ({
   layout: {
-    marginLeft: '12%',
-    marginRight: '12%',
+    marginLeft: '25%',
+    marginRight: '25%',
     [theme.breakpoints.down('sm')]: {
       marginLeft: '0%',
       marginRight: '0%'
