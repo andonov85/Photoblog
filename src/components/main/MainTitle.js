@@ -6,12 +6,16 @@ import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 
+import imageSource from '../gallery/imageSource';
+
+const randomImage = imageSource()[Math.floor(Math.random() * imageSource().length)];
+
 const styles = {
   layout: {
    
   },
   mainFeaturedPost: {
-    backgroundImage: "url('https://www.walldevil.com/wallpapers/a85/geographic-national-nature-wallpaper-landscapes-ice-iceland-desktop-wallpapers.jpg')",
+    //backgroundImage: `url(${randomImage.url})`,
     height: '100%',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',

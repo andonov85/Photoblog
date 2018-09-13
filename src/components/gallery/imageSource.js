@@ -1,12 +1,12 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-function imageSource() {
-    const config = {
-        projectId: "aaphotography-b504f"
-    };
-    firebase.initializeApp(config);
+const config = {
+    projectId: "aaphotography-b504f"
+};
+firebase.initializeApp(config);
 
+function imageSource() {
     const db = firebase.firestore();
 
     let images = [];

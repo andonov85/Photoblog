@@ -10,6 +10,8 @@ import Card from '@material-ui/core/Card';
 import imageSource from './imageSource';
 import './galleryStyles.css'
 
+const tileData = imageSource();
+
 function getModalStyle() {
   const top = 50;
   const left = 50;
@@ -53,8 +55,6 @@ const styles = theme => ({
     maxWidth: '100vw'
   }
 });
-
-const tileData = imageSource();
 
 class Gallery extends React.Component {
   constructor(props) {
