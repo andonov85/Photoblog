@@ -8,15 +8,13 @@ import Typography from '@material-ui/core/Typography';
 
 import imageSource from '../gallery/imageSource';
 
-const randomImage = imageSource()[Math.floor(Math.random() * imageSource().length)];
-
-const styles = {
+const styles = theme => ({
   layout: {
    
   },
   mainFeaturedPost: {
-    //backgroundImage: `url(${randomImage.url})`,
-    height: '100%',
+    // height: '100%',
+    height: '400px',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
@@ -25,33 +23,47 @@ const styles = {
   },
   mainFeaturedPostContent: {
     padding: '5%'
-  }
-};
+  },
+  progress: {
+    margin: theme.spacing.unit * 2,
+  },
+});
 
-function MainTitle(props) {
-  const { classes } = props;
-  return (
+class MainTitle extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      imageUrl: ''
+    };
+  }
+
+  componentDidMount() {
+    imageSource().then((images) => {
+      const randomImage = images[Math.floor(Math.random() * images.length)];
+      this.setState({
+        imageUrl: `url(${randomImage.url})`
+      });
+    });
+  }
+
+  render() {
+    const { classes } = this.props;
+    return (
         <div className={classes.layout}>
-          <Paper className={classes.mainFeaturedPost}>
+          <Paper className={classes.mainFeaturedPost} style={{backgroundImage: this.state.imageUrl}}>
             <Grid container>
               <Grid item md={6}>
                 <div className={classes.mainFeaturedPostContent}>
-                  <Typography variant="display2" color="inherit" gutterBottom>
-                    Title of a longer featured blog post
-                  </Typography>
-                  <Typography variant="headline" color="inherit" paragraph>
-                    Multiple lines of text that form the lede, informing new readers quickly and
-                    efficiently about what&apos;s most interesting in this post&apos;s contents.
-                  </Typography>
-                  <Typography variant="title" color="inherit">
-                    Continue reading...
+                  <Typography variant="display1" color="inherit" gutterBottom>
+                    Random image from gallery :)
                   </Typography>
                 </div>
               </Grid>
             </Grid>
           </Paper>
         </div>
-)}
+  )}
+}
 
 MainTitle.propTypes = {
   classes: PropTypes.object.isRequired,
