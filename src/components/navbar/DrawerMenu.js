@@ -8,11 +8,9 @@ import List from '@material-ui/core/List';
 import NavLink from './NavLink';
 
 const styles = {
-  list: {
-    width: 250,
-  },
   fullList: {
     width: 'auto',
+    backgroundColor: 'black'
   },
 };
 
