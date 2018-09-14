@@ -11,15 +11,17 @@ import DrawerMenu from './DrawerMenu';
 import './navbar.css';
 
 const styles = theme => ({
-  root: {
-    
-  },
   appbar: {
-    boxShadow: 'none'
+    boxShadow: 'none',
+    backgroundColor: 'black'
+  },
+  logoImg: {
+    height: 60
   },
   flexLogo: {
     flexGrow: 1,
-    fontFamily: 'Courgette, cursive'
+    fontFamily: 'Courgette, cursive',
+    color: 'white'
   },
   flexMenuItems: {
     [theme.breakpoints.down('sm')]: {
@@ -40,10 +42,10 @@ function NavBar(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
-      <AppBar position="static" color="default" className={classes.appbar}>
+      <AppBar position="static" className={classes.appbar}>
         <Toolbar>
           <Typography variant="title" className={classes.flexLogo}>
-            Andon Andonov Photography
+            <img src="logo/logo-black-bg.jpg" className={classes.logoImg} />
           </Typography>
           <div className={classes.flexMenuItems}>
             <NavLink to="/main" buttonName="Home" />
