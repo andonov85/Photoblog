@@ -1,9 +1,12 @@
 div>a:hover {
-    border-bottom: 4px solid grey;
+    border-bottom: 4px solid rgb(216, 168, 12);
 }
 ul {
     display: flex;
 }
 ul>a {
     flex-grow: 1;
+}
+button span {
+    color: white;
 }
