@@ -19,7 +19,8 @@ const styles = theme => ({
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
     color: 'white',
-    boxShadow: 'none'
+    boxShadow: 'none',
+    borderRadius: '0px'
   },
   mainFeaturedPostContent: {
   }
