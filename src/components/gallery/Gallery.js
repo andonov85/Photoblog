@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
+import Grid from '@material-ui/core/Grid';
 import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Modal from '@material-ui/core/Modal';
@@ -9,6 +10,7 @@ import Card from '@material-ui/core/Card';
 
 import imageSource from './imageSource';
 import './galleryStyles.css'
+import { Typography } from '@material-ui/core';
 
 function getModalStyle() {
   const top = 50;
@@ -22,6 +24,9 @@ function getModalStyle() {
 }
 
 const styles = theme => ({
+  rootGrid: {
+    flexGrow: 1
+  },
   root: {
     display: 'flex',
     flexWrap: 'wrap',
@@ -30,8 +35,11 @@ const styles = theme => ({
     backgroundColor: '#f5f5f5',
   },
   gridList: {
-    width: 800,
-    height: 500,
+    width: '50%',
+    height: '100%',
+    [theme.breakpoints.down('sm')]: {
+      width: '100%'
+    },
   },
   subheader: {
     width: '100%'
@@ -61,7 +69,8 @@ class Gallery extends React.Component {
       openModal: false,
       url: '',
       name: '',
-      tileData: []
+      tileData: [],
+      gallery: 'All photos'
     };
     this.handleOnClick = this.handleOnClick.bind(this);
     this.handleClose = this.handleClose.bind(this);
@@ -91,7 +100,7 @@ class Gallery extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div className={classes.root}>
+      <div>
         <Modal
           aria-labelledby="simple-modal-title"
           aria-describedby="simple-modal-description"
@@ -107,13 +116,26 @@ class Gallery extends React.Component {
             </Card>
           </div>
         </Modal>
-        <GridList cellHeight={160} className={classes.gridList} cols={4}>
-          {this.state.tileData.map(tile => (
-            <GridListTile key={tile.id} cols={tile.cols || 1}>
-              <img className="thumbs" src={tile.thumbFileUrl} alt={tile.url} name={tile.name} onClick={this.handleOnClick}/>
-            </GridListTile>
-          ))}
-        </GridList>
+      <div className={classes.rootGrid}>
+        <Grid container spacing={24}>
+          <Grid item xs={12}>
+            <Typography>
+              {this.state.gallery}
+            </Typography>
+          </Grid>
+          <Grid item xs={12}>
+          <div className={classes.root}>
+            <GridList cellHeight={160} className={classes.gridList} cols={6}>
+              {this.state.tileData.map(tile => (
+              <GridListTile key={tile.id} cols={tile.cols}>
+                <img className="thumbs" src={tile.thumbFileUrl} alt={tile.url} name={tile.name} onClick={this.handleOnClick}/>
+              </GridListTile>
+              ))}
+            </GridList>
+            </div>
+          </Grid>
+        </Grid>
+      </div>
       </div>
     );
   }
