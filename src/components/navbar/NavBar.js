@@ -19,9 +19,7 @@ const styles = theme => ({
     height: 45
   },
   flexLogo: {
-    flexGrow: 1,
-    fontFamily: 'Courgette, cursive',
-    color: 'white'
+    flexGrow: 1
   },
   flexMenuItems: {
     [theme.breakpoints.down('sm')]: {
