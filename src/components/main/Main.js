@@ -8,7 +8,7 @@ import MainTitle from './MainTitle';
 import MainFeaturedPost from './FeaturedPost';
 
 const styles = theme => ({
-  layoutGrid: {
+  layoutMain: {
     marginTop: '1%',
     marginLeft: '25%',
     marginRight: '25%',
@@ -23,16 +23,16 @@ function Main(props) {
   const { classes } = props;
   return (
     <div className={classes.layout}>
-      <MainTitle />
-      <div className={classes.layoutGrid}>
         <Grid container spacing={16} justify="center">
+          <Grid item xs={12} lg={12}>
+            <MainTitle />
+          </Grid>
+          <div className={classes.layoutMain}>
           <Grid item xs={12} lg={6}>
             <MainFeaturedPost />
           </Grid>
-          <Grid item xs={12} lg={6}>
-          </Grid>
+          </div>
         </Grid>
-      </div>
     </div>
 )}
 
