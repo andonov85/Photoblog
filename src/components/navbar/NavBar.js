@@ -16,7 +16,7 @@ const styles = theme => ({
     backgroundColor: 'black'
   },
   logoImg: {
-    height: 60
+    height: 45
   },
   flexLogo: {
     flexGrow: 1,
