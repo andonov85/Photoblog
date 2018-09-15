@@ -15,19 +15,17 @@ class App extends Component {
   render() {
     return (
       <HashRouter>
-        <div>
+        <div className="rootApp">
           <Grid container spacing={0}>
             <Grid item xs={12}>
               <NavBar />
             </Grid>
             <Grid item xs={12}>
-              <div className="content">
                 <Route exact path="/" component={Main}/>
                 <Route path="/main" component={Main}/>
                 <Route path="/about" component={About}/>
                 <Route path="/gallery" component={Gallery}/>
                 {/* <Route path="/blog" component={Blog}/> */}
-              </div>
             </Grid>
           </Grid>
         </div>
