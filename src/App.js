@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 import { Route, HashRouter } from "react-router-dom";
+import PropTypes from 'prop-types';
+import { withStyles } from '@material-ui/core/styles';
 
 import NavBar from './components/navbar/NavBar';
 import Grid from '@material-ui/core/Grid';
@@ -8,15 +10,21 @@ import Main from './components/main/Main';
 import About from './components/about/About';
 import Gallery from './components/gallery/Gallery';
 // import Blog from './components/blog/Blog';
+// import Footer from './components/footer/Footer'
 
-import './App.css';
+const styles = theme => ({
+  root: {
+    flexGrow: 1,
+  }
+});
 
 class App extends Component {
   render() {
+    const {classes} = this.props;
+
     return (
       <HashRouter>
-        <div className="rootApp">
-          <Grid container spacing={0}>
+          <Grid container spacing={0} className={classes.root}>
             <Grid item xs={12}>
               <NavBar />
             </Grid>
@@ -25,13 +33,19 @@ class App extends Component {
                 <Route path="/main" component={Main}/>
                 <Route path="/about" component={About}/>
                 <Route path="/gallery" component={Gallery}/>
-                {/* <Route path="/blog" component={Blog}/> */}
+                {/* ToDo <Route path="/blog" component={Blog}/> */}
+            </Grid>
+            <Grid item xs={12}>
+              {/* ToDo <Route path="/footer" component={Footer}/> */}
             </Grid>
           </Grid>
-        </div>
       </HashRouter>
     );
   }
 }
 
-export default App;
+App.propTypes = {
+  classes: PropTypes.object.isRequired,
+};
+
+export default withStyles(styles)(App);
