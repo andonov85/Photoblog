@@ -16,6 +16,14 @@ import ShareIcon from '@material-ui/icons/Share';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 
 const styles = theme => ({
+  root: {
+    marginLeft: '25%',
+    marginRight: '25%',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0%',
+      marginRight: '0%',
+    }
+  },
   card: {
     boxShadow: 'none',
   },
@@ -46,6 +54,7 @@ class FeaturedPost extends React.Component {
     const { classes } = this.props;
 
     return (
+      <div className={classes.root}>
       <Card className={classes.card}>
         <CardHeader
           avatar={
@@ -83,6 +92,7 @@ class FeaturedPost extends React.Component {
           </IconButton>
         </CardActions>
       </Card>
+      </div>
     );
   }
 }

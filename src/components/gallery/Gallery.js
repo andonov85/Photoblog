@@ -24,21 +24,22 @@ function getModalStyle() {
 }
 
 const styles = theme => ({
-  rootGrid: {
+  root: {
     flexGrow: 1
   },
-  root: {
+  rootGridList: {
+    marginLeft: '25%',
+    marginRight: '25%',
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '0%',
+      marginRight: '0%',
+  },
+  gridList: {
     display: 'flex',
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: '#f5f5f5',
-  },
-  gridList: {
-    width: '50%',
-    height: '100%',
-    [theme.breakpoints.down('sm')]: {
-      width: '100%'
     },
   },
   subheader: {
@@ -100,42 +101,44 @@ class Gallery extends React.Component {
     const { classes } = this.props;
 
     return (
-      <div>
-        <Modal
-          aria-labelledby="simple-modal-title"
-          aria-describedby="simple-modal-description"
-          open={this.state.openModal}
-          onClose={this.handleClose}>
-          <div style={getModalStyle()} className={classes.paper}>
-            <Card className={classes.containerImage}>
-              <img
-                className={classes.image}
-                src={this.state.url}
-                alt={this.state.name}
-              />
-            </Card>
-          </div>
-        </Modal>
-      <div className={classes.rootGrid}>
+      <div className={classes.root}>
         <Grid container spacing={24}>
           <Grid item xs={12}>
-            <Typography>
+          <div className={classes.rootGridList}>
+            <Typography variant="display3" gutterBottom>
               {this.state.gallery}
             </Typography>
+          </div>
           </Grid>
           <Grid item xs={12}>
-          <div className={classes.root}>
-            <GridList cellHeight={160} className={classes.gridList} cols={6}>
-              {this.state.tileData.map(tile => (
-              <GridListTile key={tile.id} cols={tile.cols}>
-                <img className="thumbs" src={tile.thumbFileUrl} alt={tile.url} name={tile.name} onClick={this.handleOnClick}/>
-              </GridListTile>
-              ))}
-            </GridList>
+          <div className={classes.rootGridList}>
+            <div className={classes.gridList}>
+              <GridList cellHeight={160} cols={6}>
+                {this.state.tileData.map(tile => (
+                <GridListTile key={tile.id} cols={tile.cols}>
+                  <img className="thumbs" src={tile.thumbFileUrl} alt={tile.url} name={tile.name} onClick={this.handleOnClick}/>
+                </GridListTile>
+                ))}
+              </GridList>
             </div>
+          </div>
+            <Modal
+              aria-labelledby="simple-modal-title"
+              aria-describedby="simple-modal-description"
+              open={this.state.openModal}
+              onClose={this.handleClose}>
+              <div style={getModalStyle()} className={classes.paper}>
+                <Card className={classes.containerImage}>
+                  <img
+                    className={classes.image}
+                    src={this.state.url}
+                    alt={this.state.name}
+                  />
+                </Card>
+              </div>
+            </Modal>
           </Grid>
         </Grid>
-      </div>
       </div>
     );
   }
