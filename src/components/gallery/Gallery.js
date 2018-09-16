@@ -102,7 +102,7 @@ class Gallery extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={24}>
+        <Grid container spacing={0}>
           <Grid item xs={12}>
           <div className={classes.rootGridList}>
             <Typography variant="display3" gutterBottom>
