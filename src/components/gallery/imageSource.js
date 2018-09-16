@@ -14,7 +14,7 @@ function imageSource() {
 
         db.collection('images').get().then((snapshot) => {
             let num = 0;
-            const ALL_COLS = 6;
+            const ALL_COLS = 4;
 
             snapshot.forEach((doc) => {
                 const image = doc.data();
