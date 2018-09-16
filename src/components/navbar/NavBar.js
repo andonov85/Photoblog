@@ -24,10 +24,7 @@ const styles = theme => ({
   flexMenuItems: {
     [theme.breakpoints.down('sm')]: {
       display: 'none'
-    },
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'flex-end'
+    }
   },
   shortMenu: {
     [theme.breakpoints.up('md')]: {
