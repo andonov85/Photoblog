@@ -17,7 +17,7 @@ function Main(props) {
   const { classes } = props;
   return (
     <div className={classes.root}>
-      <Grid container spacing={16} justify="center">
+      <Grid container spacing={0} justify="center">
         <Grid item xs={12}>
           <MainTitle />
         </Grid>
