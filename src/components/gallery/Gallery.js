@@ -39,7 +39,7 @@ const styles = theme => ({
     flexWrap: 'wrap',
     justifyContent: 'space-around',
     overflow: 'hidden',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: '#f5f5f5'
     },
   },
   subheader: {
@@ -105,7 +105,7 @@ class Gallery extends React.Component {
         <Grid container spacing={0}>
           <Grid item xs={12}>
           <div className={classes.rootGridList}>
-            <Typography variant="display3" gutterBottom>
+            <Typography variant="display3" align="center" gutterBottom>
               {this.state.gallery}
             </Typography>
           </div>
@@ -113,7 +113,7 @@ class Gallery extends React.Component {
           <Grid item xs={12}>
           <div className={classes.rootGridList}>
             <div className={classes.gridList}>
-              <GridList cellHeight={160} cols={6}>
+              <GridList cellHeight={160} cols={4} spacing={0}>
                 {this.state.tileData.map(tile => (
                 <GridListTile key={tile.id} cols={tile.cols}>
                   <img className="thumbs" src={tile.thumbFileUrl} alt={tile.url} name={tile.name} onClick={this.handleOnClick}/>
