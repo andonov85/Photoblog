@@ -9,10 +9,7 @@ import Typography from '@material-ui/core/Typography';
 import imageSource from '../gallery/imageSource';
 
 const styles = theme => ({
-  layout: {
-   
-  },
-  mainFeaturedPost: {
+  paper: {
     width: '100%',
     height: '500px',
     backgroundPosition: 'center',
@@ -21,8 +18,6 @@ const styles = theme => ({
     color: 'white',
     boxShadow: 'none',
     borderRadius: '0px'
-  },
-  mainFeaturedPostContent: {
   }
 });
 
@@ -46,18 +41,14 @@ class MainTitle extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-        <div className={classes.layout}>
-          <Paper className={classes.mainFeaturedPost} style={{backgroundImage: this.state.imageUrl}}>
+          <Paper className={classes.paper} style={{backgroundImage: this.state.imageUrl}}>
             <Grid container>
               <Grid item md={6}>
-                <div className={classes.mainFeaturedPostContent}>
-                  <Typography variant="display1" color="inherit" gutterBottom>
-                  </Typography>
-                </div>
+                <Typography variant="display1" color="inherit" gutterBottom>
+                </Typography>
               </Grid>
             </Grid>
           </Paper>
-        </div>
   )}
 }
 
