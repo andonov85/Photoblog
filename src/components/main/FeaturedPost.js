@@ -62,13 +62,8 @@ class FeaturedPost extends React.Component {
             aria-label="Recipe" className={classnames(classes.avatar, classes.bigAvatar)}>
             </Avatar>
           }
-          action={
-            <IconButton>
-              <MoreVertIcon />
-            </IconButton>
-          }
           title = "Hands-on with new Fujifilm XF 200mm F2 and XF 8-16mm F2.8"
-          subheader = "Sep 11, 2018 "
+          subheader = "Sep 11, 2018"
         />
         <a type="button" target="_blank" rel="noopener noreferrer" 
         href="https://www.dpreview.com/articles/3133419616/hands-on-with-new-fujifilm-xf-200mm-f2-and-xf-8-16mm-f2-8?slide=2">
