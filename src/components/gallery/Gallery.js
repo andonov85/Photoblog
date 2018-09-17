@@ -33,6 +33,7 @@ const styles = theme => ({
     [theme.breakpoints.down('sm')]: {
       marginLeft: '0%',
       marginRight: '0%',
+    }
   },
   gridList: {
     display: 'flex',
@@ -40,7 +41,6 @@ const styles = theme => ({
     justifyContent: 'space-around',
     overflow: 'hidden',
     backgroundColor: '#f5f5f5'
-    },
   },
   subheader: {
     width: '100%'
