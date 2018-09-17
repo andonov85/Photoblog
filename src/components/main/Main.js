@@ -5,7 +5,6 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 
 import MainTitle from './MainTitle';
-import FeaturedPost from './FeaturedPost';
 
 const styles = theme => ({
   root: {
@@ -22,7 +21,7 @@ function Main(props) {
           <MainTitle />
         </Grid>
         <Grid item xs={12}>
-          <FeaturedPost />
+        
         </Grid>
       </Grid>
     </div>
