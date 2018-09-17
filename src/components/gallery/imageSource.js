@@ -22,7 +22,7 @@ function imageSource() {
                     id: image.id,
                     name: image.name,
                     url: image.url,
-                    thumbFileUrl: image.thumbFileUrl,
+                    thumbUrl: image.thumbUrl,
                     category: image.category,
                     description: image.description,
                     cols: Math.floor(Math.random() * 2 + 1)

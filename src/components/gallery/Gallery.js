@@ -88,7 +88,7 @@ class Gallery extends React.Component {
   handleOnClick(e) {
     this.setState({
       openModal: true,
-      url: e.currentTarget.getAttribute('alt'),
+      url: e.currentTarget.dataset.url,
       name: e.currentTarget.getAttribute('name'),
     });
   }
@@ -116,7 +116,7 @@ class Gallery extends React.Component {
               <GridList cellHeight={160} cols={4} spacing={0}>
                 {this.state.tileData.map(tile => (
                 <GridListTile key={tile.id} cols={tile.cols}>
-                  <img className="thumbs" src={tile.thumbFileUrl} alt={tile.url} name={tile.name} onClick={this.handleOnClick}/>
+                  <img className="thumbs" src={tile.thumbUrl} alt={tile.name} name={tile.name} data-url={tile.url} onClick={this.handleOnClick}/>
                 </GridListTile>
                 ))}
               </GridList>
