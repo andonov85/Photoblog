@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Main from './components/main/Main';
 import About from './components/about/About';
 import Gallery from './components/gallery/Gallery';
-// import Blog from './components/blog/Blog';
+import Blog from './components/blog/Blog';
 // import Footer from './components/footer/Footer'
 
 const styles = theme => ({
@@ -33,7 +33,7 @@ class App extends Component {
                 <Route path="/main" component={Main}/>
                 <Route path="/about" component={About}/>
                 <Route path="/gallery" component={Gallery}/>
-                {/* ToDo <Route path="/blog" component={Blog}/> */}
+                <Route path="/blog" component={Blog}/>
             </Grid>
             <Grid item xs={12}>
               {/* ToDo <Route path="/footer" component={Footer}/> */}
