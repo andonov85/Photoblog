@@ -40,7 +40,7 @@ function NavBar(props) {
       <AppBar position="static" className={classes.appbar}>
         <Toolbar>
           <Typography variant="title" className={classes.flexLogo}>
-            <img src="logo/logo-black-bg.jpg" className={classes.logoImg} />
+            <img src="logo/logo-black-bg.jpg" alt="Logo" className={classes.logoImg} />
           </Typography>
           <div className={classes.flexMenuItems}>
             <NavLink to="/main" buttonName="Home" />
