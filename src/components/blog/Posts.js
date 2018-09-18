@@ -60,7 +60,7 @@ class Posts extends React.Component {
       <div className={classes.root}>
         <Grid container spacing={8}>
           {this.state.blogPosts.map(post => (
-            <Grid item xs={12}>
+            <Grid item xs={12} key={post.linkUrl}>
               <Card className={classes.card}>
                 <CardHeader
                   avatar={
