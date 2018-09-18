@@ -115,7 +115,7 @@ class Gallery extends React.Component {
             <div className={classes.gridList}>
               <GridList cellHeight={160} cols={4} spacing={0}>
                 {this.state.tileData.map(tile => (
-                <GridListTile key={tile.id} cols={tile.cols}>
+                <GridListTile key={tile.id} cols={1}>
                   <img className="thumbs" src={tile.thumbUrl} alt={tile.name} name={tile.name} data-url={tile.url} onClick={this.handleOnClick}/>
                 </GridListTile>
                 ))}
