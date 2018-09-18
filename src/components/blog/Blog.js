@@ -32,7 +32,7 @@ class Blog extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={8}>
+        <Grid container spacing={0}>
           <Grid item sm={6} xs={12}>
             <div className={classes.posts}>
               <Posts />
