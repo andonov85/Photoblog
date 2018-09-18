@@ -20,6 +20,7 @@ const styles = theme => ({
   },
   card: {
     boxShadow: 'none',
+    marginBottom: '8px'
   },
   media: {
     height: 0,
@@ -58,7 +59,7 @@ class Posts extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={8}>
+        <Grid container spacing={0}>
           {this.state.blogPosts.map(post => (
             <Grid item xs={12} key={post.linkUrl}>
               <Card className={classes.card}>
