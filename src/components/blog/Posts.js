@@ -69,8 +69,8 @@ class Posts extends React.Component {
                     aria-label="Recipe" className={classnames(classes.avatar, classes.bigAvatar)}>
                     </Avatar>
                   }
-                title={post.title}
-                subheader={post.date}
+                  title={post.title}
+                  subheader={post.date}
                 />
               <a type="button" target="_blank" rel="noopener noreferrer"
                 href={post.linkUrl}>
@@ -81,9 +81,17 @@ class Posts extends React.Component {
                 />
               </a>
                 <CardContent>
+                  <div>
                   <Typography component="p">
                     {post.content}
                   </Typography>
+                  <Typography component="p" align="left" variant="caption">
+                    Main page: <a type="button" target="_blank" rel="noopener noreferrer"
+                    href={post.homepageUrl}>
+                    {post.homepageUrl}
+                    </a>
+                  </Typography>
+                  </div>
                 </CardContent>
               </Card>
             </Grid>
