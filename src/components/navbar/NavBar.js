@@ -8,7 +8,6 @@ import Typography from '@material-ui/core/Typography';
 
 import NavLink from './NavLink';
 import DrawerMenu from './DrawerMenu';
-import './navbar.css';
 
 const styles = theme => ({
   appbar: {
