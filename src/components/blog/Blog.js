@@ -11,7 +11,7 @@ const styles = theme => ({
     flexGrow: 1
   },
   posts: {
-    marginLeft: '50%',
+    marginLeft: '40%',
     [theme.breakpoints.down('sm')]: {
       marginLeft: '0%',
     }
