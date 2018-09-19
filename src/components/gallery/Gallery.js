@@ -7,10 +7,9 @@ import GridList from '@material-ui/core/GridList';
 import GridListTile from '@material-ui/core/GridListTile';
 import Modal from '@material-ui/core/Modal';
 import Card from '@material-ui/core/Card';
+import { Typography } from '@material-ui/core';
 
 import imageSource from './imageSource';
-import './galleryStyles.css'
-import { Typography } from '@material-ui/core';
 
 function getModalStyle() {
   const top = 50;
@@ -45,6 +44,9 @@ const styles = theme => ({
   subheader: {
     width: '100%'
   },
+  backdrop: {
+    backgroundColor: 'rgba(0, 0, 0, 0.9)'
+  },
   paper: {
     position: 'absolute',
     maxWidth: theme.spacing.unit * 400,
@@ -60,6 +62,12 @@ const styles = theme => ({
   image: {
     maxHeight: '100vh',
     maxWidth: '100vw'
+  },
+  thumbs: {
+    '&:hover': {
+      webkitFilter: 'brightness(50%)',
+      filter: 'brightness(50%)'
+    }
   }
 });
 
@@ -113,16 +121,17 @@ class Gallery extends React.Component {
           <Grid item xs={12}>
           <div className={classes.rootGridList}>
             <div className={classes.gridList}>
-              <GridList cellHeight={160} cols={4} spacing={0}>
+              <GridList cellHeight={160} cols={4} spacing={2}>
                 {this.state.tileData.map(tile => (
                 <GridListTile key={tile.id} cols={1}>
-                  <img className="thumbs" src={tile.thumbUrl} alt={tile.name} name={tile.name} data-url={tile.url} onClick={this.handleOnClick}/>
+                  <img className={classes.thumbs} src={tile.thumbUrl} alt={tile.name} name={tile.name} data-url={tile.url} onClick={this.handleOnClick}/>
                 </GridListTile>
                 ))}
               </GridList>
             </div>
           </div>
             <Modal
+              BackdropProps={{className: classes.backdrop}}
               aria-labelledby="simple-modal-title"
               aria-describedby="simple-modal-description"
               open={this.state.openModal}
