@@ -1,5 +1,0 @@
-.thumbs:hover {
-    -webkit-filter: brightness(50%);
-    /* Chrome, Safari, Opera */
-    filter: brightness(50%);
-}
