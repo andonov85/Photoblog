@@ -3,107 +3,49 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
-import Modal from '@material-ui/core/Modal';
 import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 
-import imageSource from './imageSource';
-
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
+import firebase from '../../Firebase';
 
 const styles = theme => ({
-  root: {
-    flexGrow: 1
-  },
-  rootGridList: {
-    marginLeft: '25%',
-    marginRight: '25%',
-    [theme.breakpoints.down('sm')]: {
-      marginLeft: '0%',
-      marginRight: '0%',
-    }
-  },
-  gridList: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
-    backgroundColor: '#f5f5f5'
-  },
-  subheader: {
-    width: '100%'
-  },
-  backdrop: {
-    backgroundColor: 'rgba(0, 0, 0, 0.9)'
-  },
-  paper: {
-    position: 'absolute',
-    maxWidth: theme.spacing.unit * 400,
-    backgroundColor: theme.palette.background.paper,
-    boxShadow: 'none',
-    outline: 'none'
-  },
-  containerImage: {
-    display: 'grid',
-    height: '100%',
-    borderRadius: '0px'
-  },
-  image: {
-    maxHeight: '100vh',
-    maxWidth: '100vw'
-  },
-  thumbs: {
+  card: {
+    margin: 'auto', // center the elements
     '&:hover': {
-      webkitFilter: 'brightness(50%)',
-      filter: 'brightness(50%)'
-    }
-  }
+      opacity: 0.8
+    },
+    maxWidth: 345,
+    boxShadow: 'none',
+    borderRadius: 0
+  },
+  media: {
+    height: 210,
+  },
 });
 
 class Gallery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      openModal: false,
-      url: '',
-      name: '',
-      tileData: [],
-      gallery: 'All photos'
+      categoriesData: []
     };
     this.handleOnClick = this.handleOnClick.bind(this);
-    this.handleClose = this.handleClose.bind(this);
   }
 
   componentDidMount() {
-    imageSource().then((images) => {
+    const db = firebase.firestore();
+    db.collection('images').doc('categories').get().then((doc) => {
       this.setState({
-        tileData: images
+        categoriesData: doc.data().categories
       });
     });
   }
 
-  handleOnClick(e) {
-    this.setState({
-      openModal: true,
-      url: e.currentTarget.dataset.url,
-      name: e.currentTarget.getAttribute('name'),
-    });
-  }
+  handleOnClick() {
 
-  handleClose = () => {
-    this.setState({openModal: false});
-  };
+  }
 
   render() {
     const { classes } = this.props;
@@ -111,45 +53,27 @@ class Gallery extends React.Component {
     return (
       <div className={classes.root}>
         <Grid container spacing={0}>
-          <Grid item xs={12}>
-          <div className={classes.rootGridList}>
-            <Typography variant="display3" align="center" gutterBottom>
-              {this.state.gallery}
-            </Typography>
-          </div>
-          </Grid>
-          <Grid item xs={12}>
-          <div className={classes.rootGridList}>
-            <div className={classes.gridList}>
-              <GridList cellHeight={160} cols={4} spacing={2}>
-                {this.state.tileData.map(tile => (
-                <GridListTile key={tile.id} cols={1}>
-                  <img className={classes.thumbs} src={tile.thumbUrl} alt={tile.name} name={tile.name} data-url={tile.url} onClick={this.handleOnClick}/>
-                </GridListTile>
-                ))}
-              </GridList>
-            </div>
-          </div>
-            <Modal
-              BackdropProps={{className: classes.backdrop}}
-              aria-labelledby="simple-modal-title"
-              aria-describedby="simple-modal-description"
-              open={this.state.openModal}
-              onClose={this.handleClose}>
-              <div style={getModalStyle()} className={classes.paper}>
-                <Card className={classes.containerImage}>
-                  <img
-                    className={classes.image}
-                    src={this.state.url}
-                    alt={this.state.name}
+        {this.state.categoriesData.map((data) => {
+          return (
+            <Grid item xs={12} sm={6} key={data.categories}>
+              <Card className={classes.card} onClick={this.handleOnClick}>
+                  <CardMedia
+                    className={classes.media}
+                    image={data.thumbUrl}
+                    title={data.category}
                   />
-                </Card>
-              </div>
-            </Modal>
-          </Grid>
+                  <CardContent>
+                    <Typography gutterBottom variant="headline" component="h2" align='center'>
+                      {data.category}
+                    </Typography>
+                  </CardContent>
+              </Card>
+            </Grid>
+          )
+        })}
         </Grid>
       </div>
-    );
+    )
   }
 }
 
