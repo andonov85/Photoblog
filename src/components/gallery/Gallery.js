@@ -11,18 +11,21 @@ import { Typography } from '@material-ui/core';
 import firebase from '../../Firebase';
 
 const styles = theme => ({
+  root: {
+    height: 'calc(100vh - 45px)'
+  },
   card: {
     margin: 'auto', // center the elements
     '&:hover': {
       opacity: 0.8
     },
-    maxWidth: 345,
+    maxWidth: 400,
     boxShadow: 'none',
     borderRadius: 0
   },
   media: {
-    height: 210,
-  },
+    height: 250,
+  }
 });
 
 class Gallery extends React.Component {
@@ -52,10 +55,10 @@ class Gallery extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={0}>
+        <Grid container spacing={0} alignContent='center'>
         {this.state.categoriesData.map((data) => {
           return (
-            <Grid item xs={12} sm={6} key={data.categories}>
+            <Grid item xs={12} sm={4} key={data.categories}>
               <Card className={classes.card} onClick={this.handleOnClick}>
                   <CardMedia
                     className={classes.media}
@@ -63,7 +66,7 @@ class Gallery extends React.Component {
                     title={data.category}
                   />
                   <CardContent>
-                    <Typography gutterBottom variant="headline" component="h2" align='center'>
+                    <Typography gutterBottom variant="title" align='center'>
                       {data.category}
                     </Typography>
                   </CardContent>
