@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
+import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
@@ -12,7 +13,16 @@ import firebase from '../../Firebase';
 
 const styles = theme => ({
   root: {
-    height: 'calc(100vh - 45px)'
+    paddingTop: 30,
+    [theme.breakpoints.down('sm')]: {
+      paddingTop: 5,
+    }
+  },
+  gridItem: {
+    padding: '45px 0px 45px 0px',
+    [theme.breakpoints.down('sm')]: {
+      padding: 0,
+    }
   },
   card: {
     margin: 'auto', // center the elements
@@ -20,8 +30,10 @@ const styles = theme => ({
       opacity: 0.8
     },
     maxWidth: 400,
-    boxShadow: 'none',
     borderRadius: 0
+  },
+  cardContent: {
+    backgroundColor: '#f5f5f5'
   },
   media: {
     height: 250,
@@ -55,25 +67,30 @@ class Gallery extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={0} alignContent='center'>
-        {this.state.categoriesData.map((data) => {
-          return (
-            <Grid item xs={12} sm={4} key={data.categories}>
-              <Card className={classes.card} onClick={this.handleOnClick}>
+      <Paper>
+        <Typography gutterBottom variant="display1" align="center">
+          Photo gallery
+        </Typography>
+      </Paper>
+        <Grid container spacing={0} justify="center">
+          {this.state.categoriesData.map((data) => {
+            return (
+              <Grid item xs={12} md={6} lg={4} key={data.categories} className={classes.gridItem}>
+                <Card className={classes.card} onClick={this.handleOnClick}>
                   <CardMedia
                     className={classes.media}
                     image={data.thumbUrl}
                     title={data.category}
                   />
-                  <CardContent>
-                    <Typography gutterBottom variant="title" align='center'>
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="title" align="center">
                       {data.category}
                     </Typography>
                   </CardContent>
-              </Card>
-            </Grid>
-          )
-        })}
+                </Card>
+              </Grid>
+            )
+          })}
         </Grid>
       </div>
     )
