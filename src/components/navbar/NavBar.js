@@ -12,10 +12,14 @@ import DrawerMenu from './DrawerMenu';
 const styles = theme => ({
   appbar: {
     boxShadow: 'none',
-    backgroundColor: 'black'
+    backgroundColor: 'black',
+  },
+  toolbar: {
+    minHeight: 45,
+    height: 45
   },
   logoImg: {
-    height: 45
+    height: 40
   },
   flexLogo: {
     flexGrow: 1
@@ -37,7 +41,7 @@ function NavBar(props) {
   return (
     <div className={classes.root}>
       <AppBar position="static" className={classes.appbar}>
-        <Toolbar>
+        <Toolbar className={classes.toolbar}>
           <Typography variant="title" className={classes.flexLogo}>
             <img src="logo/logo-black-bg.jpg" alt="Logo" className={classes.logoImg} />
           </Typography>
