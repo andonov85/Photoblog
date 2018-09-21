@@ -8,9 +8,12 @@ import Button from '@material-ui/core/Button';
 const styles = theme => ({
   buttonsNavbar: {
     '&:hover': {
-      borderBottom: '4px solid rgb(216, 168, 12)'
+      borderBottom: '3px solid rgb(216, 168, 12)'
     },
-    color: 'white'
+    color: 'white',
+    fontSize: 13,
+    color: '#f5f5f5',
+    borderRadius: 0
   }
 });
 
