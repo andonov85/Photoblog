@@ -12,7 +12,6 @@ const styles = theme => ({
     },
     color: 'white',
     fontSize: 13,
-    color: '#f5f5f5',
     borderRadius: 0
   }
 });
