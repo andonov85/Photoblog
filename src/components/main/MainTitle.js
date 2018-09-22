@@ -11,7 +11,7 @@ import imageSource from '../gallery/imageSource';
 const styles = theme => ({
   paper: {
     width: '100%',
-    height: 'calc(100vh - 50px)',
+    height: 'calc(100vh - 45px)',
     backgroundPosition: 'center',
     backgroundRepeat: 'no-repeat',
     backgroundSize: 'cover',
