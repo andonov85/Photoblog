@@ -27,10 +27,10 @@ const styles = theme => ({
   card: {
     margin: 'auto', // center the elements
     '&:hover': {
-      opacity: 0.8
+      opacity: 0.8,
     },
     maxWidth: 400,
-    borderRadius: 0
+    borderRadius: 0,
   },
   cardContent: {
     backgroundColor: '#f5f5f5'
@@ -67,7 +67,7 @@ class Gallery extends React.Component {
 
     return (
       <div className={classes.root}>
-      <Paper>
+      <Paper style={{backgroundColor: '#f5f5f5'}}>
         <Typography gutterBottom variant="display1" align="center">
           Photo gallery
         </Typography>
@@ -75,8 +75,8 @@ class Gallery extends React.Component {
         <Grid container spacing={0} justify="center">
           {this.state.categoriesData.map((data) => {
             return (
-              <Grid item xs={12} md={6} lg={4} key={data.categories} className={classes.gridItem}>
-                <Card className={classes.card} onClick={this.handleOnClick}>
+              <Grid item xs={12} md={6} lg={4} key={data.category} className={classes.gridItem}>
+                <Card className={classes.card} onClick={this.handleOnClick} about={data.category.toLowerCase()}>
                   <CardMedia
                     className={classes.media}
                     image={data.thumbUrl}
