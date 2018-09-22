@@ -3,71 +3,63 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import GridList from '@material-ui/core/GridList';
-import GridListTile from '@material-ui/core/GridListTile';
+import Paper from '@material-ui/core/Paper';
+import Card from '@material-ui/core/Card';
+import CardMedia from '@material-ui/core/CardMedia';
+import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 
-import imageSource from './imageSource';
-
-function getModalStyle() {
-  const top = 50;
-  const left = 50;
-
-  return {
-    top: `${top}%`,
-    left: `${left}%`,
-    transform: `translate(-${top}%, -${left}%)`,
-  };
-}
+import firebase from '../../Firebase';
 
 const styles = theme => ({
   root: {
-    flexGrow: 1
-  },
-  rootGridList: {
-    marginLeft: '25%',
-    marginRight: '25%',
+    paddingTop: 30,
     [theme.breakpoints.down('sm')]: {
-      marginLeft: '0%',
-      marginRight: '0%',
+      paddingTop: 5,
     }
   },
-  gridList: {
-    display: 'flex',
-    flexWrap: 'wrap',
-    justifyContent: 'space-around',
-    overflow: 'hidden',
+  gridItem: {
+    padding: '45px 0px 45px 0px',
+    [theme.breakpoints.down('sm')]: {
+      padding: 0,
+    }
+  },
+  card: {
+    margin: 'auto', // center the elements
+    '&:hover': {
+      opacity: 0.8,
+    },
+    maxWidth: 400,
+    borderRadius: 0,
+  },
+  cardContent: {
     backgroundColor: '#f5f5f5'
   },
-  subheader: {
-    width: '100%'
+  media: {
+    height: 250,
   }
 });
 
-class Categories extends React.Component {
+class Gallery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      url: '',
-      name: '',
-      tileData: []
+      categoriesData: []
     };
     this.handleOnClick = this.handleOnClick.bind(this);
   }
 
   componentDidMount() {
-    imageSource().then((images) => {
+    const db = firebase.firestore();
+    db.collection('images').doc('categories').get().then((doc) => {
       this.setState({
-        tileData: images
+        categoriesData: doc.data().categories
       });
     });
   }
 
-  handleOnClick(e) {
-    this.setState({
-      url: e.currentTarget.dataset.url,
-      name: e.currentTarget.getAttribute('name'),
-    });
+  handleOnClick() {
+
   }
 
   render() {
@@ -75,30 +67,38 @@ class Categories extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={0}>
-          <Grid item xs={6}>
-
-          </Grid>
-          <Grid item xs={6}>
-
-          </Grid>
-          <Grid item xs={6}>
-
-          </Grid>
-          <Grid item xs={6}>
-
-          </Grid>
-          <Grid item xs={6}>
-
-          </Grid>
+      <Paper>
+        <Typography gutterBottom variant="display1" align="center">
+          SubGallery
+        </Typography>
+      </Paper>
+        <Grid container spacing={0} justify="center">
+          {this.state.categoriesData.map((data) => {
+            return (
+              <Grid item xs={12} md={6} lg={4} key={data.category.toLowerCase()} className={classes.gridItem}>
+                <Card className={classes.card} onClick={this.handleOnClick} about={data.category.toLowerCase()}>
+                  <CardMedia
+                    className={classes.media}
+                    image={data.thumbUrl}
+                    title={data.category}
+                  />
+                  <CardContent className={classes.cardContent}>
+                    <Typography gutterBottom variant="title" align="center">
+                      {data.category}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            )
+          })}
         </Grid>
       </div>
-    );
+    )
   }
 }
 
-Categories.propTypes = {
+Gallery.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Categories);
+export default withStyles(styles)(Gallery);
