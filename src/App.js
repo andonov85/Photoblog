@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, HashRouter } from "react-router-dom";
+import { Route, BrowserRouter, Switch } from "react-router-dom";
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
@@ -9,6 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Main from './components/main/Main';
 import About from './components/about/About';
 import Gallery from './components/gallery/Gallery';
+import SubGallery from './components/category/SubGallery';
 import Blog from './components/blog/Blog';
 // import Footer from './components/footer/Footer'
 
@@ -23,23 +24,26 @@ class App extends Component {
     const {classes} = this.props;
 
     return (
-      <HashRouter>
+      <BrowserRouter>
           <Grid container spacing={0} className={classes.root}>
             <Grid item xs={12}>
               <NavBar />
             </Grid>
             <Grid item xs={12}>
+              <Switch>
                 <Route exact path="/" component={Main}/>
                 <Route path="/main" component={Main}/>
                 <Route path="/about" component={About}/>
                 <Route path="/gallery" component={Gallery}/>
+                <Route path="/category" component={SubGallery}/>
                 <Route path="/blog" component={Blog}/>
+              </Switch>
             </Grid>
             <Grid item xs={12}>
               {/* ToDo <Route path="/footer" component={Footer}/> */}
             </Grid>
           </Grid>
-      </HashRouter>
+      </BrowserRouter>
     );
   }
 }
