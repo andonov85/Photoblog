@@ -9,7 +9,7 @@ import Grid from '@material-ui/core/Grid';
 import Main from './components/main/Main';
 import About from './components/about/About';
 import Gallery from './components/gallery/Gallery';
-import SubGallery from './components/category/SubGallery';
+import CategoryGallery from './components/gallery/category/CategoryGallery';
 import Blog from './components/blog/Blog';
 // import Footer from './components/footer/Footer'
 
@@ -35,7 +35,7 @@ class App extends Component {
                 <Route path="/main" component={Main}/>
                 <Route path="/about" component={About}/>
                 <Route path="/gallery" component={Gallery}/>
-                <Route path="/category" component={SubGallery}/>
+                <Route path="/gallery/category" component={CategoryGallery}/>
                 <Route path="/blog" component={Blog}/>
               </Switch>
             </Grid>
