@@ -30,10 +30,6 @@ const styles = theme => ({
 });
 
 class NavBar extends React.Component {
-  constructor (props) {
-    super(props);
-  }
-  
   render() {
     const { classes } = this.props;
     return (
