@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -76,6 +77,7 @@ class Gallery extends React.Component {
           {this.state.categoriesData.map((data) => {
             return (
               <Grid item xs={12} md={6} lg={4} key={data.category} className={classes.gridItem}>
+              <Link to="/gallery/category" style={{textDecoration: "none"}}>
                 <Card className={classes.card} onClick={this.handleOnClick} about={data.category.toLowerCase()}>
                   <CardMedia
                     className={classes.media}
@@ -88,6 +90,7 @@ class Gallery extends React.Component {
                     </Typography>
                   </CardContent>
                 </Card>
+              </Link>
               </Grid>
             )
           })}
