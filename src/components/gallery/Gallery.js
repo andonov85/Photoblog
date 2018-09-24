@@ -47,7 +47,6 @@ class Gallery extends React.Component {
     this.state = {
       categoriesData: []
     };
-    this.handleOnClick = this.handleOnClick.bind(this);
   }
 
   componentDidMount() {
@@ -57,10 +56,6 @@ class Gallery extends React.Component {
         categoriesData: doc.data().categories
       });
     });
-  }
-
-  handleOnClick() {
-
   }
 
   render() {
@@ -77,8 +72,8 @@ class Gallery extends React.Component {
           {this.state.categoriesData.map((data) => {
             return (
               <Grid item xs={12} md={6} lg={4} key={data.category} className={classes.gridItem}>
-              <Link to="/gallery/category" style={{textDecoration: "none"}}>
-                <Card className={classes.card} onClick={this.handleOnClick} about={data.category.toLowerCase()}>
+                <Card className={classes.card} onClick={this.handleOnClick}>
+                  <Link to={`/category/${data.category.toLowerCase()}`} style={{textDecoration: "none"}}>
                   <CardMedia
                     className={classes.media}
                     image={data.thumbUrl}
@@ -89,8 +84,8 @@ class Gallery extends React.Component {
                       {data.category}
                     </Typography>
                   </CardContent>
+                  </Link>
                 </Card>
-              </Link>
               </Grid>
             )
           })}
