@@ -6,11 +6,11 @@ import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
-  buttonsNavbar: {
+  buttons: {
     '&:hover': {
-      borderBottom: '3px solid rgb(216, 168, 12)'
+      borderBottom: '2px solid black',
+      backgroundColor: 'transparent'
     },
-    color: 'white',
     fontSize: 13,
     borderRadius: 0
   }
@@ -20,7 +20,11 @@ const NavLink = ({ classes, to, location, buttonName }) => {
   return (
     <Route path={to} children={({ match }) => (
       <Link type="button" replace={match === location.pathname} to={to} style={{textDecoration: "none"}}>
-        <Button className={classes.buttonsNavbar}>{buttonName}</Button>
+        {buttonName === 'Gallery' ? 
+        <Button className={classes.buttons}>{buttonName}</Button>
+      :
+        <Button className={classes.buttons}>{buttonName}</Button>
+      }
       </Link>
     )}/>
   )
