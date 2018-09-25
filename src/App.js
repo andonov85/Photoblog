@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 
 import NavBar from './components/navbar/NavBar';
 import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
 
 import Main from './components/main/Main';
 import About from './components/about/About';
@@ -17,6 +18,9 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
+  logo: {
+    textAlign: 'center'
+  }
 });
 
 class App extends Component {
@@ -26,7 +30,12 @@ class App extends Component {
       <Router>
           <Grid container spacing={0} className={classes.root}>
             <Grid item xs={12}>
-              <NavBar />
+              <Typography variant="display1" className={classes.logo}>
+                AA Photography
+              </Typography>
+            </Grid>
+            <Grid item xs={12}>
+              <NavBar/>
             </Grid>
             <Grid item xs={12}>
                 <Switch>
