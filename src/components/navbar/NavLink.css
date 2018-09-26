@@ -25,5 +25,7 @@
 }
 .gallery:hover + .subMenu .line {
     height: 300px;
-    color: red;
+}
+.subMenu:hover > .line {
+    height: 300px;
 }
