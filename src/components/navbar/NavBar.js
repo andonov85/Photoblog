@@ -7,7 +7,6 @@ import withWidth from '@material-ui/core/withWidth';
 
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
 import Hidden from '@material-ui/core/Hidden';
 
 import NavLink from './NavLink';
