@@ -10,6 +10,7 @@ import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 
 import firebase from '../../Firebase';
+import uuidv1 from 'uuid/v1';
 
 const styles = theme => ({
   root: {
@@ -81,7 +82,7 @@ class Category extends React.Component {
         <Grid container spacing={0} justify="center">
           {this.state.images.map((data) => {
             return (
-              <Grid item xs={12} md={6} lg={4} key={data.category.toLowerCase()} className={classes.gridItem}>
+              <Grid item xs={12} md={6} lg={4} key={uuidv1()} className={classes.gridItem}>
                 <Card className={classes.card} onClick={this.handleOnClick} about={data.category.toLowerCase()}>
                   <CardMedia
                     className={classes.media}
