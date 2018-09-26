@@ -48,9 +48,10 @@ class Category extends React.Component {
       images: []
     };
     this.handleOnClick = this.handleOnClick.bind(this);
+    this.setImageSource = this.setImageSource.bind(this);
   }
 
-  componentDidMount() {
+  setImageSource() {
     const db = firebase.firestore();
     const { category } = this.props.match.params;
     let imagesData = [];
@@ -64,6 +65,16 @@ class Category extends React.Component {
         images: imagesData
       });
     });
+  }
+
+  componentDidMount() {
+    this.setImageSource();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (prevProps.hasOwnProperty('match') && prevProps.match.params.category !== this.props.match.params.category) {
+      this.setImageSource();
+    }
   }
 
   handleOnClick() {
