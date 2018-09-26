@@ -5,7 +5,9 @@ import { Route, Link, withRouter } from 'react-router-dom';
 import { withStyles } from '@material-ui/core/styles';
 import Button from '@material-ui/core/Button';
 import './NavLink.css';
+import uuidv1 from 'uuid/v1';
 
+const categories = ['Flowers', 'Landscapes and seascapes', 'Macro', 'Black and white', 'Other'];
 const styles = theme => ({
   buttons: {
     '&:hover': {
@@ -19,25 +21,27 @@ const styles = theme => ({
 
 const NavLink = ({ classes, to, location, buttonName }) => {
   return (
-    <Route path={to} children={({ match }) => (
-      <Link type="button" replace={match === location.pathname} to={to} style={{textDecoration: "none"}}>
-        {buttonName === 'Gallery' ? 
-        <div className={classes.galleryContainer}>
-          <Button className={classes.buttons + ' ' + 'gallery'}>{buttonName}</Button>
+    <Route path={to} children={({ match }) => 
+      buttonName === 'Gallery'
+      ? 
+        (<div className={classes.galleryContainer}>
+          <Link type="button" replace={match === location.pathname} to={to} style={{textDecoration: "none"}}>
+            <Button className={classes.buttons + ' ' + 'gallery'}>{buttonName}</Button>
+          </Link>
           <div className="subMenu">
             <div className="line"/>
-            <div className="subMenuButton">{'Flowers'}</div>
-            <div className="subMenuButton">{'Landscapes and seascapes'}</div>
-            <div className="subMenuButton">{'Macro'}</div>
-            <div className="subMenuButton">{'Black and white'}</div>
-            <div className="subMenuButton">{'Other'}</div>
+              {categories.map((category) =>
+                (<Link to={`/category/${category.toLowerCase()}`} key={uuidv1()} style={{textDecoration: "none"}}>
+                  <div className="subMenuButton">{category}</div>
+                </Link>)
+              )}
           </div>
-        </div>
+        </div>)
       :
+      (<Link type="button" replace={match === location.pathname} to={to} style={{textDecoration: "none"}}>
         <Button className={classes.buttons}>{buttonName}</Button>
-      }
-      </Link>
-    )}/>
+      </Link>)
+    }/>
   )
 }
 
