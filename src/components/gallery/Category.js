@@ -62,7 +62,6 @@ class Category extends React.Component {
       this.setState({
         images: imagesData
       });
-      console.log(imagesData);
     });
   }
 
