@@ -1,5 +1,4 @@
 .subMenu {
-    /* display: none; */
     position: absolute;
 }
 .subMenuButton {
@@ -23,7 +22,7 @@
     -o-transition: height 1s, transform 1s;
     transition: height 1s, transform 1s;
 }
-.gallery:hover + .subMenu .line {
+.galleryBtn:hover + .subMenu .line {
     height: 300px;
 }
 .subMenu:hover > .line {
