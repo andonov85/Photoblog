@@ -84,11 +84,11 @@ class Category extends React.Component {
     const { classes, match } = this.props;
     return (
       <div className={classes.root}>
-      <Paper>
-        <Typography gutterBottom variant="display1" align="center">
-          {match.params.category}
-        </Typography>
-      </Paper>
+        <Paper>
+          <Typography gutterBottom variant="display1" align="center">
+            {match.params.category}
+          </Typography>
+        </Paper>
         <Grid container spacing={0} justify="center">
           {this.state.images.map((data) => {
             return (
