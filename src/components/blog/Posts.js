@@ -11,6 +11,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
+import Zoom from '@material-ui/core/Zoom';
 
 import blogSource from './blogSource'
 
@@ -42,23 +43,29 @@ class Posts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      blogPosts: []
+      blogPosts: [],
+      checked: false
     };
   }
 
   componentDidMount() {
     blogSource().then((posts) => {
       this.setState({
-        blogPosts: posts
+        blogPosts: posts,
+        checked: true
       });
     });
   }
 
   render() {
     const { classes } = this.props;
+    const { checked } = this.state;
 
     return (
       <div className={classes.root}>
+      <Zoom
+        in={checked}
+      >
         <Grid container spacing={0}>
           {this.state.blogPosts.map(post => (
             <Grid item xs={12} key={post.linkUrl}>
@@ -97,6 +104,7 @@ class Posts extends React.Component {
             </Grid>
           ))}
         </Grid>
+        </Zoom>
       </div>
     );
   }
