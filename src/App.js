@@ -19,7 +19,12 @@ const styles = theme => ({
     flexGrow: 1,
   },
   logo: {
-    textAlign: 'center'
+    [theme.breakpoints.down('sm')]: {
+      fontSize: 20,
+      textAlign: 'left',
+    },
+    textAlign: 'center',
+    fontFamily: 'Abril Fatface, cursive'
   }
 });
 
@@ -29,12 +34,12 @@ class App extends Component {
     return (
       <Router>
           <Grid container spacing={0} className={classes.root}>
-            <Grid item xs={12}>
+            <Grid item xl={12} xs={8}>
               <Typography variant="display1" className={classes.logo}>
                 AA Photography
               </Typography>
             </Grid>
-            <Grid item xs={12}>
+            <Grid item xl={12} xs={4}>
               <NavBar/>
             </Grid>
             <Grid item xs={12}>
@@ -42,7 +47,7 @@ class App extends Component {
                   <Route exact path="/" component={Main}/>
                   <Route path="/main" component={Main}/>
                   <Route path="/about" component={About}/>
-                  <Route path="/gallery" component={Gallery}/>
+                  <Route path="/gallery/" component={Gallery}/>
                   <Route path="/category/:category" component={Category}/>
                   <Route path="/blog" component={Blog}/>
                   <Route render={() => <div>Not Found</div>} />
