@@ -3,15 +3,11 @@ import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 
 import { withStyles } from '@material-ui/core/styles';
-import Grid from '@material-ui/core/Grid';
 import Paper from '@material-ui/core/Paper';
-import Card from '@material-ui/core/Card';
-import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
+import Grow from '@material-ui/core/Grow';
 import { Typography } from '@material-ui/core';
 
 import firebase from '../../Firebase';
-import uuidv1 from 'uuid/v1';
 
 const styles = theme => ({
   root: {
@@ -20,25 +16,16 @@ const styles = theme => ({
       paddingTop: 5,
     }
   },
-  gridItem: {
-    padding: '45px 0px 45px 0px',
-    [theme.breakpoints.down('sm')]: {
-      padding: 0,
-    }
+  paper: {
+    display: 'flex',
+    flexDirection: 'column',
+    backgroundColor: 'LavenderBlush'
   },
-  card: {
-    margin: 'auto', // center the elements
+  links: {
     '&:hover': {
-      opacity: 0.8,
+      color: 'black',
     },
-    maxWidth: 400,
-    borderRadius: 0,
-  },
-  cardContent: {
-    backgroundColor: '#f5f5f5'
-  },
-  media: {
-    height: 250,
+    fontFamily: 'Fredericka the Great, cursive'
   }
 });
 
@@ -46,7 +33,8 @@ class Gallery extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      categoriesData: []
+      categoriesData: [],
+      checked: false
     };
   }
 
@@ -54,43 +42,36 @@ class Gallery extends React.Component {
     const db = firebase.firestore();
     db.collection('images').doc('categories').get().then((doc) => {
       this.setState({
-        categoriesData: doc.data().categories
+        categoriesData: doc.data().categories,
+        checked: true
       });
     });
   }
 
   render() {
     const { classes } = this.props;
+    const { checked } = this.state;
 
     return (
       <div className={classes.root}>
-      <Paper style={{backgroundColor: '#f5f5f5'}}>
-        <Typography gutterBottom variant="display1" align="center">
-          Photo gallery
-        </Typography>
-      </Paper>
-        <Grid container spacing={0} justify="center">
-          {this.state.categoriesData.map((data) => {
-            return (
-              <Grid item xs={12} md={6} lg={4} key={uuidv1()} className={classes.gridItem}>
-                <Card className={classes.card} onClick={this.handleOnClick}>
-                  <Link to={`/category/${data.category.toLowerCase()}`} style={{textDecoration: "none"}}>
-                  <CardMedia
-                    className={classes.media}
-                    image={data.thumbUrl}
-                    title={data.category}
-                  />
-                  <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="title" align="center">
-                      {data.category}
-                    </Typography>
-                  </CardContent>
-                  </Link>
-                </Card>
-              </Grid>
+        <Paper className={classes.paper}>
+        {this.state.categoriesData.map((data, index) => {
+          return (
+          <Grow 
+            key={data.category.toLowerCase()}
+            in={checked}
+            style={{ transformOrigin: '0 0 0' }}
+            {...(checked ? { timeout: (index + 1)*1000 } : {})}
+          >
+            <Link to={`/category/${data.category.toLowerCase()}`} style={{textDecoration: "none"}}>
+              <Typography className={classes.links} gutterBottom variant="display1" align="center">
+                {data.category}
+              </Typography>
+            </Link>
+          </Grow>
             )
           })}
-        </Grid>
+        </Paper>
       </div>
     )
   }
