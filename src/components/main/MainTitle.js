@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
+import Fade from '@material-ui/core/Fade';
 
 import imageSource from '../gallery/imageSource';
 
@@ -25,7 +26,8 @@ class MainTitle extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      imageUrl: ''
+      imageUrl: '',
+      checked: false
     };
   }
 
@@ -33,14 +35,22 @@ class MainTitle extends React.Component {
     imageSource().then((images) => {
       const randomImage = images[Math.floor(Math.random() * images.length)];
       this.setState({
-        imageUrl: `url(${randomImage.url})`
+        imageUrl: `url(${randomImage.url})`,
+        checked: setTimeout(() => {
+          return true
+        }, 2000)
       });
     });
   }
 
   render() {
     const { classes } = this.props;
+    const { checked } = this.state;
     return (
+        <Fade
+          in={checked}
+          timeout={{enter: 2500}}
+        >
           <Paper className={classes.paper} style={{backgroundImage: this.state.imageUrl}}>
             <Grid container>
               <Grid item md={6}>
@@ -49,6 +59,7 @@ class MainTitle extends React.Component {
               </Grid>
             </Grid>
           </Paper>
+        </Fade>
   )}
 }
 
