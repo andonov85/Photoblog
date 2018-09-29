@@ -20,9 +20,6 @@ function Main(props) {
         <Grid item xs={12}>
           <MainTitle />
         </Grid>
-        <Grid item xs={12}>
-        
-        </Grid>
       </Grid>
     </div>
 )}
