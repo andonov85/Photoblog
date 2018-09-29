@@ -10,7 +10,7 @@ import NavLink from './NavLink';
 const styles = {
   fullList: {
     width: 'auto',
-    backgroundColor: 'black'
+    backgroundColor: 'grey'
   },
 };
 
@@ -42,7 +42,7 @@ class DrawerMenu extends React.Component {
     return (
       <div>
         <Button onClick={this.toggleDrawer('top', true)}>
-            <i className="material-icons" style={{color: 'white'}}>menu</i>
+            <i className="material-icons" style={{color: 'grey'}}>menu</i>
         </Button>
         <Drawer anchor="top" open={this.state.top} onClose={this.toggleDrawer('top', false)}>
           <div
