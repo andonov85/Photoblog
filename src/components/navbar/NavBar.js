@@ -33,7 +33,7 @@ class NavBar extends React.Component {
     const { classes } = this.props;
     return (
       <div className={classes.root}>
-      <AppBar position="static" className={classes.appbar}>
+      <AppBar position="sticky" className={classes.appbar}>
         <Toolbar className={classes.toolbar}>
           <Hidden only={['xs', 'sm']}>
             <NavLink to="/main" buttonName="Home" />
