@@ -10,10 +10,11 @@ const styles = (theme) => ({
   root: {
     display: 'flex',
     justifyContent: 'center',
+    height: '90vh'
   },
 	paper: {
     width: 500,
-    height: 800,
+    height: '100%',
     backgroundColor: '#ebfaf9'
 	}
 });

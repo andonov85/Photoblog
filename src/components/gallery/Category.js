@@ -3,10 +3,10 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-import Paper from '@material-ui/core/Paper';
+// import Paper from '@material-ui/core/Paper';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
-import CardContent from '@material-ui/core/CardContent';
+// import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 
 import firebase from '../../Firebase';
@@ -23,6 +23,11 @@ const styles = theme => ({
     [theme.breakpoints.down('sm')]: {
       padding: 0,
     }
+  },
+  category: {
+    fontFamily: 'Great Vibes, cursive',
+    fontSize: 56,
+    textTransform: 'capitalize'
   },
   card: {
     margin: 'auto', // center the elements
@@ -84,11 +89,9 @@ class Category extends React.Component {
     const { classes, match } = this.props;
     return (
       <div className={classes.root}>
-        <Paper>
-          <Typography gutterBottom variant="display1" align="center">
-            {match.params.category}
-          </Typography>
-        </Paper>
+        <Typography className={classes.category} gutterBottom variant="display1" align="center">
+          {match.params.category}
+        </Typography>
         <Grid container spacing={0} justify="center">
           {this.state.images.map((data) => {
             return (
@@ -99,11 +102,11 @@ class Category extends React.Component {
                     image={data.thumbUrl}
                     title={data.category}
                   />
-                  <CardContent className={classes.cardContent}>
+                  {/* <CardContent className={classes.cardContent}>
                     <Typography gutterBottom variant="title" align="center">
                       {data.name}
                     </Typography>
-                  </CardContent>
+                  </CardContent> */}
                 </Card>
               </Grid>
             )

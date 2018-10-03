@@ -18,10 +18,14 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
+  grow: {
+    flexGrow: 1
+  },
   logo: {
     [theme.breakpoints.down('sm')]: {
       fontSize: 20,
       textAlign: 'left',
+      padding: '10px 0px 10px 20px'
     },
     textAlign: 'center',
     fontFamily: 'Abril Fatface, cursive'
@@ -34,12 +38,12 @@ class App extends Component {
     return (
       <Router>
           <Grid container spacing={0} className={classes.root}>
-            <Grid item xl={12} xs={8}>
+            <Grid item md={12} sm={9} className={classes.grow}>
               <Typography variant="display1" className={classes.logo}>
                 AA Photography
               </Typography>
             </Grid>
-            <Grid item xl={12} xs={4}>
+            <Grid item md={12} sm={3}>
               <NavBar/>
             </Grid>
             <Grid item xs={12}>

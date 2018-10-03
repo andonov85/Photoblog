@@ -9,6 +9,9 @@ import imageSource from '../gallery/imageSource';
 
 const styles = theme => ({
   paper: {
+    [theme.breakpoints.down('sm')]: {
+      height: 'calc(100vh - 45px)',
+    },
     width: '100%',
     height: 'calc(100vh - 85px)',
     backgroundPosition: 'center',
