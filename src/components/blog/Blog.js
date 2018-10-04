@@ -5,7 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 
-import Posts from './Posts';
+import Post from './Post';
 import blogSource from './blogSource';
 
 const styles = theme => ({
@@ -64,9 +64,13 @@ class Blog extends React.Component {
         <Grid container spacing={0} className={classes.grid}>
           <Grid item sm={12} md={7}>
             <div className={classes.posts}>
+              <Grid container spacing={0}>
               {posts.map((post) => {
-                return <Posts post={post} key={post.linkUrl} />
+                return (
+                  <Post post={post} key={post.linkUrl}/>
+                )
               })}
+              </Grid>
             </div>
           </Grid>
           <Grid item sm={12} md={5}>
