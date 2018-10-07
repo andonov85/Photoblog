@@ -48,7 +48,7 @@ class Posts extends React.Component {
     const { classes, post } = this.props;
     return (
     <Grid item xs={12}>
-    <LazyLoad className={classes.lazyLoad} height={200} offsetVertical={100}>
+    <LazyLoad className={classes.lazyLoad} height={200} offsetVertical={2160}>
         <Card className={classes.card}>
           <CardHeader
             avatar={

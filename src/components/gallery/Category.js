@@ -9,7 +9,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 // import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 
-import firebase from '../../Firebase';
+import { firebase } from '../../Firebase';
 
 const styles = theme => ({
   root: {

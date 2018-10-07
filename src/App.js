@@ -37,30 +37,30 @@ class App extends Component {
     const { classes } = this.props;
     return (
       <Router>
-          <Grid container spacing={0} className={classes.root}>
-            <Grid item md={12} sm={9} className={classes.grow}>
-              <Typography variant="display1" className={classes.logo}>
-                AA Photography
-              </Typography>
-            </Grid>
-            <Grid item md={12} sm={3}>
-              <NavBar/>
-            </Grid>
-            <Grid item xs={12}>
-                <Switch>
-                  <Route exact path="/" component={Main}/>
-                  <Route path="/main" component={Main}/>
-                  <Route path="/about" component={About}/>
-                  <Route path="/gallery/" component={Gallery}/>
-                  <Route path="/category/:category" component={Category}/>
-                  <Route path="/blog" component={Blog}/>
-                  <Route render={() => <div>Not Found</div>} />
-                </Switch>
-            </Grid>
-            <Grid item xs={12}>
-              {/* ToDo <Route path="/footer" component={Footer}/> */}
-            </Grid>
+        <Grid container spacing={0} className={classes.root}>
+          <Grid item md={12} sm={9} className={classes.grow}>
+            <Typography variant="display1" className={classes.logo}>
+              AA Photography
+            </Typography>
           </Grid>
+          <Grid item md={12} sm={3}>
+            <NavBar />
+          </Grid>
+          <Grid item xs={12}>
+            <Switch>
+              <Route exact path="/" component={Main} />
+              <Route path="/main" component={Main} />
+              <Route path="/about" component={About} />
+              <Route path="/gallery/" component={Gallery} />
+              <Route path="/category/:category" component={Category} />
+              <Route path="/blog" component={Blog} />
+              <Route render={() => <div>Not Found</div>} />
+            </Switch>
+          </Grid>
+          <Grid item xs={12}>
+            {/* ToDo <Route path="/footer" component={Footer}/> */}
+          </Grid>
+        </Grid>
       </Router>
     );
   }

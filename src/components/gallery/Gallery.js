@@ -7,7 +7,7 @@ import Paper from '@material-ui/core/Paper';
 import Grow from '@material-ui/core/Grow';
 import { Typography } from '@material-ui/core';
 
-import firebase from '../../Firebase';
+import { firebase } from '../../Firebase';
 
 const styles = theme => ({
   root: {
