@@ -13,6 +13,8 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import LazyLoad from 'react-lazy-load';
 
+import CommentSection from './CommentSection';
+
 const styles = theme => ({
   card: {
     boxShadow: 'none',
@@ -39,7 +41,7 @@ const styles = theme => ({
     position: 'relative',
     height: 0,
     paddingBottom: '70%',
-    overflow: 'hidden'
+    // overflow: 'hidden'
   }
 });
 
@@ -79,6 +81,7 @@ class Posts extends React.Component {
                 </a>
               </Typography>
             </div>
+            <CommentSection postId={post.postId}/>
           </CardContent>
         </Card>
       </LazyLoad>

@@ -9,7 +9,7 @@ import Divider from '@material-ui/core/Divider';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
 import Post from './Post';
-import blogSource from './blogSource';
+import { getPosts } from './blogSource';
 
 const styles = theme => ({
   root: {
@@ -56,7 +56,7 @@ class Blog extends React.Component {
   }
 
   componentDidMount() {
-    blogSource.blogSource().then((posts) => {
+    getPosts().then((posts) => {
       this.setState({
         posts: posts
       });
@@ -64,7 +64,7 @@ class Blog extends React.Component {
   }
 
   handleOnChange(event) {
-    blogSource.searchInPosts(event.target.value).then((posts) => {
+    getPosts(event.target.value).then((posts) => {
       this.setState({
         posts: posts
       });
@@ -72,7 +72,7 @@ class Blog extends React.Component {
   }
 
   responseGoogle = (res) => {
-    alert('А така, ' + res.profileObj.name + ', сега ми падна! ;) (майтап, само те пробвам)');
+    console.log(res.profileObj);
   }
 
   logout = () => {
@@ -101,7 +101,7 @@ class Blog extends React.Component {
               <Grid container spacing={0}>
                 {posts.map((post) => {
                   return (
-                    <Post post={post} key={post.linkUrl} />
+                    <Post key={post.postId} post={post}/>
                   )
                 })}
               </Grid>
