@@ -3,12 +3,19 @@ import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
 
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
+import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 
 const styles = theme => ({
-  root: {
-
+  card: {
+    borderRadius: 'unset',
+    boxShadow: 'none',
+  },
+  header: {
+    padding: 0
   },
   avatar: {
     margin: 10,
@@ -21,10 +28,19 @@ class Comment extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Avatar alt={comment.userName} src={comment.imageUrl} className={classes.avatar}/>
-        <Typography>{comment.userName}</Typography>
-        <Typography>{comment.date}</Typography>
-        <Typography>{comment.content}</Typography>
+        <Card className={classes.card}>
+          <CardHeader
+            avatar={
+              <Avatar alt={comment.userName} src={comment.imageUrl} className={classes.avatar} />
+            }
+            title={comment.userName}
+            subheader={comment.date}
+            className={classes.header}
+          />
+          <CardContent>
+            <Typography component="p">{comment.content}</Typography>
+          </CardContent>
+        </Card>
       </div>
     )
   }

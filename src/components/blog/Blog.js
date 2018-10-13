@@ -7,6 +7,8 @@ import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
+import Avatar from '@material-ui/core/Avatar';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import Post from './Post';
 import { getPosts } from './blogSource';
@@ -33,6 +35,9 @@ const styles = theme => ({
   articlesTitle: {
     color: 'grey'
   },
+  avatar: {
+    margin: 10
+  },
   GoogleLogin: {
     fontSize: 10,
     fontWeight: 'bold'
@@ -48,7 +53,8 @@ class Blog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      posts: []
+      posts: [],
+      user: {}
     };
     this.handleOnChange = this.handleOnChange.bind(this);
     this.responseGoogle = this.responseGoogle.bind(this);
@@ -72,22 +78,26 @@ class Blog extends React.Component {
   }
 
   responseGoogle = (res) => {
-    console.log(res.profileObj);
+    this.setState({
+      user: res.profileObj
+    });
   }
 
   logout = () => {
-    console.log('Log outed');
+    this.setState({
+      user: {}
+    });
   }
 
   render() {
     const { classes } = this.props;
-    const { posts } = this.state;
+    const { posts, user } = this.state;
 
     return (
       <div className={classes.root}>
         <Grid container spacing={0} className={classes.grid}>
-        <Grid item sm={12} md={2}>
-        </Grid>
+          <Grid item sm={12} md={2}>
+          </Grid>
           <Grid item sm={12} md={8}>
             <Typography variant="title" gutterBottom={true} align="left" className={classes.articlesTitle}>
               LATEST ARTICLES
@@ -101,7 +111,7 @@ class Blog extends React.Component {
               <Grid container spacing={0}>
                 {posts.map((post) => {
                   return (
-                    <Post key={post.postId} post={post}/>
+                    <Post key={post.postId} postId={post.postId} post={post} user={user}/>
                   )
                 })}
               </Grid>
@@ -121,20 +131,29 @@ class Blog extends React.Component {
                 />
               </Grid>
               <Grid item sm={3} md={3}>
-                <GoogleLogin
-                  className={classes.GoogleLogin}
-                  clientId={process.env.REACT_APP_GOOGLE_clientId}
-                  buttonText="G Login"
-                  onSuccess={this.responseGoogle}
-                  onFailure={this.responseGoogle}
-                >
-                </GoogleLogin>
-                <GoogleLogout
-                  className={classes.GoogleLogout}
-                  buttonText="logout"
-                  onLogoutSuccess={this.logout}
-                >
-                </GoogleLogout>
+                {Object.values(user).length === 0 ?
+                  <div>
+                    <AccountCircle color="primary" />
+                    <GoogleLogin
+                      className={classes.GoogleLogin}
+                      clientId={process.env.REACT_APP_GOOGLE_clientId}
+                      buttonText="G Login"
+                      onSuccess={this.responseGoogle}
+                      onFailure={this.responseGoogle}
+                      isSignedIn={true}
+                    >
+                    </GoogleLogin>
+                  </div> :
+                  <div>
+                    <Avatar alt={user.userName} src={user.imageUrl} className={classes.avatar} />
+                    <GoogleLogout
+                      className={classes.GoogleLogout}
+                      buttonText="Logout"
+                      onLogoutSuccess={this.logout}
+                    >
+                    </GoogleLogout>
+                  </div>
+                }
               </Grid>
             </Grid>
           </Grid>
