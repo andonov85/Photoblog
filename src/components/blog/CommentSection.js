@@ -13,7 +13,7 @@ const styles = theme => ({
     boxShadow: 'none',
   },
   subcomments: {
-    paddingLeft: 20
+    paddingLeft: 50
   }
 });
 

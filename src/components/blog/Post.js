@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
+import { firebase } from '../../Firebase';
 import { withStyles } from '@material-ui/core/styles';
 
 import classnames from 'classnames';
@@ -19,10 +20,10 @@ import ShareIcon from '@material-ui/icons/Share';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import Comment from '@material-ui/icons/Comment';
 import LazyLoad from 'react-lazy-load';
-import TextField from '@material-ui/core/TextField';
 
+import WriteComment from './WriteComment';
 import CommentSection from './CommentSection';
-import { getComments } from './blogSource';
+import { sortByDate, countComments } from './blogSource';
 
 const styles = theme => ({
   card: {
@@ -77,6 +78,7 @@ class Posts extends React.Component {
     super(props);
     this.state = {
       comments: [],
+      commentsNumber: '',
       expanded: false,
       chat: false,
     };
@@ -85,11 +87,32 @@ class Posts extends React.Component {
   }
 
   componentDidMount() {
-    getComments(this.props.postId).then((comments) => {
-      this.setState({
-        comments: comments
+    const db = firebase.firestore();
+    db.collection('comments')
+      .where('postId', '==', this.props.postId)
+      .orderBy('date', 'asc')
+      .onSnapshot((snapshot) => {
+        let comments = [];
+
+        snapshot.forEach((comment) => {
+          const { content, postId, userId, date, userName, imageUrl, subcomments } = comment.data();
+          comments.push({
+            commentId: comment.id,
+            content: content,
+            date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
+            postId: postId,
+            userId: userId,
+            userName: userName,
+            imageUrl: imageUrl,
+            subcomments: sortByDate(subcomments)
+          });
+        });
+
+        this.setState({
+          comments: comments,
+          commentsNumber: countComments(comments)
+        });
       });
-    });
   }
 
   handleExpandClick = () => {
@@ -102,7 +125,7 @@ class Posts extends React.Component {
 
   render() {
     const { classes, post, postId, user } = this.props;
-    const { comments, expanded, chat } = this.state;
+    const { comments, commentsNumber, expanded, chat } = this.state;
     return (
       <Grid item xs={12}>
         <LazyLoad className={classes.lazyLoad} offsetVertical={1000}>
@@ -148,7 +171,7 @@ class Posts extends React.Component {
                 aria-label="Comment">
                 <Comment />
               </IconButton>
-              <Typography>{comments.length}</Typography>
+              <Typography>{commentsNumber}</Typography>
               <IconButton
                 className={classnames(classes.expand, {
                   [classes.expandOpen]: expanded,
@@ -163,30 +186,14 @@ class Posts extends React.Component {
             <Collapse in={chat} timeout="auto" unmountOnExit>
               <CardContent>
                 {Object.values(user).length !== 0 ?
-                  <div>
-                    <Avatar alt={user.userName} src={user.imageUrl} className={classes.avatar} />
-                    <Typography>
-                      {user.name}
-                    </Typography>
-                    <TextField
-                      in={chat.toString()}
-                      id="outlined-multiline-static"
-                      label="Write a comment:"
-                      fullWidth={true}
-                      multiline
-                      rows="4"
-                      className={classes.textField}
-                      margin="normal"
-                      variant="outlined"
-                    />
-                  </div> :
+                  <WriteComment postId={postId} user={user} /> :
                   <Typography>Sign in to write a comment.</Typography>
                 }
               </CardContent>
             </Collapse>
             <Collapse in={expanded} timeout="auto" unmountOnExit>
               <CardContent>
-                <CommentSection postId={postId} comments={comments}/>
+                <CommentSection postId={postId} comments={comments} />
               </CardContent>
             </Collapse>
           </Card>

@@ -1,5 +1,13 @@
 import { firebase } from '../../Firebase';
 
+function countComments(comments) {
+  let result = comments.length;
+  comments.forEach((comment) => {
+    result += comment.subcomments.length;
+  });
+  return result;
+}
+
 function sortByDate(array) {
   return array.sort((a, b) => {
     return a.date.toDate() - b.date.toDate();
@@ -13,9 +21,10 @@ function getUser(userId) {
   if (userId === undefined || typeof userId !== 'string') {
     return Error('Invalid userId');
   }
-  const db = firebase.firestore();
-
+  
   return new Promise((resolve) => {
+    const db = firebase.firestore();
+
     db.collection('users').doc(userId).get().then((user) => {
       if (user.exists) {
         resolve(user.data());
@@ -28,33 +37,7 @@ function getUser(userId) {
   });
 }
 
-function getComments(postId) {
-  const db = firebase.firestore();
-  let comments = [];
-
-  return new Promise((resolve) => {
-    db.collection('comments').where('postId', '==', postId).orderBy('date', 'asc').get().then((snapshot) => {
-      snapshot.forEach((doc) => {
-        let comment = doc.data();
-
-        comments.push({
-          commentId: doc.id,
-          content: comment.content,
-          date: comment.date.toDate().toDateString(),
-          postId: comment.postId,
-          userId: comment.userId,
-          userName: comment.userName,
-          imageUrl: comment.imageUrl,
-          subcomments: sortByDate(comment.subcomments)
-        });
-      });
-      resolve(comments);
-    });
-  });
-}
-
 function getPosts(searched) {
-  const db = firebase.firestore();
   let regex = '';
   if (searched) {
     searched = searched.match(/[\w\d]+/gi) ? searched.match(/[\w\d]+/gi).join(' ') : '';
@@ -62,6 +45,7 @@ function getPosts(searched) {
   }
 
   return new Promise((resolve) => {
+    const db = firebase.firestore();
     let blogPosts = [];
 
     db.collection('blog').orderBy('date', 'desc').get().then((snapshot) => {
@@ -93,4 +77,4 @@ function getPosts(searched) {
   });
 }
 
-export { getPosts, getComments, getUser };
+export { getPosts, getUser, countComments, sortByDate };

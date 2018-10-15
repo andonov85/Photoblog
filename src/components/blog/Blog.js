@@ -12,6 +12,7 @@ import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import Post from './Post';
 import { getPosts } from './blogSource';
+import { setUser } from './uploadSource';
 
 const styles = theme => ({
   root: {
@@ -48,7 +49,6 @@ const styles = theme => ({
   },
 });
 
-
 class Blog extends React.Component {
   constructor(props) {
     super(props);
@@ -56,7 +56,7 @@ class Blog extends React.Component {
       posts: [],
       user: {}
     };
-    this.handleOnChange = this.handleOnChange.bind(this);
+    this.handleOnSearchChange = this.handleOnSearchChange.bind(this);
     this.responseGoogle = this.responseGoogle.bind(this);
     this.logout = this.logout.bind(this);
   }
@@ -69,7 +69,7 @@ class Blog extends React.Component {
     });
   }
 
-  handleOnChange(event) {
+  handleOnSearchChange(event) {
     getPosts(event.target.value).then((posts) => {
       this.setState({
         posts: posts
@@ -78,8 +78,10 @@ class Blog extends React.Component {
   }
 
   responseGoogle = (res) => {
-    this.setState({
-      user: res.profileObj
+    setUser(res.profileObj).then((newUser) => {
+      this.setState({
+        user: newUser
+      });
     });
   }
 
@@ -122,7 +124,7 @@ class Blog extends React.Component {
               <Grid item sm={3} md={3}>
                 <TextField
                   className={classes.textField}
-                  onChange={this.handleOnChange}
+                  onChange={this.handleOnSearchChange}
                   id="outlined-search"
                   label="Search post..."
                   type="search"
