@@ -35,10 +35,14 @@ class MainTitle extends React.Component {
 
   componentDidMount() {
     imageSource().then((images) => {
-      const randomImage = images[Math.floor(Math.random() * images.length)];
-      this.setState({
-        imageUrl: `${randomImage.url}`
-      });
+      if (images) {
+        const randomImage = images[Math.floor(Math.random() * images.length)];
+        this.setState({
+          imageUrl: `${randomImage.url}`
+        });
+      } else {
+        console.log('Can\'t download images');
+      }
     });
   }
 
@@ -53,15 +57,16 @@ class MainTitle extends React.Component {
     const { imageUrl, checked } = this.state;
 
     return (
-        <Fade
-          in={checked}
-          timeout={{enter: 2500, exit: 2500}}
-        >
-          <Paper className={classes.paper} style={{backgroundImage: `url(${imageUrl})`}}>
-            <img src={imageUrl} alt="Flowers" onLoad={this.handleonLoad} style={{display: 'none'}}/>
-          </Paper>
-        </Fade>
-  )}
+      <Fade
+        in={checked}
+        timeout={{ enter: 2500, exit: 2500 }}
+      >
+        <Paper className={classes.paper} style={{ backgroundImage: `url(${imageUrl})` }}>
+          <img src={imageUrl} alt="Flowers" onLoad={this.handleonLoad} style={{ display: 'none' }} />
+        </Paper>
+      </Fade>
+    )
+  }
 }
 
 MainTitle.propTypes = {

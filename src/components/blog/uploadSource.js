@@ -17,13 +17,13 @@ function setUser(googleUser) {
 			if (user.docs.length === 1) {
 				const userId = user.docs[0].id;
 				const userData = user.docs[0].data();
-				const { name, familyName, givenName, email, imageUrl } = userData;
+				const { name, familyName, givenName, imageUrl } = userData;
 				
 				users.doc(userId).update({
 					name: name,
 					familyName: familyName,
 					givenName: givenName,
-					email: email,
+					// email: email,
 					imageUrl: imageUrl
 				}).catch(function (error) {
 					// The document probably doesn't exist.

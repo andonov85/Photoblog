@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-import { firebase } from '../../Firebase';
 import { withStyles } from '@material-ui/core/styles';
 
 import classnames from 'classnames';
@@ -17,13 +16,14 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import AddComment from '@material-ui/icons/AddComment';
 import Comment from '@material-ui/icons/Comment';
 import LazyLoad from 'react-lazy-load';
+import Divider from '@material-ui/core/Divider';
 
 import WriteComment from './WriteComment';
 import CommentSection from './CommentSection';
-import { sortByDate, countComments } from './blogSource';
+import { countComments } from './blogSource';
 
 const styles = theme => ({
   card: {
@@ -77,8 +77,6 @@ class Posts extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      comments: [],
-      commentsNumber: '',
       expanded: false,
       chat: false,
     };
@@ -86,46 +84,21 @@ class Posts extends React.Component {
     this.handleCommentClick = this.handleCommentClick.bind(this);
   }
 
-  componentDidMount() {
-    const db = firebase.firestore();
-    db.collection('comments')
-      .where('postId', '==', this.props.postId)
-      .orderBy('date', 'asc')
-      .onSnapshot((snapshot) => {
-        let comments = [];
-
-        snapshot.forEach((comment) => {
-          const { content, postId, userId, date, userName, imageUrl, subcomments } = comment.data();
-          comments.push({
-            commentId: comment.id,
-            content: content,
-            date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
-            postId: postId,
-            userId: userId,
-            userName: userName,
-            imageUrl: imageUrl,
-            subcomments: sortByDate(subcomments)
-          });
-        });
-
-        this.setState({
-          comments: comments,
-          commentsNumber: countComments(comments)
-        });
-      });
-  }
-
-  handleExpandClick = () => {
-    this.setState(state => ({ expanded: !state.expanded }));
+  handleExpandClick() {
+    this.setState(state => ({ 
+      expanded: !state.expanded
+     }));
   };
 
-  handleCommentClick = () => {
-    this.setState(state => ({ chat: !state.chat }));
+  handleCommentClick() {
+    this.setState(state => ({ 
+      chat: !state.chat
+    }));
   };
 
   render() {
-    const { classes, post, postId, user } = this.props;
-    const { comments, commentsNumber, expanded, chat } = this.state;
+    const { classes, post, postId, user, comments } = this.props;
+    const { expanded, chat } = this.state;
     return (
       <Grid item xs={12}>
         <LazyLoad className={classes.lazyLoad} offsetVertical={1000}>
@@ -171,7 +144,7 @@ class Posts extends React.Component {
                 aria-label="Comment">
                 <Comment />
               </IconButton>
-              <Typography>{commentsNumber}</Typography>
+              <Typography>{countComments(comments)}</Typography>
               <IconButton
                 className={classnames(classes.expand, {
                   [classes.expandOpen]: expanded,
@@ -180,10 +153,11 @@ class Posts extends React.Component {
                 aria-expanded={expanded}
                 aria-label="Show more"
               >
-                <ExpandMoreIcon />
+                <AddComment />
               </IconButton>
             </CardActions>
-            <Collapse in={chat} timeout="auto" unmountOnExit>
+            <Collapse in={expanded} timeout="auto" unmountOnExit>
+              <Divider />
               <CardContent>
                 {Object.values(user).length !== 0 ?
                   <WriteComment postId={postId} user={user} /> :
@@ -191,9 +165,14 @@ class Posts extends React.Component {
                 }
               </CardContent>
             </Collapse>
-            <Collapse in={expanded} timeout="auto" unmountOnExit>
+            <Collapse in={chat} timeout="auto" unmountOnExit>
+              <Divider />
               <CardContent>
-                <CommentSection postId={postId} comments={comments} />
+                <CommentSection postId={postId} comments={comments} user={user}/>
+                {Object.values(user).length !== 0 ?
+                  <WriteComment postId={postId} user={user} /> :
+                  <Typography>Sign in to write a comment.</Typography>
+                }
               </CardContent>
             </Collapse>
           </Card>

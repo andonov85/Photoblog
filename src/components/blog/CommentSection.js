@@ -12,29 +12,16 @@ const styles = theme => ({
     borderRadius: 'none',
     boxShadow: 'none',
   },
-  subcomments: {
-    paddingLeft: 50
-  }
 });
 
 class CommentSection extends React.Component {
   render() {
-    const { classes, comments } = this.props;
+    const { classes, comments, user } = this.props;
     return (
       <Paper className={classes.paper}>
         {comments.map((comment) => {
           return (
-            <div key={comment.commentId} className={classes.comments}>
-              <Comment comment={comment} />
-              <div className={classes.subcomments}>
-                {comment.subcomments.map((subcomment, index) => {
-                  return (
-                    <Comment key={comment.commentId + index} comment={subcomment} />
-                  )
-                })
-                }
-              </div>
-            </div>
+            <Comment className={classes.comments} key={comment.commentId} comment={comment} user={user}/>
           )
         })
         }

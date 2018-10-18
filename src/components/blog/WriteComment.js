@@ -2,8 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
+
+import Card from '@material-ui/core/Card';
+import CardHeader from '@material-ui/core/CardHeader';
 import Avatar from '@material-ui/core/Avatar';
-import Typography from '@material-ui/core/Typography';
 import TextField from '@material-ui/core/TextField';
 import Button from '@material-ui/core/Button';
 
@@ -15,8 +17,18 @@ const styles = theme => ({
 	avatar: {
 		margin: 10,
 	},
+	card: {
+		// borderRadius: 'unset',
+		boxShadow: 'none',
+	},
+	header: {
+		padding: '0px 0px -5px 0px'
+	},
 	button: {
 		margin: theme.spacing.unit,
+	},
+	textField: {
+		marginTop: -5
 	}
 });
 
@@ -54,17 +66,22 @@ class WriteComment extends React.Component {
 		const { classes, user } = this.props;
 		return (
 			<div>
-				<Avatar alt={user.name} src={user.imageUrl} className={classes.avatar} />
-				<Typography>
-					{user.name}
-				</Typography>
+				<Card className={classes.card}>
+					<CardHeader
+						className={classes.header}
+						avatar={
+							<Avatar alt={user.name} src={user.imageUrl} className={classes.avatar} />
+						}
+						title={user.name}
+					/>
+				</Card>
 				<TextField
+					className={classes.textField}
 					id="outlined-multiline-static"
 					label="Write a comment:"
 					fullWidth={true}
 					multiline
 					rows="4"
-					className={classes.textField}
 					margin="normal"
 					variant="outlined"
 					value={this.state.commentField}
@@ -72,7 +89,7 @@ class WriteComment extends React.Component {
 				/>
 				<Button variant="outlined" color="primary" className={classes.button} onClick={this.publishComment}>
 					Publish
-        </Button>
+							</Button>
 			</div>
 		);
 	}

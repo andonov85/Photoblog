@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { firebase } from '../../Firebase';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -11,7 +12,7 @@ import Avatar from '@material-ui/core/Avatar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import Post from './Post';
-import { getPosts } from './blogSource';
+import { getPosts, sortByDate } from './blogSource';
 import { setUser } from './uploadSource';
 
 const styles = theme => ({
@@ -54,6 +55,7 @@ class Blog extends React.Component {
     super(props);
     this.state = {
       posts: [],
+      comments: [],
       user: {}
     };
     this.handleOnSearchChange = this.handleOnSearchChange.bind(this);
@@ -63,9 +65,33 @@ class Blog extends React.Component {
 
   componentDidMount() {
     getPosts().then((posts) => {
-      this.setState({
-        posts: posts
-      });
+      return posts;
+    }).then((posts) => {
+      const db = firebase.firestore();
+      db.collection('comments')
+        .orderBy('date', 'asc')
+        .onSnapshot((snapshot) => {
+          let comments = [];
+
+          snapshot.forEach((comment) => {
+            const { content, postId, userId, date, userName, imageUrl, subcomments } = comment.data();
+            comments.push({
+              commentId: comment.id,
+              content: content,
+              date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
+              postId: postId,
+              userId: userId,
+              userName: userName,
+              imageUrl: imageUrl,
+              subcomments: sortByDate(subcomments)
+            });
+          });
+
+          this.setState({
+            posts: posts,
+            comments: comments,
+          });
+        });
     });
   }
 
@@ -93,7 +119,7 @@ class Blog extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { posts, user } = this.state;
+    const { posts, user, comments } = this.state;
 
     return (
       <div className={classes.root}>
@@ -112,8 +138,10 @@ class Blog extends React.Component {
             <div className={classes.posts}>
               <Grid container spacing={0}>
                 {posts.map((post) => {
+                  const postComments = comments.filter(comment => comment.postId === post.postId);
+                  console.log(postComments);
                   return (
-                    <Post key={post.postId} postId={post.postId} post={post} user={user}/>
+                    <Post key={post.postId} postId={post.postId} post={post} user={user} comments={postComments} />
                   )
                 })}
               </Grid>
