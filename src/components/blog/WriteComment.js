@@ -48,13 +48,12 @@ class WriteComment extends React.Component {
 			return;
 		}
 		let comment = {
+			postId: postId,
 			userId: user.googleId,
 			userName: user.name,
-			postId: postId,
 			content: commentField,
 			date: firebase.firestore.Timestamp.now(),
 			imageUrl: user.imageUrl,
-			subcomments: []
 		};
 		this.setState({
 			commentField: ''

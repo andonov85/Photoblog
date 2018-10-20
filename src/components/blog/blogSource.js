@@ -1,13 +1,5 @@
 import { firebase } from '../../Firebase';
 
-function countComments(comments) {
-  let result = comments.length;
-  comments.forEach((comment) => {
-    result += comment.subcomments.length;
-  });
-  return result;
-}
-
 function sortByDate(array) {
   return array.sort((a, b) => {
     return a.date.toDate() - b.date.toDate();
@@ -21,7 +13,7 @@ function getUser(userId) {
   if (userId === undefined || typeof userId !== 'string') {
     return Error('Invalid userId');
   }
-  
+
   return new Promise((resolve) => {
     const db = firebase.firestore();
 
@@ -77,4 +69,4 @@ function getPosts(searched) {
   });
 }
 
-export { getPosts, getUser, countComments, sortByDate };
+export { getPosts, getUser, sortByDate };

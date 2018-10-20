@@ -16,12 +16,12 @@ const styles = theme => ({
 
 class CommentSection extends React.Component {
   render() {
-    const { classes, comments, user } = this.props;
+    const { classes, comments, subcomments, user } = this.props;
     return (
       <Paper className={classes.paper}>
         {comments.map((comment) => {
           return (
-            <Comment className={classes.comments} key={comment.commentId} comment={comment} user={user}/>
+            <Comment className={classes.comments} key={comment.commentId} comment={comment} subcomments={subcomments} user={user}/>
           )
         })
         }

@@ -2,10 +2,9 @@ import { firebase } from '../../Firebase';
 
 function uploadComment(comment) {
 	const db = firebase.firestore();
-	db.collection('comments').add(comment).then((addedComment) => {
-		
-	}).catch(function (error) {
-			console.error("Error adding document: ", error);
+	db.collection('comments').add(comment)
+		.catch(function (error) {
+			console.error("Error adding comment: ", error);
 		});
 }
 
@@ -18,7 +17,7 @@ function setUser(googleUser) {
 				const userId = user.docs[0].id;
 				const userData = user.docs[0].data();
 				const { name, familyName, givenName, imageUrl } = userData;
-				
+
 				users.doc(userId).update({
 					name: name,
 					familyName: familyName,

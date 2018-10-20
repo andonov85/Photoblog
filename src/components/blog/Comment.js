@@ -75,40 +75,41 @@ class Comment extends React.Component {
       expanded: false,
     };
     this.handleExpandClick = this.handleExpandClick.bind(this);
-    this.sendComment = this.sendComment.bind(this);
+    this.sendSubcomment = this.sendSubcomment.bind(this);
   }
 
   handleExpandClick() {
     this.setState(state => ({ expanded: !state.expanded }));
   };
 
-  sendComment() {
-		const { comment, user } = this.props;
-		const { commentField } = this.state;
-		if (commentField === '') {
-			return;
-		}
-		let subcomment = {
-			userId: user.googleId,
-			userName: user.name,
-			content: commentField,
-			date: firebase.firestore.Timestamp.now(),
-			imageUrl: user.imageUrl
-		};
-		this.setState({
-			commentField: ''
-		});
+  sendSubcomment() {
+    const { comment, user } = this.props;
+    const { commentField } = this.state;
+    if (commentField === '') {
+      return;
+    }
+    let subcomment = {
+      postId: comment.postId,
+      commentId: comment.commentId,
+      userId: user.googleId,
+      userName: user.name,
+      content: commentField,
+      date: firebase.firestore.Timestamp.now(),
+      imageUrl: user.imageUrl
+    };
+    this.setState({
+      commentField: ''
+    });
 
     const db = firebase.firestore();
-    db.collection('comments').doc(comment.commentId).update({
-      subcomments: firebase.firestore.FieldValue.arrayUnion(subcomment)
-    }).catch(function (error) {
-      console.error("Error adding subcomment: ", error);
-    });
+    db.collection('subcomments').add(subcomment)
+      .catch(function (error) {
+        console.error("Error adding subcomment: ", error);
+      });
   }
 
   render() {
-    const { classes, comment, user } = this.props;
+    const { classes, comment, user, subcomments } = this.props;
     const { commentsNumber, expanded } = this.state;
 
     return (
@@ -141,9 +142,9 @@ class Comment extends React.Component {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <div className={classes.subcomments}>
-              {comment.subcomments.map((subcomment, index) => {
+              {subcomments.filter((el) => el.commentId === comment.commentId).map((subcomment, index) => {
                 return (
-                  <SubComment key={comment.commentId + index} comment={subcomment} />
+                  <SubComment key={subcomment.subcommentId} subcomment={subcomment} />
                 )
               })
               }
@@ -161,7 +162,7 @@ class Comment extends React.Component {
                     value={this.state.commentField}
                     onChange={event => this.setState({ commentField: event.target.value })}
                   />
-                  <Button variant="outlined" color="primary" className={classes.button} onClick={this.sendComment}>
+                  <Button variant="outlined" color="primary" className={classes.button} onClick={this.sendSubcomment}>
                     Answer
 							    </Button>
                 </Grid>

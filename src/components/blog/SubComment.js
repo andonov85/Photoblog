@@ -25,21 +25,21 @@ const styles = theme => ({
 
 class SubComment extends React.Component {
   render() {
-    const { classes, comment } = this.props;
+    const { classes, subcomment } = this.props;
 
     return (
       <div className={classes.root}>
         <Card className={classes.card}>
           <CardHeader
-            avatar={
-              <Avatar alt={comment.userName} src={comment.imageUrl} className={classes.avatar} />
-            }
-            title={comment.userName}
-            subheader={comment.date}
             className={classes.header}
+            avatar={
+              <Avatar alt={subcomment.userName} src={subcomment.imageUrl} className={classes.avatar} />
+            }
+            title={subcomment.userName}
+            subheader={subcomment.date}
           />
           <CardContent>
-            <Typography component="p">{comment.content}</Typography>
+            <Typography component="p">{subcomment.content}</Typography>
           </CardContent>
         </Card>
         <Divider/>

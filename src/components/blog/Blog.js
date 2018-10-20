@@ -10,9 +10,11 @@ import Divider from '@material-ui/core/Divider';
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 import Avatar from '@material-ui/core/Avatar';
 import AccountCircle from '@material-ui/icons/AccountCircle';
+import LazyLoad from 'react-lazy-load';
 
 import Post from './Post';
-import { getPosts, sortByDate } from './blogSource';
+import AdminTools from './AdminTools';
+import { getPosts } from './blogSource';
 import { setUser } from './uploadSource';
 
 const styles = theme => ({
@@ -48,7 +50,17 @@ const styles = theme => ({
     fontSize: 10,
     fontWeight: 'bold'
   },
+  lazyLoad: {
+    display: 'inline-block',
+    position: 'relative',
+    height: 600,
+    [theme.breakpoints.down('sm')]: {
+      height: 300,
+    }
+  }
 });
+
+let userAccount = {};
 
 class Blog extends React.Component {
   constructor(props) {
@@ -56,42 +68,80 @@ class Blog extends React.Component {
     this.state = {
       posts: [],
       comments: [],
-      user: {}
+      subcomments: [],
+      user: userAccount,
+      count: 1
     };
     this.handleOnSearchChange = this.handleOnSearchChange.bind(this);
     this.responseGoogle = this.responseGoogle.bind(this);
     this.logout = this.logout.bind(this);
+    this.handleOnContentVisible = this.handleOnContentVisible.bind(this);
+    this.getComments = this.getComments.bind(this);
+    this.getSubcomments = this.getSubcomments.bind(this);
+    this.getComments();
+    this.getSubcomments();
+  }
+
+  getComments() {
+    const db = firebase.firestore();
+
+    db.collection('comments')
+      .orderBy('date', 'asc')
+      .onSnapshot((snapshot) => {
+        let comments = [];
+
+        snapshot.forEach((comment) => {
+          const { content, postId, userId, date, userName, imageUrl } = comment.data();
+          comments.push({
+            postId: postId,
+            commentId: comment.id,
+            content: content,
+            date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
+            userId: userId,
+            userName: userName,
+            imageUrl: imageUrl
+          });
+        });
+
+        this.setState({
+          comments: comments,
+        });
+      });
+  }
+
+  getSubcomments() {
+    const db = firebase.firestore();
+
+    db.collection('subcomments')
+      .orderBy('date', 'asc')
+      .onSnapshot((snapshot) => {
+        let subcomments = [];
+
+        snapshot.forEach((subcomment) => {
+          const { content, postId, commentId, userId, date, userName, imageUrl } = subcomment.data();
+          subcomments.push({
+            postId: postId,
+            commentId: commentId,
+            subcommentId: subcomment.id,
+            content: content,
+            date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
+            userId: userId,
+            userName: userName,
+            imageUrl: imageUrl
+          });
+        });
+        
+        this.setState({
+          subcomments: subcomments,
+        });
+      });
   }
 
   componentDidMount() {
     getPosts().then((posts) => {
-      return posts;
-    }).then((posts) => {
-      const db = firebase.firestore();
-      db.collection('comments')
-        .orderBy('date', 'asc')
-        .onSnapshot((snapshot) => {
-          let comments = [];
-
-          snapshot.forEach((comment) => {
-            const { content, postId, userId, date, userName, imageUrl, subcomments } = comment.data();
-            comments.push({
-              commentId: comment.id,
-              content: content,
-              date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
-              postId: postId,
-              userId: userId,
-              userName: userName,
-              imageUrl: imageUrl,
-              subcomments: sortByDate(subcomments)
-            });
-          });
-
-          this.setState({
-            posts: posts,
-            comments: comments,
-          });
-        });
+      this.setState({
+        posts: posts,
+      });
     });
   }
 
@@ -108,6 +158,7 @@ class Blog extends React.Component {
       this.setState({
         user: newUser
       });
+      userAccount = newUser;
     });
   }
 
@@ -115,11 +166,16 @@ class Blog extends React.Component {
     this.setState({
       user: {}
     });
+    userAccount = {};
+  }
+
+  handleOnContentVisible() {
+
   }
 
   render() {
     const { classes } = this.props;
-    const { posts, user, comments } = this.state;
+    const { posts, user, comments, subcomments } = this.state;
 
     return (
       <div className={classes.root}>
@@ -139,9 +195,12 @@ class Blog extends React.Component {
               <Grid container spacing={0}>
                 {posts.map((post) => {
                   const postComments = comments.filter(comment => comment.postId === post.postId);
-                  console.log(postComments);
                   return (
-                    <Post key={post.postId} postId={post.postId} post={post} user={user} comments={postComments} />
+                    <Grid item xs={12} key={post.postId}>
+                      <LazyLoad className={classes.lazyLoad} offsetVertical={1000} onContentVisible={this.handleOnContentVisible}>
+                        <Post postId={post.postId} post={post} user={user} comments={postComments} subcomments={subcomments}/>
+                      </LazyLoad>
+                    </Grid>
                   )
                 })}
               </Grid>
@@ -185,6 +244,12 @@ class Blog extends React.Component {
                   </div>
                 }
               </Grid>
+              {user.googleId === "109925718796500399302" ?
+                <Grid item sm={3} md={3}>
+                  <AdminTools />
+                </Grid>
+                : null
+              }
             </Grid>
           </Grid>
         </Grid>
