@@ -1,13 +1,17 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import PropTypes from 'prop-types';
+
+import { GoogleLogin, GoogleLogout } from 'react-google-login';
+
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-
 import NavBar from './components/navbar/NavBar';
 import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import grey from '@material-ui/core/colors/grey';
+import Avatar from '@material-ui/core/Avatar';
+import AccountCircle from '@material-ui/icons/AccountCircle';
 
 import Main from './components/main/Main';
 import About from './components/about/About';
@@ -15,6 +19,9 @@ import Gallery from './components/gallery/Gallery';
 import Category from './components/gallery/Category';
 import Blog from './components/blog/Blog';
 // import Footer from './components/footer/Footer'
+import { setUser } from './components/blog/uploadSource';
+
+export const UserContext = React.createContext({});
 
 const theme = createMuiTheme({
   palette: {
@@ -26,9 +33,6 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
-  grow: {
-    flexGrow: 1
-  },
   logo: {
     [theme.breakpoints.down('sm')]: {
       fontSize: 20,
@@ -37,34 +41,99 @@ const styles = theme => ({
     },
     textAlign: 'center',
     fontFamily: 'Abril Fatface, cursive'
+  },
+  GoogleLogin: {
+    display: 'inline',
+    fontSize: 10,
+    fontWeight: 'bold'
+  },
+  GoogleLogout: {
+    display: 'inline',
+    fontSize: 10,
+    fontWeight: 'bold'
+  },
+  avatar: {
+    display: 'inline-block',
   }
 });
 
 class App extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      user: {},
+    };
+    this.responseGoogle = this.responseGoogle.bind(this);
+    this.logout = this.logout.bind(this);
+  }
+
+  responseGoogle = (res) => {
+    setUser(res.profileObj).then((user) => {
+      this.setState({
+        user: user
+      });
+    });
+  }
+
+  logout = () => {
+    this.setState({
+      user: {}
+    });
+  }
+
   render() {
+    const { user } = this.state;
     const { classes } = this.props;
+
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
           <Grid container spacing={0} className={classes.root}>
-            <Grid item md={12} sm={9} className={classes.grow}>
+            <Grid item xs={8} md={10}>
               <Typography variant="display1" className={classes.logo}>
                 AA Photography
-            </Typography>
+              </Typography>
             </Grid>
-            <Grid item md={12} sm={3}>
+            <Grid item xs={2} md={2}>
+              {Object.values(user).length === 0 ?
+                <div>
+                  <AccountCircle className={classes.avatar} color="primary"/>
+                  <GoogleLogin
+                    className={classes.GoogleLogin}
+                    clientId={process.env.REACT_APP_GOOGLE_clientId}
+                    buttonText="G Login"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                    isSignedIn={true}
+                  >
+                  </GoogleLogin>
+                </div> :
+                <div>
+                  <Avatar className={classes.avatar} alt={user.userName} src={user.imageUrl}/>
+                  <GoogleLogout
+                    className={classes.GoogleLogout}
+                    buttonText="Logout"
+                    onLogoutSuccess={this.logout}
+                  >
+                  </GoogleLogout>
+                </div>
+              }
+            </Grid>
+            <Grid item xs={2} md={12}>
               <NavBar />
             </Grid>
             <Grid item xs={12}>
-              <Switch>
-                <Route exact path="/" component={Main} />
-                <Route path="/main" component={Main} />
-                <Route path="/about" component={About} />
-                <Route path="/gallery/" component={Gallery} />
-                <Route path="/category/:category" component={Category} />
-                <Route path="/blog" component={Blog} />
-                <Route render={() => <div>Not Found</div>} />
-              </Switch>
+              <UserContext.Provider value={user}>
+                <Switch>
+                  <Route exact path="/" component={Main} />
+                  <Route path="/main" component={Main} />
+                  <Route path="/about" component={About} />
+                  <Route path="/gallery/" component={Gallery} />
+                  <Route path="/category/:category" component={Category} />
+                  <Route path="/blog" component={Blog} />
+                  <Route render={() => <div>Not Found</div>} />
+                </Switch>
+              </UserContext.Provider>
             </Grid>
             <Grid item xs={12}>
               {/* ToDo <Route path="/footer" component={Footer}/> */}

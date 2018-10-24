@@ -58,7 +58,7 @@ class WriteComment extends React.Component {
 		this.setState({
 			commentField: ''
 		});
-		uploadComment(comment);
+		uploadComment('comments', comment);
 	}
 
 	render() {

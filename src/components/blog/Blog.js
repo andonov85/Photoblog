@@ -1,21 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { firebase } from '../../Firebase';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography'
 import Divider from '@material-ui/core/Divider';
-import { GoogleLogin, GoogleLogout } from 'react-google-login';
-import Avatar from '@material-ui/core/Avatar';
-import AccountCircle from '@material-ui/icons/AccountCircle';
+
 import LazyLoad from 'react-lazy-load';
 
 import Post from './Post';
 import AdminTools from './AdminTools';
-import { getPosts } from './blogSource';
-import { setUser } from './uploadSource';
+import asearch from '../../Algolia';
+import { UserContext } from '../../App';
 
 const styles = theme => ({
   root: {
@@ -42,14 +39,6 @@ const styles = theme => ({
   avatar: {
     margin: 10
   },
-  GoogleLogin: {
-    fontSize: 10,
-    fontWeight: 'bold'
-  },
-  GoogleLogout: {
-    fontSize: 10,
-    fontWeight: 'bold'
-  },
   lazyLoad: {
     display: 'inline-block',
     position: 'relative',
@@ -60,113 +49,31 @@ const styles = theme => ({
   }
 });
 
-let userAccount = {};
-
 class Blog extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       posts: [],
-      comments: [],
-      subcomments: [],
-      user: userAccount,
-      count: 1
     };
     this.handleOnSearchChange = this.handleOnSearchChange.bind(this);
-    this.responseGoogle = this.responseGoogle.bind(this);
-    this.logout = this.logout.bind(this);
     this.handleOnContentVisible = this.handleOnContentVisible.bind(this);
-    this.getComments = this.getComments.bind(this);
-    this.getSubcomments = this.getSubcomments.bind(this);
-    this.getComments();
-    this.getSubcomments();
-  }
-
-  getComments() {
-    const db = firebase.firestore();
-
-    db.collection('comments')
-      .orderBy('date', 'asc')
-      .onSnapshot((snapshot) => {
-        let comments = [];
-
-        snapshot.forEach((comment) => {
-          const { content, postId, userId, date, userName, imageUrl } = comment.data();
-          comments.push({
-            postId: postId,
-            commentId: comment.id,
-            content: content,
-            date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
-            userId: userId,
-            userName: userName,
-            imageUrl: imageUrl
-          });
-        });
-
-        this.setState({
-          comments: comments,
-        });
-      });
-  }
-
-  getSubcomments() {
-    const db = firebase.firestore();
-
-    db.collection('subcomments')
-      .orderBy('date', 'asc')
-      .onSnapshot((snapshot) => {
-        let subcomments = [];
-
-        snapshot.forEach((subcomment) => {
-          const { content, postId, commentId, userId, date, userName, imageUrl } = subcomment.data();
-          subcomments.push({
-            postId: postId,
-            commentId: commentId,
-            subcommentId: subcomment.id,
-            content: content,
-            date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
-            userId: userId,
-            userName: userName,
-            imageUrl: imageUrl
-          });
-        });
-        
-        this.setState({
-          subcomments: subcomments,
-        });
-      });
   }
 
   componentDidMount() {
-    getPosts().then((posts) => {
+    asearch('').then((content) => {
       this.setState({
-        posts: posts,
+        posts: content.hits,
       });
     });
   }
 
   handleOnSearchChange(event) {
-    getPosts(event.target.value).then((posts) => {
+    const searchValue = event.target.value;
+    asearch(searchValue).then((content) => {
       this.setState({
-        posts: posts
+        posts: content.hits,
       });
     });
-  }
-
-  responseGoogle = (res) => {
-    setUser(res.profileObj).then((newUser) => {
-      this.setState({
-        user: newUser
-      });
-      userAccount = newUser;
-    });
-  }
-
-  logout = () => {
-    this.setState({
-      user: {}
-    });
-    userAccount = {};
   }
 
   handleOnContentVisible() {
@@ -175,7 +82,7 @@ class Blog extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { posts, user, comments, subcomments } = this.state;
+    const { posts } = this.state;
 
     return (
       <div className={classes.root}>
@@ -194,11 +101,12 @@ class Blog extends React.Component {
             <div className={classes.posts}>
               <Grid container spacing={0}>
                 {posts.map((post) => {
-                  const postComments = comments.filter(comment => comment.postId === post.postId);
                   return (
-                    <Grid item xs={12} key={post.postId}>
+                    <Grid item xs={12} key={post.objectID}>
                       <LazyLoad className={classes.lazyLoad} offsetVertical={1000} onContentVisible={this.handleOnContentVisible}>
-                        <Post postId={post.postId} post={post} user={user} comments={postComments} subcomments={subcomments}/>
+                        <UserContext.Consumer>
+                          {user => <Post postId={post.objectID} post={post} user={user} />}
+                        </UserContext.Consumer>
                       </LazyLoad>
                     </Grid>
                   )
@@ -220,36 +128,10 @@ class Blog extends React.Component {
                 />
               </Grid>
               <Grid item sm={3} md={3}>
-                {Object.values(user).length === 0 ?
-                  <div>
-                    <AccountCircle color="primary" />
-                    <GoogleLogin
-                      className={classes.GoogleLogin}
-                      clientId={process.env.REACT_APP_GOOGLE_clientId}
-                      buttonText="G Login"
-                      onSuccess={this.responseGoogle}
-                      onFailure={this.responseGoogle}
-                      isSignedIn={true}
-                    >
-                    </GoogleLogin>
-                  </div> :
-                  <div>
-                    <Avatar alt={user.userName} src={user.imageUrl} className={classes.avatar} />
-                    <GoogleLogout
-                      className={classes.GoogleLogout}
-                      buttonText="Logout"
-                      onLogoutSuccess={this.logout}
-                    >
-                    </GoogleLogout>
-                  </div>
-                }
+                <UserContext.Consumer>
+                  {user => user.role === 'admin' ? <AdminTools /> : null}
+                </UserContext.Consumer>
               </Grid>
-              {user.googleId === "109925718796500399302" ?
-                <Grid item sm={3} md={3}>
-                  <AdminTools />
-                </Grid>
-                : null
-              }
             </Grid>
           </Grid>
         </Grid>

@@ -20,6 +20,7 @@ import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
 
 import SubComment from './SubComment';
+import { uploadComment } from './uploadSource'
 
 const styles = theme => ({
   card: {
@@ -101,11 +102,7 @@ class Comment extends React.Component {
       commentField: ''
     });
 
-    const db = firebase.firestore();
-    db.collection('subcomments').add(subcomment)
-      .catch(function (error) {
-        console.error("Error adding subcomment: ", error);
-      });
+    uploadComment('subcomments', subcomment);
   }
 
   render() {
@@ -142,7 +139,7 @@ class Comment extends React.Component {
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <div className={classes.subcomments}>
-              {subcomments.filter((el) => el.commentId === comment.commentId).map((subcomment, index) => {
+              {subcomments.filter((el) => el.commentId === comment.commentId).map((subcomment) => {
                 return (
                   <SubComment key={subcomment.subcommentId} subcomment={subcomment} />
                 )
@@ -153,18 +150,23 @@ class Comment extends React.Component {
                   <Avatar alt={user.userName} src={user.imageUrl} className={classes.avatar} />
                 </Grid>
                 <Grid item >
-                  <TextField
-                    id="outlined-dense"
-                    label="Write a response:"
-                    className={classnames(classes.textField, classes.dense)}
-                    margin="dense"
-                    variant="outlined"
-                    value={this.state.commentField}
-                    onChange={event => this.setState({ commentField: event.target.value })}
-                  />
-                  <Button variant="outlined" color="primary" className={classes.button} onClick={this.sendSubcomment}>
-                    Answer
+                  {Object.values(user).length !== 0 ?
+                    <div>
+                      <TextField
+                        id="outlined-dense"
+                        label="Write a response:"
+                        className={classnames(classes.textField, classes.dense)}
+                        margin="dense"
+                        variant="outlined"
+                        value={this.state.commentField}
+                        onChange={event => this.setState({ commentField: event.target.value })}
+                      />
+                      <Button variant="outlined" color="primary" className={classes.button} onClick={this.sendSubcomment}>
+                        Answer
 							    </Button>
+                    </div> :
+                    <Typography>Sign in to write a comment.</Typography>
+                  }
                 </Grid>
               </Grid>
             </div>

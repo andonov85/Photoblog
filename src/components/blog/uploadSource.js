@@ -1,8 +1,22 @@
 import { firebase } from '../../Firebase';
 
-function uploadComment(comment) {
+function uploadComment(collection, comment) {
 	const db = firebase.firestore();
-	db.collection('comments').add(comment)
+	db.collection(collection)
+		.add(comment)
+		.then(commentRef => {
+			const postRef = db.collection('blog').doc(comment.postId);
+			db.runTransaction((t) => {
+				return t.get(postRef).then((post) => {
+					let newCommentsCounter = post.data().commentsCounter + 1;
+					t.update(postRef, { commentsCounter: newCommentsCounter });
+				});
+			}).then(result => {
+
+			}).catch(err => {
+				console.log('Transaction "+1 comment" failure:', err);
+			});
+		})
 		.catch(function (error) {
 			console.error("Error adding comment: ", error);
 		});
@@ -22,7 +36,7 @@ function setUser(googleUser) {
 					name: name,
 					familyName: familyName,
 					givenName: givenName,
-					// email: email,
+					//email: email,
 					imageUrl: imageUrl
 				}).catch(function (error) {
 					// The document probably doesn't exist.
@@ -32,6 +46,8 @@ function setUser(googleUser) {
 					resolve(updatedUser.data());
 				});
 			} else {
+				googleUser.email = 'none';
+				googleUser.role = 'user';
 				users.add(googleUser).then((addedUser) => {
 					addedUser.get().then((newUser) => resolve(newUser.data()));
 				}).catch(function (error) {

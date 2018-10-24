@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { firebase } from '../../Firebase';
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -15,7 +16,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ShareIcon from '@material-ui/icons/Share';
-import AddComment from '@material-ui/icons/AddComment';
 import Comment from '@material-ui/icons/Comment';
 import Divider from '@material-ui/core/Divider';
 
@@ -62,22 +62,24 @@ const styles = theme => ({
   },
 });
 
-class Posts extends React.Component {
+class Post extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      expanded: false,
+      commentsCounter: '',
       chat: false,
     };
-    this.handleExpandClick = this.handleExpandClick.bind(this);
     this.handleCommentClick = this.handleCommentClick.bind(this);
   }
 
-  handleExpandClick() {
-    this.setState(state => ({
-      expanded: !state.expanded
-    }));
-  };
+  componentDidMount() {
+    let db = firebase.firestore();
+    db.collection('blog').doc(this.props.postId).onSnapshot((post) => {
+      this.setState({
+        commentsCounter: post.data().commentsCounter
+      });
+    });
+  }
 
   handleCommentClick() {
     this.setState(state => ({
@@ -86,8 +88,11 @@ class Posts extends React.Component {
   };
 
   render() {
-    const { classes, post, postId, user, comments, subcomments } = this.props;
-    const { expanded, chat } = this.state;
+    const { classes, post, postId, user } = this.props;
+    const { commentsCounter, chat } = this.state;
+
+    post.date = new Date(post.date).toDateString();
+
     return (
       <Card className={classes.card}>
         <CardHeader
@@ -127,35 +132,16 @@ class Posts extends React.Component {
           </IconButton>
           <IconButton
             onClick={this.handleCommentClick}
-            aria-expanded={expanded}
+            aria-expanded={chat}
             aria-label="Comment">
             <Comment />
           </IconButton>
-          <Typography>{comments.length + subcomments.filter((el) => el.postId === postId).length}</Typography>
-          <IconButton
-            className={classnames(classes.expand, {
-              [classes.expandOpen]: expanded,
-            })}
-            onClick={this.handleExpandClick}
-            aria-expanded={expanded}
-            aria-label="Show more"
-          >
-            <AddComment />
-          </IconButton>
+          <Typography>{commentsCounter}</Typography>
         </CardActions>
-        <Collapse in={expanded} timeout="auto" unmountOnExit>
-          <Divider />
-          <CardContent>
-            {Object.values(user).length !== 0 ?
-              <WriteComment postId={postId} user={user} /> :
-              <Typography>Sign in to write a comment.</Typography>
-            }
-          </CardContent>
-        </Collapse>
         <Collapse in={chat} timeout="auto" unmountOnExit>
           <Divider />
           <CardContent>
-            <CommentSection postId={postId} comments={comments} subcomments={subcomments} user={user} />
+            <CommentSection postId={postId} user={user} />
             {Object.values(user).length !== 0 ?
               <WriteComment postId={postId} user={user} /> :
               <Typography>Sign in to write a comment.</Typography>
@@ -167,8 +153,8 @@ class Posts extends React.Component {
   }
 }
 
-Posts.propTypes = {
+Post.propTypes = {
   classes: PropTypes.object.isRequired,
 };
 
-export default withStyles(styles)(Posts);
+export default withStyles(styles)(Post);

@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { firebase } from '../../Firebase';
+import { AlgoliaUpdateSearchIndex } from '../../AlgoliaUpdateSearchIndex'
 
 import { withStyles } from '@material-ui/core/styles';
 
@@ -31,7 +32,8 @@ class AdminTools extends React.Component {
       imageUrl: '',
       linkUrl: '',
       homepageUrl: '',
-      date: firebase.firestore.Timestamp.now()
+      date: firebase.firestore.Timestamp.now(),
+      commentsCounter: 0
     };
     this.handleAddPost = this.handleAddPost.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -47,11 +49,17 @@ class AdminTools extends React.Component {
   };
 
   handleAddPost() {
-    const {title, content, avatarUrl, imageUrl, linkUrl, homepageUrl, date} = this.state;
-    let post = {title, content, avatarUrl, imageUrl, linkUrl, homepageUrl, date};
+    const { title, content, avatarUrl, imageUrl, linkUrl, homepageUrl, date, commentsCounter } = this.state;
+    let post = { title, content, avatarUrl, imageUrl, linkUrl, homepageUrl, date, commentsCounter };
 
     const blog = firebase.firestore().collection('blog');
-    blog.add(post);
+    blog.add(post).then((postRef) => {
+      delete post.commentsCounter;
+      post.date = post.date.toDate().getTime();
+      post.objectID = postRef.id;
+      
+      AlgoliaUpdateSearchIndex(post);
+    });
 
     this.setState({ open: false });
   };
