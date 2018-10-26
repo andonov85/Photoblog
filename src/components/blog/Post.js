@@ -15,7 +15,6 @@ import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import ShareIcon from '@material-ui/icons/Share';
 import Comment from '@material-ui/icons/Comment';
 import Divider from '@material-ui/core/Divider';
 
@@ -60,24 +59,134 @@ const styles = theme => ({
   expandOpen: {
     transform: 'rotate(180deg)',
   },
+  favourite: {
+    color: '#dc143c'
+  },
+  unfavourite: {
+    color: 'grey'
+  }
 });
 
 class Post extends React.Component {
   constructor(props) {
     super(props);
+    this.isLikeRecieved = false;
+    this.isLikePending = false;
+
     this.state = {
       commentsCounter: '',
       chat: false,
+      likes: 0,
+      isLiked: false
     };
     this.handleCommentClick = this.handleCommentClick.bind(this);
+    this.addToLiked = this.addToLiked.bind(this);
   }
 
   componentDidMount() {
     let db = firebase.firestore();
-    db.collection('blog').doc(this.props.postId).onSnapshot((post) => {
-      this.setState({
-        commentsCounter: post.data().commentsCounter
+    this.unsubscribe = db.collection('blog').doc(this.props.postId).onSnapshot((post) => {
+      const commentsCounter = post.data().commentsCounter;
+      const likes = post.data().likes;
+
+      if (!this.props.user.hasOwnProperty('userId')) {
+        this.setState({
+          commentsCounter: commentsCounter,
+          likes: likes,
+        });
+        return;
+      }
+
+      db.collection('users').doc(this.props.user.userId)
+        .collection('userLiked').where('postId', '==', this.props.postId).get()
+        .then((snapshot) => {
+          if (snapshot.docs.length !== 0) {
+            this.setState(() => {
+              this.isLikeRecieved = true;
+              return {
+                commentsCounter: commentsCounter,
+                likes: likes,
+                isLiked: snapshot.docs[0].data().isLiked
+              };
+            });
+          }
+        });
+    });
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.user !== prevProps.user && this.props.user.hasOwnProperty('userId')) {
+      let db = firebase.firestore();
+      db.collection('users').doc(this.props.user.userId)
+        .collection('userLiked').where('postId', '==', this.props.postId).get()
+        .then((snapshot) => {
+          if (snapshot.docs.length !== 0) {
+            this.setState(() => {
+              this.isLikeRecieved = true
+              return {
+                isLiked: snapshot.docs[0].data().isLiked
+              }
+            });
+          }
+        });
+    }
+  }
+
+  componentWillUnmount() {
+    this.unsubscribe();
+  }
+
+  addToLiked() {
+    if (!this.props.user.hasOwnProperty('userId') && !this.isLikeRecieved) {
+      return;
+    } else if (this.isLikePending) {
+      return;
+    }
+    this.isLikePending = !this.isLikePending;
+
+    const vote = this.state.isLiked ? -1 : 1;
+    let newLikes;
+
+    const db = firebase.firestore();
+    const postRef = firebase.firestore().collection('blog').doc(this.props.postId);
+
+    db.runTransaction((t) => {
+      return t.get(postRef).then((post) => {
+        newLikes = post.data().likes + vote;
+        t.update(postRef, { likes: newLikes });
       });
+    }).then(() => {
+      const userLiked = db.collection('users').doc(this.props.user.userId).collection('userLiked');
+      userLiked.where('postId', '==', this.props.postId).get().then((liked) => {
+        if (liked.docs.length === 0) {
+          userLiked.add({
+            postId: this.props.postId,
+            isLiked: !this.state.isLiked
+          }).then(() => {
+            this.setState((state) => {
+              this.isLikePending = false;
+              return {
+                likes: newLikes,
+                isLiked: !state.isLiked
+              };
+            });
+          });
+        } else {
+          userLiked.doc(liked.docs[0].id).update({
+            isLiked: !this.state.isLiked
+          }).then(() => {
+            this.setState((state) => {
+              this.isLikePending = false;
+              return {
+                likes: newLikes,
+                isLiked: !state.isLiked
+              };
+            });
+          });
+        }
+      });
+    }).catch(err => {
+      console.log(`Transaction "${vote} like" failure: `, err);
     });
   }
 
@@ -89,7 +198,7 @@ class Post extends React.Component {
 
   render() {
     const { classes, post, postId, user } = this.props;
-    const { commentsCounter, chat } = this.state;
+    const { commentsCounter, chat, isLiked, likes } = this.state;
 
     post.date = new Date(post.date).toDateString();
 
@@ -124,19 +233,18 @@ class Post extends React.Component {
           </Typography>
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites">
-            <FavoriteIcon />
-          </IconButton>
-          <IconButton aria-label="Share">
-            <ShareIcon />
+          <IconButton aria-label="Add to favorites" onClick={this.addToLiked}>
+            {isLiked ?
+              <FavoriteIcon className={classes.favourite} /> : <FavoriteIcon className={classes.unfavourite} />}
+            <Typography>{likes}</Typography>
           </IconButton>
           <IconButton
             onClick={this.handleCommentClick}
             aria-expanded={chat}
             aria-label="Comment">
             <Comment />
+            <Typography>{commentsCounter}</Typography>
           </IconButton>
-          <Typography>{commentsCounter}</Typography>
         </CardActions>
         <Collapse in={chat} timeout="auto" unmountOnExit>
           <Divider />

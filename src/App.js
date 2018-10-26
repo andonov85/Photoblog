@@ -21,7 +21,7 @@ import Blog from './components/blog/Blog';
 // import Footer from './components/footer/Footer'
 import { setUser } from './components/blog/uploadSource';
 
-export const UserContext = React.createContext({});
+export const UserContext = React.createContext();
 
 const theme = createMuiTheme({
   palette: {
@@ -97,7 +97,7 @@ class App extends Component {
             <Grid item xs={2} md={2}>
               {Object.values(user).length === 0 ?
                 <div>
-                  <AccountCircle className={classes.avatar} color="primary"/>
+                  <AccountCircle className={classes.avatar} color="primary" />
                   <GoogleLogin
                     className={classes.GoogleLogin}
                     clientId={process.env.REACT_APP_GOOGLE_clientId}
@@ -109,7 +109,7 @@ class App extends Component {
                   </GoogleLogin>
                 </div> :
                 <div>
-                  <Avatar className={classes.avatar} alt={user.userName} src={user.imageUrl}/>
+                  <Avatar className={classes.avatar} alt={user.userName} src={user.imageUrl} />
                   <GoogleLogout
                     className={classes.GoogleLogout}
                     buttonText="Logout"
@@ -123,17 +123,17 @@ class App extends Component {
               <NavBar />
             </Grid>
             <Grid item xs={12}>
-              <UserContext.Provider value={user}>
                 <Switch>
                   <Route exact path="/" component={Main} />
                   <Route path="/main" component={Main} />
                   <Route path="/about" component={About} />
                   <Route path="/gallery/" component={Gallery} />
                   <Route path="/category/:category" component={Category} />
-                  <Route path="/blog" component={Blog} />
+                  <UserContext.Provider value={user}>
+                    <Route path="/blog" component={Blog} />
+                  </UserContext.Provider>
                   <Route render={() => <div>Not Found</div>} />
                 </Switch>
-              </UserContext.Provider>
             </Grid>
             <Grid item xs={12}>
               {/* ToDo <Route path="/footer" component={Footer}/> */}

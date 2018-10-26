@@ -26,32 +26,36 @@ function setUser(googleUser) {
 	return new Promise((resolve) => {
 		const users = firebase.firestore().collection('users');
 
-		users.where('googleId', '==', googleUser.googleId).limit(1).get().then((user) => {
-			if (user.docs.length === 1) {
+		users.where('googleId', '==', googleUser.googleId).get().then((user) => {
+			if (user.docs.length === 0) {
+				// If doesnt exist add new user
+				googleUser.email = 'none';
+				googleUser.role = 'user';
+				users.add(googleUser).then((addedUser) => {
+					addedUser.get().then((newUser) => {
+						let user = newUser.data();
+						user.userId = newUser.id;
+						resolve(user);
+					});
+				}).catch(function (error) {
+					console.error("Error adding document: ", error);
+				});
+			} else {
+				// If exist check for changes and update user data if needed.
 				const userId = user.docs[0].id;
-				const userData = user.docs[0].data();
-				const { name, familyName, givenName, imageUrl } = userData;
+				const { name, familyName, givenName, imageUrl } = googleUser;
 
 				users.doc(userId).update({
 					name: name,
 					familyName: familyName,
 					givenName: givenName,
-					//email: email,
 					imageUrl: imageUrl
-				}).catch(function (error) {
-					// The document probably doesn't exist.
-					console.error("Error updating document: ", error);
-				});
-				users.doc(userId).get().then((updatedUser) => {
-					resolve(updatedUser.data());
-				});
-			} else {
-				googleUser.email = 'none';
-				googleUser.role = 'user';
-				users.add(googleUser).then((addedUser) => {
-					addedUser.get().then((newUser) => resolve(newUser.data()));
-				}).catch(function (error) {
-					console.error("Error adding document: ", error);
+				}).then(() => {
+					users.doc(userId).get().then((updatedUser) => {
+						let user = updatedUser.data();
+						user.userId = updatedUser.id;
+						resolve(user);
+					});
 				});
 			}
 		}).catch(function (error) {

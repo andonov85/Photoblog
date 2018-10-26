@@ -33,7 +33,8 @@ class AdminTools extends React.Component {
       linkUrl: '',
       homepageUrl: '',
       date: firebase.firestore.Timestamp.now(),
-      commentsCounter: 0
+      commentsCounter: 0,
+      likes: 0
     };
     this.handleAddPost = this.handleAddPost.bind(this);
     this.handleClickOpen = this.handleClickOpen.bind(this);
@@ -55,6 +56,7 @@ class AdminTools extends React.Component {
     const blog = firebase.firestore().collection('blog');
     blog.add(post).then((postRef) => {
       delete post.commentsCounter;
+      delete post.likes;
       post.date = post.date.toDate().getTime();
       post.objectID = postRef.id;
       
