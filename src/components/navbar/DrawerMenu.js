@@ -29,20 +29,18 @@ class DrawerMenu extends React.Component {
     const { classes } = this.props;
 
     const fullList = (
-      <div className={classes.fullList}>
-        <List>
-            <NavLink to="/main" buttonName="Home" />
-            <NavLink to="/blog" buttonName="Blog" />
-            <NavLink to="/gallery" buttonName="Gallery" />
-            <NavLink to="/about" buttonName="About" />
-        </List>
-      </div>
+      <List className={classes.fullList}>
+        <NavLink to="/main" buttonName="Home" />
+        <NavLink to="/blog" buttonName="Blog" />
+        <NavLink to="/gallery" buttonName="Gallery" />
+        <NavLink to="/about" buttonName="About" />
+      </List>
     );
 
     return (
-      <div>
+      <React.Fragment>
         <Button onClick={this.toggleDrawer('top', true)}>
-            <i className="material-icons" style={{color: 'grey'}}>menu</i>
+          <i className="material-icons" style={{ color: 'grey' }}>menu</i>
         </Button>
         <Drawer anchor="top" open={this.state.top} onClose={this.toggleDrawer('top', false)}>
           <div
@@ -54,7 +52,7 @@ class DrawerMenu extends React.Component {
             {fullList}
           </div>
         </Drawer>
-      </div>
+      </React.Fragment>
     );
   }
 }

@@ -52,6 +52,10 @@ class MainTitle extends React.Component {
     });
   }
 
+  componentWillUnmount() {
+    
+  }
+
   render() {
     const { classes } = this.props;
     const { imageUrl, checked } = this.state;

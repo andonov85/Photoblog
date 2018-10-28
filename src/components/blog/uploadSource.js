@@ -23,45 +23,48 @@ function uploadComment(collection, comment) {
 }
 
 function setUser(googleUser) {
-	return new Promise((resolve) => {
-		const users = firebase.firestore().collection('users');
+	if (typeof googleUser === 'object' && googleUser.hasOwnProperty('googleId')) {
 
-		users.where('googleId', '==', googleUser.googleId).get().then((user) => {
-			if (user.docs.length === 0) {
-				// If doesnt exist add new user
-				googleUser.email = 'none';
-				googleUser.role = 'user';
-				users.add(googleUser).then((addedUser) => {
-					addedUser.get().then((newUser) => {
-						let user = newUser.data();
-						user.userId = newUser.id;
-						resolve(user);
-					});
-				}).catch(function (error) {
-					console.error("Error adding document: ", error);
-				});
-			} else {
-				// If exist check for changes and update user data if needed.
-				const userId = user.docs[0].id;
-				const { name, familyName, givenName, imageUrl } = googleUser;
+		return new Promise((resolve) => {
+			const users = firebase.firestore().collection('users');
 
-				users.doc(userId).update({
-					name: name,
-					familyName: familyName,
-					givenName: givenName,
-					imageUrl: imageUrl
-				}).then(() => {
-					users.doc(userId).get().then((updatedUser) => {
-						let user = updatedUser.data();
-						user.userId = updatedUser.id;
-						resolve(user);
+			users.where('googleId', '==', googleUser.googleId).get().then((user) => {
+				if (user.empty) {
+					// If doesnt exist add new user
+					googleUser.email = 'none';
+					googleUser.role = 'user';
+					users.add(googleUser).then((addedUser) => {
+						addedUser.get().then((newUser) => {
+							let user = newUser.data();
+							user.userId = newUser.id;
+							resolve(user);
+						});
+					}).catch(function (error) {
+						console.error("Error adding document: ", error);
 					});
-				});
-			}
-		}).catch(function (error) {
-			console.log("Error getting document:", error);
+				} else {
+					// If exist check for changes and update user data if needed.
+					const userId = user.docs[0].id;
+					const { name, familyName, givenName, imageUrl } = googleUser;
+
+					users.doc(userId).update({
+						name: name,
+						familyName: familyName,
+						givenName: givenName,
+						imageUrl: imageUrl
+					}).then(() => {
+						users.doc(userId).get().then((updatedUser) => {
+							let user = updatedUser.data();
+							user.userId = updatedUser.id;
+							resolve(user);
+						});
+					});
+				}
+			}).catch(function (error) {
+				console.log("Error getting document:", error);
+			});
 		});
-	});
+	}
 }
 
 export { uploadComment, setUser };

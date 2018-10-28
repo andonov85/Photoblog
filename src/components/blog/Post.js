@@ -88,17 +88,20 @@ class Post extends React.Component {
     const db = firebase.firestore();
 
     this.unsubscribeBlog = db.collection('blog').doc(this.props.postId).onSnapshot((post) => {
-      const commentsCounter = post.data().commentsCounter;
-      const likes = post.data().likes;
+      if (post.exists) {
+        const commentsCounter = post.data().commentsCounter;
+        const likes = post.data().likes;
 
-      this.setState({
-        commentsCounter: commentsCounter,
-        likes: likes,
-      });
+        this.setState({
+          commentsCounter: commentsCounter,
+          likes: likes,
+        });
+      } else {
+        console.log(`postId ${this.props.postId} doesn't exists or can't retrieve it`);
+      }
     });
 
-    if (this.props.user.hasOwnProperty('userId')) {
-      console.log('componentDidMount -> ', this.props.postId);
+    if (typeof this.props.user === 'object' && this.props.user.hasOwnProperty('userId')) {
       this.unsubscribeUserLiked = db.collection('users').doc(this.props.user.userId)
         .collection('userLiked').where('postId', '==', this.props.postId).onSnapshot((userLike) => {
           if (userLike.docs.length === 1) {
@@ -116,10 +119,13 @@ class Post extends React.Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (this.props.user !== prevProps.user && this.props.user.hasOwnProperty('userId')) {
+    const { user } = this.props;
+
+    if (typeof user !== 'object') return;
+
+    if (user !== prevProps.user && user.hasOwnProperty('userId')) {
       let db = firebase.firestore();
-      console.log('componentDidUpdate -> ', this.props.postId);
-      this.unsubscribeUserLiked = db.collection('users').doc(this.props.user.userId)
+      this.unsubscribeUserLiked = db.collection('users').doc(user.userId)
         .collection('userLiked').where('postId', '==', this.props.postId).onSnapshot((userLike) => {
           if (userLike.docs.length === 1) {
             this.setState(() => {
@@ -132,7 +138,7 @@ class Post extends React.Component {
             });
           }
         });
-    } else if (this.props.user !== prevProps.user && !this.props.user.hasOwnProperty('userId')) {
+    } else if (user !== prevProps.user && !user.hasOwnProperty('userId')) {
       this.isLikeRecieved = false;
       this.isLiked = false;
 
@@ -144,12 +150,15 @@ class Post extends React.Component {
 
   componentWillUnmount() {
     this.unsubscribeBlog();
-    this.unsubscribeUserLiked();
-    console.log('componentWillUnmount -> ', this.props.postId);
+    if (this.unsubscribeUserLiked) {
+      this.unsubscribeUserLiked();
+    }
   }
 
   addToLiked() {
-    if (!this.props.user.hasOwnProperty('userId') && !this.isLikeRecieved) {
+    if (typeof this.props.user !== 'object') {
+      return;
+    } else if (!this.props.user.hasOwnProperty('userId') && !this.isLikeRecieved) {
       return;
     } else if (this.isLikePending) {
       return;

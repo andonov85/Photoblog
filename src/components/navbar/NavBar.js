@@ -22,9 +22,6 @@ const styles = theme => ({
     marginRight: 'auto',
     minHeight: 45,
     height: 45
-  },
-  logoImg: {
-    height: 40
   }
 });
 
@@ -32,7 +29,6 @@ class NavBar extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <div className={classes.root}>
       <AppBar position="sticky" className={classes.appbar}>
         <Toolbar className={classes.toolbar}>
           <Hidden only={['xs', 'sm']}>
@@ -46,7 +42,6 @@ class NavBar extends React.Component {
           </Hidden>
         </Toolbar>
       </AppBar>
-      </div>
   );
 }
 }
