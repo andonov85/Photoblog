@@ -68,72 +68,84 @@ const styles = theme => ({
 });
 
 class Post extends React.Component {
+  isLikeRecieved = false;
+  isLikePending = false;
+  isLiked = false;
+
   constructor(props) {
     super(props);
-    this.isLikeRecieved = false;
-    this.isLikePending = false;
-
     this.state = {
-      commentsCounter: '',
+      commentsCounter: 0,
       chat: false,
       likes: 0,
-      isLiked: false
+      changeLikeColor: false
     };
     this.handleCommentClick = this.handleCommentClick.bind(this);
     this.addToLiked = this.addToLiked.bind(this);
   }
 
   componentDidMount() {
-    let db = firebase.firestore();
-    this.unsubscribe = db.collection('blog').doc(this.props.postId).onSnapshot((post) => {
+    const db = firebase.firestore();
+
+    this.unsubscribeBlog = db.collection('blog').doc(this.props.postId).onSnapshot((post) => {
       const commentsCounter = post.data().commentsCounter;
       const likes = post.data().likes;
 
-      if (!this.props.user.hasOwnProperty('userId')) {
-        this.setState({
-          commentsCounter: commentsCounter,
-          likes: likes,
-        });
-        return;
-      }
+      this.setState({
+        commentsCounter: commentsCounter,
+        likes: likes,
+      });
+    });
 
-      db.collection('users').doc(this.props.user.userId)
-        .collection('userLiked').where('postId', '==', this.props.postId).get()
-        .then((snapshot) => {
-          if (snapshot.docs.length !== 0) {
+    if (this.props.user.hasOwnProperty('userId')) {
+      console.log('componentDidMount -> ', this.props.postId);
+      this.unsubscribeUserLiked = db.collection('users').doc(this.props.user.userId)
+        .collection('userLiked').where('postId', '==', this.props.postId).onSnapshot((userLike) => {
+          if (userLike.docs.length === 1) {
             this.setState(() => {
               this.isLikeRecieved = true;
-              return {
-                commentsCounter: commentsCounter,
-                likes: likes,
-                isLiked: snapshot.docs[0].data().isLiked
-              };
-            });
-          }
-        });
-    });
-  }
+              this.isLiked = userLike.docs[0].data().isLiked;
 
-  componentDidUpdate(prevProps) {
-    if (this.props.user !== prevProps.user && this.props.user.hasOwnProperty('userId')) {
-      let db = firebase.firestore();
-      db.collection('users').doc(this.props.user.userId)
-        .collection('userLiked').where('postId', '==', this.props.postId).get()
-        .then((snapshot) => {
-          if (snapshot.docs.length !== 0) {
-            this.setState(() => {
-              this.isLikeRecieved = true
               return {
-                isLiked: snapshot.docs[0].data().isLiked
-              }
+                changeLikeColor: this.isLiked
+              };
             });
           }
         });
     }
   }
 
+  componentDidUpdate(prevProps) {
+    if (this.props.user !== prevProps.user && this.props.user.hasOwnProperty('userId')) {
+      let db = firebase.firestore();
+      console.log('componentDidUpdate -> ', this.props.postId);
+      this.unsubscribeUserLiked = db.collection('users').doc(this.props.user.userId)
+        .collection('userLiked').where('postId', '==', this.props.postId).onSnapshot((userLike) => {
+          if (userLike.docs.length === 1) {
+            this.setState(() => {
+              this.isLikeRecieved = true;
+              this.isLiked = userLike.docs[0].data().isLiked;
+
+              return {
+                changeLikeColor: this.isLiked
+              };
+            });
+          }
+        });
+    } else if (this.props.user !== prevProps.user && !this.props.user.hasOwnProperty('userId')) {
+      this.isLikeRecieved = false;
+      this.isLiked = false;
+
+      this.setState({
+        changeLikeColor: false
+      });
+    }
+  }
+
   componentWillUnmount() {
-    this.unsubscribe();
+    this.unsubscribeBlog();
+    this.unsubscribeUserLiked();
+    console.log('componentWillUnmount -> ', this.props.postId);
   }
 
   addToLiked() {
@@ -142,17 +154,21 @@ class Post extends React.Component {
     } else if (this.isLikePending) {
       return;
     }
-    this.isLikePending = !this.isLikePending;
 
-    const vote = this.state.isLiked ? -1 : 1;
-    let newLikes;
+    this.isLikePending = !this.isLikePending;
+    const vote = this.isLiked ? -1 : 1;
+
+    this.setState({
+      changeLikeColor: !this.state.changeLikeColor,
+      likes: this.state.likes + vote
+    });
 
     const db = firebase.firestore();
     const postRef = firebase.firestore().collection('blog').doc(this.props.postId);
 
     db.runTransaction((t) => {
       return t.get(postRef).then((post) => {
-        newLikes = post.data().likes + vote;
+        const newLikes = post.data().likes + vote;
         t.update(postRef, { likes: newLikes });
       });
     }).then(() => {
@@ -161,27 +177,19 @@ class Post extends React.Component {
         if (liked.docs.length === 0) {
           userLiked.add({
             postId: this.props.postId,
-            isLiked: !this.state.isLiked
+            isLiked: !this.isLiked
           }).then(() => {
-            this.setState((state) => {
-              this.isLikePending = false;
-              return {
-                likes: newLikes,
-                isLiked: !state.isLiked
-              };
-            });
+            this.isLikePending = false;
+          }).catch(err => {
+            console.log(`Adding "isLiked" doc failure: `, err);
           });
         } else {
           userLiked.doc(liked.docs[0].id).update({
-            isLiked: !this.state.isLiked
+            isLiked: !this.isLiked
           }).then(() => {
-            this.setState((state) => {
-              this.isLikePending = false;
-              return {
-                likes: newLikes,
-                isLiked: !state.isLiked
-              };
-            });
+            this.isLikePending = false;
+          }).catch(err => {
+            console.log(`Updating "isLiked" doc failure: `, err);
           });
         }
       });
@@ -198,7 +206,7 @@ class Post extends React.Component {
 
   render() {
     const { classes, post, postId, user } = this.props;
-    const { commentsCounter, chat, isLiked, likes } = this.state;
+    const { commentsCounter, chat, changeLikeColor, likes } = this.state;
 
     post.date = new Date(post.date).toDateString();
 
@@ -234,7 +242,7 @@ class Post extends React.Component {
         </CardContent>
         <CardActions className={classes.actions} disableActionSpacing>
           <IconButton aria-label="Add to favorites" onClick={this.addToLiked}>
-            {isLiked ?
+            {changeLikeColor ?
               <FavoriteIcon className={classes.favourite} /> : <FavoriteIcon className={classes.unfavourite} />}
             <Typography>{likes}</Typography>
           </IconButton>

@@ -25,9 +25,9 @@ class CommentSection extends React.Component {
 
   componentDidMount() {
     const { postId } = this.props;
-
     const db = firebase.firestore();
-    db.collection('comments')
+    
+    this.unsubscribeComments = db.collection('comments')
       .where('postId', '==', postId)
       .orderBy('date', 'asc')
       .onSnapshot((snapshot) => {
@@ -44,37 +44,44 @@ class CommentSection extends React.Component {
             imageUrl: imageUrl
           });
         });
-
-        db.collection('subcomments')
-          .where('postId', '==', postId)
-          .orderBy('date', 'asc')
-          .onSnapshot((snapshot) => {
-            let subcomments = [];
-            snapshot.forEach((subcomment) => {
-              const { content, postId, commentId, userId, date, userName, imageUrl } = subcomment.data();
-              subcomments.push({
-                postId: postId,
-                commentId: commentId,
-                subcommentId: subcomment.id,
-                content: content,
-                date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
-                userId: userId,
-                userName: userName,
-                imageUrl: imageUrl
-              });
-            });
-            this.setState({
-              comments: comments,
-              subcomments: subcomments,
-            });
-          });
+        this.setState({
+          comments: comments
+        });
       });
+
+    this.unsubscribeSubcomments = db.collection('subcomments')
+      .where('postId', '==', postId)
+      .orderBy('date', 'asc')
+      .onSnapshot((snapshot) => {
+        let subcomments = [];
+        snapshot.forEach((subcomment) => {
+          const { content, postId, commentId, userId, date, userName, imageUrl } = subcomment.data();
+          subcomments.push({
+            postId: postId,
+            commentId: commentId,
+            subcommentId: subcomment.id,
+            content: content,
+            date: date.toDate().toDateString() + '  ' + date.toDate().toLocaleTimeString(),
+            userId: userId,
+            userName: userName,
+            imageUrl: imageUrl
+          });
+        });
+        this.setState({
+          subcomments: subcomments,
+        });
+      });
+  }
+
+  componentWillUnmount() {
+    this.unsubscribeComments();
+    this.unsubscribeSubcomments();
   }
 
   render() {
     const { comments, subcomments } = this.state;
     const { classes, user } = this.props;
-    
+
     return (
       <Paper className={classes.paper}>
         {comments.map((comment) => {
