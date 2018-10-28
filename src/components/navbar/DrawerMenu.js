@@ -11,6 +11,10 @@ const styles = {
   fullList: {
     width: 'auto',
     backgroundColor: 'grey'
+  },  
+  menuButton: {
+    marginLeft: -12,
+    marginRight: 20,
   },
 };
 
@@ -39,7 +43,7 @@ class DrawerMenu extends React.Component {
 
     return (
       <React.Fragment>
-        <Button onClick={this.toggleDrawer('top', true)}>
+        <Button className={classes.menuButton} onClick={this.toggleDrawer('top', true)}>
           <i className="material-icons" style={{ color: 'grey' }}>menu</i>
         </Button>
         <Drawer anchor="top" open={this.state.top} onClose={this.toggleDrawer('top', false)}>

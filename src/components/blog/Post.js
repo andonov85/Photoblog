@@ -121,9 +121,7 @@ class Post extends React.Component {
   componentDidUpdate(prevProps) {
     const { user } = this.props;
 
-    if (typeof user !== 'object') return;
-
-    if (user !== prevProps.user && user.hasOwnProperty('userId')) {
+    if (user !== prevProps.user && user !== undefined && user.hasOwnProperty('userId')) {
       let db = firebase.firestore();
       this.unsubscribeUserLiked = db.collection('users').doc(user.userId)
         .collection('userLiked').where('postId', '==', this.props.postId).onSnapshot((userLike) => {
@@ -138,7 +136,7 @@ class Post extends React.Component {
             });
           }
         });
-    } else if (user !== prevProps.user && !user.hasOwnProperty('userId')) {
+    } else if (user !== prevProps.user && user === undefined) {
       this.isLikeRecieved = false;
       this.isLiked = false;
 
@@ -267,7 +265,7 @@ class Post extends React.Component {
           <Divider />
           <CardContent>
             <CommentSection postId={postId} user={user} />
-            {Object.values(user).length !== 0 ?
+            {user ?
               <WriteComment postId={postId} user={user} /> :
               <Typography>Sign in to write a comment.</Typography>
             }

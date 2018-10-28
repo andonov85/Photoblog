@@ -1,16 +1,16 @@
 import React, { Component } from 'react';
 import { Route, BrowserRouter as Router, Switch } from "react-router-dom";
 import PropTypes from 'prop-types';
-
 import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import NavBar from './components/navbar/NavBar';
-import Grid from '@material-ui/core/Grid';
-import Typography from '@material-ui/core/Typography';
 import grey from '@material-ui/core/colors/grey';
+import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
+
+import TopNavBar from './components/navbar/TopNavBar';
+import NavBar from './components/navbar/NavBar';
 
 import Main from './components/main/Main';
 import About from './components/about/About';
@@ -18,6 +18,7 @@ import Gallery from './components/gallery/Gallery';
 import Category from './components/gallery/Category';
 import Blog from './components/blog/Blog';
 // import Footer from './components/footer/Footer'
+
 import { setUser } from './components/blog/uploadSource';
 
 export const UserContext = React.createContext();
@@ -32,37 +33,33 @@ const styles = theme => ({
   root: {
     flexGrow: 1,
   },
-  logo: {
-    [theme.breakpoints.down('sm')]: {
-      fontSize: 20,
-      textAlign: 'left',
-      padding: '10px 0px 10px 20px'
-    },
-    textAlign: 'center',
-    fontFamily: 'Abril Fatface, cursive'
-  },
-  GoogleLogin: {
-    fontSize: 16,
-  },
-  GoogleLogout: {
-    fontSize: 16,
-  },
   avatar: {
     [theme.breakpoints.down('sm')]: {
       display: 'inline-flex',
       width: 30,
       height: 30,
     },
-    display: 'inline-flex'
-  }
+  },
+  GoogleLogin: {
+    backgroundColor: '#9b999b',
+    color: 'white',
+    height: 25,
+    width: 60,
+    borderRadius: 10,
+    fontSize: 12,
+    fontWeight: 'bold'
+  },
+  GoogleLogout: {
+    fontSize: 16,
+  },
 });
 
 class App extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      user: {},
-    };
+      user: undefined,
+    }
     this.responseGoogle = this.responseGoogle.bind(this);
     this.logout = this.logout.bind(this);
   }
@@ -77,7 +74,7 @@ class App extends Component {
 
   logout = () => {
     this.setState({
-      user: {}
+      user: undefined
     });
   }
 
@@ -89,34 +86,32 @@ class App extends Component {
       <MuiThemeProvider theme={theme}>
         <Router>
           <Grid container spacing={0} className={classes.root}>
-            <Grid item xs={6} md={11}>
-              <Typography variant="display1" className={classes.logo}>
-                AA Photography
-              </Typography>
+            <Grid item xs={10} sm={12}>
+              <TopNavBar>
+                {user ?
+                  <GoogleLogout
+                    className={classes.GoogleLogout}
+                    tag={'div'}
+                    buttonText=""
+                    onLogoutSuccess={this.logout}
+                  >
+                    <Avatar className={classes.avatar} alt={user.userName} src={user.imageUrl} />
+                  </GoogleLogout> :
+                  <GoogleLogin
+                    className={classes.GoogleLogin}
+                    clientId={process.env.REACT_APP_GOOGLE_clientId}
+                    tag={'button'}
+                    uxMode={'popup'}
+                    buttonText="Sign in"
+                    onSuccess={this.responseGoogle}
+                    onFailure={this.responseGoogle}
+                    isSignedIn={true}
+                  >
+                  </GoogleLogin>
+                }
+              </TopNavBar>
             </Grid>
-            <Grid item xs={1} md={1}>
-              {Object.values(user).length === 0 ?
-                <GoogleLogin
-                  className={classes.GoogleLogin}
-                  clientId={process.env.REACT_APP_GOOGLE_clientId}
-                  uxMode={'popup'}
-                  buttonText="Sign in"
-                  onSuccess={this.responseGoogle}
-                  onFailure={this.responseGoogle}
-                  isSignedIn={true}
-                >
-                </GoogleLogin> :
-                <GoogleLogout
-                  className={classes.GoogleLogout}
-                  tag={'div'}
-                  buttonText=""
-                  onLogoutSuccess={this.logout}
-                >
-                  <Avatar className={classes.avatar} alt={user.userName} src={user.imageUrl} />
-                </GoogleLogout>
-              }
-            </Grid>
-            <Grid item xs={1} md={11}>
+            <Grid item xs={2} sm={12}>
               <NavBar />
             </Grid>
             <Grid item xs={12}>

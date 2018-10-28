@@ -129,7 +129,7 @@ class Blog extends React.Component {
               </Grid>
               <Grid item sm={3} md={3}>
                 <UserContext.Consumer>
-                  {user => user.role === 'admin' ? <AdminTools /> : null}
+                  {user => user && user.role === 'admin' ? <AdminTools /> : null}
                 </UserContext.Consumer>
               </Grid>
             </Grid>

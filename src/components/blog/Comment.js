@@ -147,10 +147,13 @@ class Comment extends React.Component {
               }
               <Grid container spacing={8} alignItems="flex-end">
                 <Grid item>
-                  <Avatar alt={user.userName} src={user.imageUrl} className={classes.avatar} />
+                  {user ?
+                    <Avatar alt={user.userName} src={user.imageUrl} className={classes.avatar} />
+                    : null
+                  }
                 </Grid>
                 <Grid item >
-                  {Object.values(user).length !== 0 ?
+                  {user ?
                     <div>
                       <TextField
                         id="outlined-dense"

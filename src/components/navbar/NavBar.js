@@ -22,22 +22,22 @@ const styles = theme => ({
     marginRight: 'auto',
     minHeight: 45,
     height: 45
-  }
+  },
 });
 
 class NavBar extends React.Component {
   render() {
     const { classes } = this.props;
     return (
-      <AppBar position="sticky" className={classes.appbar}>
+      <AppBar position="static" className={classes.appbar}>
         <Toolbar className={classes.toolbar}>
-          <Hidden only={['xs', 'sm']}>
+          <Hidden only={['xs']}>
             <NavLink to="/main" buttonName="Home" />
             <NavLink to="/blog" buttonName="Blog" />
             <NavLink to="/gallery" buttonName="Gallery" />
             <NavLink to="/about" buttonName="About" />
           </Hidden>            
-          <Hidden only={['md', 'lg', 'xl']}>
+          <Hidden only={['sm', 'md', 'lg', 'xl']}>
             <DrawerMenu />
           </Hidden>
         </Toolbar>

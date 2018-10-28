@@ -7,7 +7,7 @@ import Button from '@material-ui/core/Button';
 
 const styles = theme => ({
   buttons: {
-    [theme.breakpoints.down('sm')]: {
+    [theme.breakpoints.down('xs')]: {
       color: 'white',
     },
     fontSize: 13,
