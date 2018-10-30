@@ -4,6 +4,8 @@ import compose from 'recompose/compose';
 
 import { withStyles } from '@material-ui/core/styles';
 import withWidth from '@material-ui/core/withWidth';
+import AdminTools from '../blog/AdminTools';
+import { UserContext } from '../../App';
 // import IconButton from '@material-ui/core/IconButton';
 // import MenuItem from '@material-ui/core/MenuItem';
 // import Menu from '@material-ui/core/Menu';
@@ -20,21 +22,25 @@ const styles = theme => ({
   },
   appbar: {
     boxShadow: 'none',
-    backgroundColor: '#f5f5f5',
-  },
-  toolbar: {
-    [theme.breakpoints.up('sm')]: {
-      marginLeft: 'auto',
-      marginRight: 'auto',
-    },
+    backgroundColor: 'white',
+    borderBottom: '1px #dbdbdb solid'
   },
   logo: {
     [theme.breakpoints.down('xs')]: {
+      textAlign: 'left',
       fontSize: 20,
     },
     flexGrow: 1,
-    fontFamily: 'Abril Fatface, cursive'
+    fontFamily: 'Abril Fatface, cursive',
+    color: 'grey'
   },
+  adminTools: {
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '62.5%',
+    },
+    position: 'absolute',
+    marginLeft: '78%',
+  }
 });
 
 class TopNavBar extends React.Component {
@@ -58,17 +64,20 @@ class TopNavBar extends React.Component {
     return (
       <div className={classes.root} >
         <AppBar position="static" className={classes.appbar}>
-          <Toolbar className={classes.toolbar}>
-            <Typography variant="display1" className={classes.logo}>
-              AA Photography
-            </Typography>
+          <Toolbar>
+              <Typography variant="display1" align="center" className={classes.logo}>
+                AA Photography
+              </Typography>
+              <UserContext.Consumer>
+                {user => user && user.role === 'admin' ? <div className={classes.adminTools}><AdminTools/></div> : null}
+              </UserContext.Consumer>
+              {this.props.children}
             {/* <IconButton
               aria-owns={open ? 'menu-appbar' : undefined}
               aria-haspopup="true"
               onClick={this.handleMenu}
               color="inherit"
             > */}
-              {this.props.children}
             {/* </IconButton> */}
             {/* <Menu
               id="menu-appbar"

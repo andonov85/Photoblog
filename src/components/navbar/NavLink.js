@@ -10,10 +10,20 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       color: 'white',
     },
-    fontSize: 13,
+    '&:hover': {
+      backgroundColor: 'white',
+      border: '1px #dbdbdb solid',
+      borderRadius: '10px',
+      color: 'black'
+    },
+    padding: 0,
+    fontSize: 20,
+    textTransform: 'none',
+    transition: 'unset',
+    minWidth: 63,
     fontFamily: 'Pompiere, cursive',
     borderRadius: 0
-  }
+  },
 });
 
 class NavLink extends React.Component {

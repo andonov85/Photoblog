@@ -13,8 +13,7 @@ const styles = {
     backgroundColor: 'grey'
   },  
   menuButton: {
-    marginLeft: -12,
-    marginRight: 20,
+    minWidth: 62
   },
 };
 

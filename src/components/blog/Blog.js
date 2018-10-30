@@ -10,7 +10,6 @@ import Divider from '@material-ui/core/Divider';
 import LazyLoad from 'react-lazy-load';
 
 import Post from './Post';
-import AdminTools from './AdminTools';
 import asearch from '../../Algolia';
 import { UserContext } from '../../App';
 
@@ -23,18 +22,40 @@ const styles = theme => ({
       flexDirection: 'column-reverse'
     }
   },
-  posts: {
-    marginLeft: '40%',
-    [theme.breakpoints.down('sm')]: {
-      marginLeft: '0%',
-    }
+  searchBar: {
+    alignItems: 'baseline',
   },
   textField: {
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
   },
   articlesTitle: {
-    color: 'grey'
+    [theme.breakpoints.down('sm')]: {
+      padding: '25px 0px 0px 20px',
+      fontSize: 16
+    },
+    color: 'grey',
+  },
+  articleContainer: {
+    marginLeft: '25%',
+    [theme.breakpoints.down('md')]: {
+      marginLeft: '15%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '0%',
+    },
+  },
+  posts: {
+    marginLeft: '30%',
+    [theme.breakpoints.down('md')]: {
+      marginLeft: '15%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      margin: '5%',
+    },
+    [theme.breakpoints.down('xs')]: {
+      margin: '0%',
+    }
   },
   avatar: {
     margin: 10
@@ -46,7 +67,7 @@ const styles = theme => ({
     [theme.breakpoints.down('sm')]: {
       height: 300,
     }
-  }
+  },
 });
 
 class Blog extends React.Component {
@@ -86,18 +107,27 @@ class Blog extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={0} className={classes.grid}>
-          <Grid item sm={12} md={2}>
-          </Grid>
-          <Grid item sm={12} md={8}>
-            <Typography variant="title" gutterBottom={true} align="left" className={classes.articlesTitle}>
+        <Grid container spacing={0} className={classes.searchBar}>
+          <Grid item xs={12} md={2} className={classes.articleContainer}>
+          <Typography variant="title" gutterBottom={true} align="left" className={classes.articlesTitle}>
               LATEST ARTICLES
-              <Divider />
             </Typography>
           </Grid>
+          <Grid item xs={12} md={6}>
+            <TextField
+              className={classes.textField}
+              onChange={this.handleOnSearchChange}
+              id="outlined-search"
+              label="Search..."
+              type="search"
+              margin="normal"
+              variant="outlined"
+            />
+          </Grid>
+          <Divider />
         </Grid>
         <Grid container spacing={0} className={classes.grid}>
-          <Grid item sm={12} md={7}>
+          <Grid item sm={12} md={9}>
             <div className={classes.posts}>
               <Grid container spacing={0}>
                 {posts.map((post) => {
@@ -114,23 +144,13 @@ class Blog extends React.Component {
               </Grid>
             </div>
           </Grid>
-          <Grid item sm={12} md={5}>
+          <Grid item sm={12} md={3}>
             <Grid container spacing={0} className={classes.grid}>
               <Grid item sm={3} md={3}>
-                <TextField
-                  className={classes.textField}
-                  onChange={this.handleOnSearchChange}
-                  id="outlined-search"
-                  label="Search post..."
-                  type="search"
-                  margin="normal"
-                  variant="outlined"
-                />
+
               </Grid>
               <Grid item sm={3} md={3}>
-                <UserContext.Consumer>
-                  {user => user && user.role === 'admin' ? <AdminTools /> : null}
-                </UserContext.Consumer>
+
               </Grid>
             </Grid>
           </Grid>

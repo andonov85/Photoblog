@@ -24,6 +24,8 @@ import CommentSection from './CommentSection';
 const styles = theme => ({
   card: {
     boxShadow: 'none',
+    borderBottom: '1px #dbdbdb solid',
+    borderRadius: 0
   },
   media: {
     paddingTop: '56.25%', // 16:9

@@ -32,6 +32,7 @@ const theme = createMuiTheme({
 const styles = theme => ({
   root: {
     flexGrow: 1,
+    alignItems: 'center',
   },
   avatar: {
     [theme.breakpoints.down('sm')]: {
@@ -41,15 +42,23 @@ const styles = theme => ({
     },
   },
   GoogleLogin: {
-    backgroundColor: '#9b999b',
-    color: 'white',
-    height: 25,
+    position: 'absolute',
+    marginLeft: '81%',
+    border: 'white',
+    backgroundColor: 'white',
+    color: 'grey',
+    height: 32,
     width: 60,
     borderRadius: 10,
     fontSize: 12,
-    fontWeight: 'bold'
+    fontWeight: 'bold',
+    '&:hover': {
+      border: '1px #dbdbdb solid'
+    },
   },
   GoogleLogout: {
+    position: 'absolute',
+    marginLeft: '81%',
     fontSize: 16,
   },
 });
@@ -85,52 +94,52 @@ class App extends Component {
     return (
       <MuiThemeProvider theme={theme}>
         <Router>
-          <Grid container spacing={0} className={classes.root}>
-            <Grid item xs={10} sm={12}>
-              <TopNavBar>
-                {user ?
-                  <GoogleLogout
-                    className={classes.GoogleLogout}
-                    tag={'div'}
-                    buttonText=""
-                    onLogoutSuccess={this.logout}
-                  >
-                    <Avatar className={classes.avatar} alt={user.userName} src={user.imageUrl} />
-                  </GoogleLogout> :
-                  <GoogleLogin
-                    className={classes.GoogleLogin}
-                    clientId={process.env.REACT_APP_GOOGLE_clientId}
-                    tag={'button'}
-                    uxMode={'popup'}
-                    buttonText="Sign in"
-                    onSuccess={this.responseGoogle}
-                    onFailure={this.responseGoogle}
-                    isSignedIn={true}
-                  >
-                  </GoogleLogin>
-                }
-              </TopNavBar>
-            </Grid>
-            <Grid item xs={2} sm={12}>
-              <NavBar />
-            </Grid>
-            <Grid item xs={12}>
-              <Switch>
-                <Route exact path="/" component={Main} />
-                <Route path="/main" component={Main} />
-                <Route path="/about" component={About} />
-                <Route path="/gallery/" component={Gallery} />
-                <Route path="/category/:category" component={Category} />
-                <UserContext.Provider value={user}>
+          <UserContext.Provider value={user}>
+            <Grid container spacing={0} className={classes.root}>
+              <Grid item xs={10} sm={12}>
+                <TopNavBar>
+                  {user ?
+                    <GoogleLogout
+                      className={classes.GoogleLogout}
+                      tag={'div'}
+                      buttonText=""
+                      onLogoutSuccess={this.logout}
+                    >
+                      <Avatar className={classes.avatar} alt={user.userName} src={user.imageUrl} />
+                    </GoogleLogout> :
+                    <GoogleLogin
+                      className={classes.GoogleLogin}
+                      clientId={process.env.REACT_APP_GOOGLE_clientId}
+                      tag={'button'}
+                      uxMode={'popup'}
+                      buttonText="Google login"
+                      onSuccess={this.responseGoogle}
+                      onFailure={this.responseGoogle}
+                      isSignedIn={true}
+                    >
+                    </GoogleLogin>
+                  }
+                </TopNavBar>
+              </Grid>
+              <Grid item xs={1} sm={12}>
+                <NavBar />
+              </Grid>
+              <Grid item xs={12}>
+                <Switch>
+                  <Route exact path="/" component={Main} />
+                  <Route path="/main" component={Main} />
+                  <Route path="/about" component={About} />
+                  <Route path="/gallery/" component={Gallery} />
+                  <Route path="/category/:category" component={Category} />
                   <Route path="/blog" component={Blog} />
-                </UserContext.Provider>
-                <Route render={() => <div>Not Found</div>} />
-              </Switch>
+                  <Route render={() => <div>Not Found</div>} />
+                </Switch>
+              </Grid>
+              <Grid item xs={12}>
+                {/* ToDo <Route path="/footer" component={Footer}/> */}
+              </Grid>
             </Grid>
-            <Grid item xs={12}>
-              {/* ToDo <Route path="/footer" component={Footer}/> */}
-            </Grid>
-          </Grid>
+          </UserContext.Provider>
         </Router>
       </MuiThemeProvider >
     );

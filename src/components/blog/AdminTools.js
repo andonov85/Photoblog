@@ -5,8 +5,7 @@ import { AlgoliaUpdateSearchIndex } from '../../AlgoliaUpdateSearchIndex'
 
 import { withStyles } from '@material-ui/core/styles';
 
-import Typography from '@material-ui/core/Typography';
-import blue from '@material-ui/core/colors/blue';
+// import Typography from '@material-ui/core/Typography';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
@@ -17,8 +16,11 @@ import DialogTitle from '@material-ui/core/DialogTitle';
 const styles = theme => ({
   button: {
     margin: theme.spacing.unit,
-    color: blue.A400
+    color: 'grey'
   },
+  userName: {
+    display: 'inline'
+  }
 });
 
 class AdminTools extends React.Component {
@@ -71,9 +73,9 @@ class AdminTools extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Typography variant="body1">
+        {/* <Typography variant="body1" className={classes.userName}>
           Hello admin!
-        </Typography>
+        </Typography> */}
         <Button className={classes.button} aria-label="Add post" onClick={this.handleClickOpen}>
           <i className="material-icons">
             library_add

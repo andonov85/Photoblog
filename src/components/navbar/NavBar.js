@@ -15,13 +15,14 @@ import DrawerMenu from './DrawerMenu';
 const styles = theme => ({
   appbar: {
     boxShadow: 'none',
-    backgroundColor: '#f5f5f5',
+    backgroundColor: 'white',
   },
   toolbar: {
     marginLeft: 'auto',
     marginRight: 'auto',
     minHeight: 45,
-    height: 45
+    height: 45,
+    padding: 0
   },
 });
 
