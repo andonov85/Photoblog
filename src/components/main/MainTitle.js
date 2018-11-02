@@ -2,12 +2,21 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 import { withStyles } from '@material-ui/core/styles';
+import classnames from 'classnames';
 import Paper from '@material-ui/core/Paper';
 import Fade from '@material-ui/core/Fade';
+import CircularProgress from '@material-ui/core/CircularProgress';
 
 import imageSource from '../gallery/imageSource';
+import makeCancelablePromise from '../helperFunctions/makeCancelablePromise';
 
 const styles = theme => ({
+  root: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
   paper: {
     [theme.breakpoints.down('sm')]: {
       height: 'calc(100vh - 45px)',
@@ -28,47 +37,56 @@ class MainTitle extends React.Component {
     super(props);
     this.state = {
       imageUrl: '',
-      checked: false
+      showImage: false,
+      loading: true
     };
-    this.handleonLoad = this.handleonLoad.bind(this);
+    this.handleOnLoad = this.handleOnLoad.bind(this);
   }
+
+  handleOnLoad() {
+    this.setState({
+      showImage: true,
+      loading: false
+    });
+  }
+
+  fetchImages = makeCancelablePromise(imageSource());
 
   componentDidMount() {
-    imageSource().then((images) => {
-      if (images) {
+    this.fetchImages
+      .promise
+      .then((images) => {
         const randomImage = images[Math.floor(Math.random() * images.length)];
         this.setState({
-          imageUrl: `${randomImage.url}`
+          imageUrl: randomImage.url
         });
-      } else {
-        console.log('Can\'t download images');
-      }
-    });
-  }
-
-  handleonLoad() {
-    this.setState({
-      checked: true
-    });
+      })
+      .catch((reason) => console.log('isCanceled', reason.isCanceled));
   }
 
   componentWillUnmount() {
-    
+    this.fetchImages.cancel(); // Cancel the promise
   }
 
   render() {
     const { classes } = this.props;
-    const { imageUrl, checked } = this.state;
+    const { imageUrl, showImage, loading } = this.state;
 
     return (
-      <Fade
-        in={checked}
-        timeout={{ enter: 2500, exit: 2500 }}
-      >
-        <Paper className={classes.paper} style={{ backgroundImage: `url(${imageUrl})` }}>
-          <img src={imageUrl} alt="Flowers" onLoad={this.handleonLoad} style={{ display: 'none' }} />
-        </Paper>
-      </Fade>
+      <div>
+        {loading ?
+          <Paper className={classnames(classes.root, classes.paper)}>
+            <CircularProgress />
+          </Paper> : null}
+        <Fade
+          in={showImage}
+          timeout={{ enter: 2000, exit: 0 }}
+        >
+          <Paper className={classes.paper} style={{ backgroundImage: `url(${imageUrl})` }}>
+            <img src={imageUrl} alt="Flowers" onLoad={this.handleOnLoad} style={{ display: 'none' }} />
+          </Paper>
+        </Fade>
+      </div>
     )
   }
 }

@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { firebase } from '../../Firebase';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
@@ -9,7 +10,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 // import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 
-import { firebase } from '../../Firebase';
+import makeCancelablePromise from '../helperFunctions/makeCancelablePromise';
 
 const styles = theme => ({
   root: {
@@ -21,10 +22,11 @@ const styles = theme => ({
   gridItem: {
     padding: '45px 0px 45px 0px',
     [theme.breakpoints.down('sm')]: {
-      padding: 0,
+      padding: 8,
     }
   },
   category: {
+    marginTop: 20,
     fontFamily: 'Great Vibes, cursive',
     fontSize: 56,
     textTransform: 'capitalize'
@@ -52,27 +54,38 @@ class Category extends React.Component {
       images: []
     };
     this.handleOnClick = this.handleOnClick.bind(this);
-    this.setImageSource = this.setImageSource.bind(this);
   }
 
-  setImageSource() {
-    const db = firebase.firestore();
-    const { category } = this.props.match.params;
-    let imagesData = [];
+  handleOnClick() {
 
+  }
+
+  fetchImages = makeCancelablePromise(new Promise((resolve, reject) => {
+    const { category } = this.props.match.params;
+    const db = firebase.firestore();
+    
     db.collection('images').where('category', '==', category).get().then((snapshot) => {
+      if(snapshot.empty) reject('There are no documents in the query snapshot');
+      let imagesData = [];
+
       snapshot.forEach((doc) => {
         const { id, name, url, thumbUrl, category, description } = doc.data();
         imagesData.push({ id, name, url, thumbUrl, category, description });
       });
+
+      resolve(imagesData);
+    });
+  }));
+
+  componentDidMount() {
+    this.fetchImages
+    .promise
+    .then((imagesData) => {
       this.setState({
         images: imagesData
       });
-    });
-  }
-
-  componentDidMount() {
-    this.setImageSource();
+    })
+    .catch((reason) => console.log('isCanceled', reason.isCanceled));;
   }
 
   componentDidUpdate(prevProps) {
@@ -81,8 +94,8 @@ class Category extends React.Component {
     }
   }
 
-  handleOnClick() {
-
+  componentWillUnmount() {
+    this.fetchImages.cancel();
   }
 
   render() {

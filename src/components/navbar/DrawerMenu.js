@@ -9,11 +9,15 @@ import NavLink from './NavLink';
 
 const styles = {
   fullList: {
-    width: 'auto',
-    backgroundColor: 'grey'
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minWidth: 200,
+    backgroundColor: '#c1c1c1',
   },  
   menuButton: {
-    minWidth: 62
+    minWidth: 60
   },
 };
 

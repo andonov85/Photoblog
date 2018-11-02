@@ -121,7 +121,7 @@ class App extends Component {
                   }
                 </TopNavBar>
               </Grid>
-              <Grid item xs={1} sm={12}>
+              <Grid item xs={2} sm={12}>
                 <NavBar />
               </Grid>
               <Grid item xs={12}>

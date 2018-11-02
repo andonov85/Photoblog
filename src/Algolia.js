@@ -13,7 +13,7 @@ const SEARCH_ONLY_API_KEY = process.env.REACT_APP_ALGOLIA_searchOnlyApiKey;
 const client = algoliasearch(APP_ID, SEARCH_ONLY_API_KEY);
 const index = client.initIndex('blog_posts');
 
-function asearch(query) {
+function Algolia(query) {
 	return new Promise((resolve) => {
 		index.search(
 			{
@@ -29,4 +29,4 @@ function asearch(query) {
 	});
 }
 
-export default asearch;
+export default Algolia;

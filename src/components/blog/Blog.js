@@ -10,8 +10,9 @@ import Divider from '@material-ui/core/Divider';
 import LazyLoad from 'react-lazy-load';
 
 import Post from './Post';
-import asearch from '../../Algolia';
+import Algolia from '../../Algolia';
 import { UserContext } from '../../App';
+import makeCancelablePromise from '../helperFunctions/makeCancelablePromise';
 
 const styles = theme => ({
   root: {
@@ -80,25 +81,37 @@ class Blog extends React.Component {
     this.handleOnContentVisible = this.handleOnContentVisible.bind(this);
   }
 
-  componentDidMount() {
-    asearch('').then((content) => {
-      this.setState({
-        posts: content.hits,
-      });
-    });
+  handleOnContentVisible() {
+
   }
+
+  AlgoliaResults = makeCancelablePromise(Algolia(''));
 
   handleOnSearchChange(event) {
     const searchValue = event.target.value;
-    asearch(searchValue).then((content) => {
-      this.setState({
-        posts: content.hits,
+    this.AlgoliaResults = makeCancelablePromise(Algolia(searchValue));
+
+    this.AlgoliaResults
+      .promise
+      .then((content) => {
+        this.setState({
+          posts: content.hits,
+        });
       });
-    });
   }
 
-  handleOnContentVisible() {
+  componentDidMount() {
+    this.AlgoliaResults
+      .promise
+      .then((content) => {
+        this.setState({
+          posts: content.hits,
+        });
+      });
+  }
 
+  componentWillUnmount() {
+    this.AlgoliaResults.cancel();
   }
 
   render() {
@@ -109,7 +122,7 @@ class Blog extends React.Component {
       <div className={classes.root}>
         <Grid container spacing={0} className={classes.searchBar}>
           <Grid item xs={12} md={2} className={classes.articleContainer}>
-          <Typography variant="title" gutterBottom={true} align="left" className={classes.articlesTitle}>
+            <Typography variant="title" gutterBottom={true} align="left" className={classes.articlesTitle}>
               LATEST ARTICLES
             </Typography>
           </Grid>

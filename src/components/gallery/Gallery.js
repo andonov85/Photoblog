@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
+import { firebase } from '../../Firebase';
 
 import { withStyles } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
@@ -8,7 +9,7 @@ import Grow from '@material-ui/core/Grow';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 
-import { firebase } from '../../Firebase';
+import makeCancelablePromise from '../helperFunctions/makeCancelablePromise';
 
 const styles = theme => ({
   root: {
@@ -67,14 +68,28 @@ class Gallery extends React.Component {
     };
   }
 
-  componentDidMount() {
+  fetchImageCategories = makeCancelablePromise(new Promise((resolve, reject) => {
     const db = firebase.firestore();
     db.collection('images').doc('categories').get().then((doc) => {
-      this.setState({
-        categoriesData: doc.data().categories,
-        checked: true
-      });
+      if (!doc.exists) reject('Doc doesn\'t exist');
+      resolve(doc.data().categories);
     });
+  }));
+
+  componentDidMount() {
+    this.fetchImageCategories
+      .promise
+      .then((categories) => {
+        this.setState({
+          categoriesData: categories,
+          checked: true
+        });
+      })
+      .catch((reason) => console.log('isCanceled', reason.isCanceled));
+  }
+
+  componentWillUnmount() {
+    this.fetchImageCategories.cancel(); // Cancel the promise
   }
 
   render() {
