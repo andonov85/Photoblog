@@ -14,7 +14,7 @@
     "react-instantsearch-dom": "^5.3.1",
     "react-lazy-load": "^3.0.13",
     "react-router-dom": "^4.3.1",
-    "react-scripts": "1.1.4",
+    "react-scripts": "2.1.1",
     "react-transition-group": "^2.5.0",
     "recompose": "^0.30.0"
   },
@@ -23,5 +23,11 @@
     "build": "react-scripts build",
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
-  }
+  },
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }

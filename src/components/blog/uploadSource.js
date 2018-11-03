@@ -24,45 +24,57 @@ function uploadComment(collection, comment) {
 
 function setUser(googleUser) {
 	if (typeof googleUser === 'object' && googleUser.hasOwnProperty('googleId')) {
+		// Form of google user object
+		let user = {
+			googleId: googleUser.googleId,
+			email: 'none', // Otherwise googleUser.email,
+			imageUrl: googleUser.imageUrl,
+			name: googleUser.name,
+			familyName: googleUser.familyName,
+			givenName: googleUser.givenName,
+			role: '', // User or admin
+		};
 
 		return new Promise((resolve) => {
 			const users = firebase.firestore().collection('users');
 
-			users.where('googleId', '==', googleUser.googleId).get().then((user) => {
-				if (user.empty) {
+			users.where('googleId', '==', user.googleId).get().then((snapshot) => {
+				if (snapshot.empty) {
 					// If doesnt exist add new user
-					googleUser.email = 'none';
-					googleUser.role = 'user';
-					users.add(googleUser).then((addedUser) => {
-						addedUser.get().then((newUser) => {
-							let user = newUser.data();
-							user.userId = newUser.id;
-							resolve(user);
-						});
-					}).catch(function (error) {
-						console.error("Error adding document: ", error);
-					});
-				} else {
-					// If exist check for changes and update user data if needed.
-					const userId = user.docs[0].id;
-					const { name, familyName, givenName, imageUrl } = googleUser;
+					// Change role
+					user.role = 'user';
 
-					users.doc(userId).update({
-						name: name,
-						familyName: familyName,
-						givenName: givenName,
-						imageUrl: imageUrl
-					}).then(() => {
-						users.doc(userId).get().then((updatedUser) => {
-							let user = updatedUser.data();
-							user.userId = updatedUser.id;
-							resolve(user);
+					users.add(user).then((doc) => {
+						// Add new doc id to user object
+						user.userId = doc.id;
+						resolve(user);
+					})
+						.catch(function (error) {
+							console.error("Error adding document: ", error);
 						});
-					});
+				} else {
+					// If exist update user data.
+					const userId = snapshot.docs[0].id;
+
+					users.doc(userId)
+						.update({
+							name: user.name,
+							familyName: user.familyName,
+							givenName: user.givenName,
+							imageUrl: user.imageUrl
+						})
+						.then(() => {
+							users.doc(userId).get().then((doc) => {
+								let userObj = doc.data();
+								// Add doc id to user object
+								userObj.userId = doc.id;
+								resolve(userObj);
+							});
+						});
 				}
 			}).catch(function (error) {
-				console.log("Error getting document:", error);
-			});
+					console.log("Error getting document:", error);
+				});
 		});
 	}
 }
