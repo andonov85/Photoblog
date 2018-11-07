@@ -4,13 +4,23 @@ import { firebase } from '../../Firebase';
 
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
-// import Paper from '@material-ui/core/Paper';
+import Modal from '@material-ui/core/Modal';
 import Card from '@material-ui/core/Card';
 import CardMedia from '@material-ui/core/CardMedia';
-// import CardContent from '@material-ui/core/CardContent';
 import { Typography } from '@material-ui/core';
 
 import makeCancelablePromise from '../helperFunctions/makeCancelablePromise';
+
+function getModalStyle() {
+  const top = 0;
+  const left = 0;
+
+  return {
+    top: `${top}%`,
+    left: `${left}%`,
+    transform: `translate(-${top}%, -${left}%)`,
+  };
+}
 
 const styles = theme => ({
   root: {
@@ -44,6 +54,25 @@ const styles = theme => ({
   },
   media: {
     height: 250,
+  },
+  paper: {
+    boxSizing: 'border-box',
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    height: '100vh',
+    width: '100vw',
+    backgroundColor: 'black',
+  },
+  imageContainer: {
+    maxHeight: '100%',
+    // border: '2px solid yellow',
+    // backgroundColor: 'crimson'
+  },
+  image: {
+    maxWidth: '100%',
+    maxHeight: '100vh'
   }
 });
 
@@ -51,21 +80,33 @@ class Category extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      images: []
+      images: [],
+      openModal: false,
+      imageUrl: '',
+      imageName: ''
     };
-    this.handleOnClick = this.handleOnClick.bind(this);
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClose = this.handleClose.bind(this);
   }
 
-  handleOnClick() {
-
+  handleOpen(e) {
+    this.setState({
+      openModal: true,
+      imageUrl: e.target.dataset.url,
+      imageName: e.target.dataset.title,
+    });
   }
+
+  handleClose = () => {
+    this.setState({ openModal: false });
+  };
 
   fetchImages = makeCancelablePromise(new Promise((resolve, reject) => {
     const { category } = this.props.match.params;
     const db = firebase.firestore();
-    
+
     db.collection('images').where('category', '==', category).get().then((snapshot) => {
-      if(snapshot.empty) reject('There are no documents in the query snapshot');
+      if (snapshot.empty) reject('There are no documents in the query snapshot');
       let imagesData = [];
 
       snapshot.forEach((doc) => {
@@ -79,13 +120,13 @@ class Category extends React.Component {
 
   componentDidMount() {
     this.fetchImages
-    .promise
-    .then((imagesData) => {
-      this.setState({
-        images: imagesData
-      });
-    })
-    .catch((reason) => console.log('isCanceled', reason.isCanceled));;
+      .promise
+      .then((imagesData) => {
+        this.setState({
+          images: imagesData
+        });
+      })
+      .catch((reason) => console.log('isCanceled', reason.isCanceled));;
   }
 
   componentDidUpdate(prevProps) {
@@ -99,6 +140,7 @@ class Category extends React.Component {
   }
 
   render() {
+    const { images, openModal, imageUrl, imageName } = this.state;
     const { classes, match } = this.props;
     return (
       <div className={classes.root}>
@@ -106,25 +148,36 @@ class Category extends React.Component {
           {match.params.category}
         </Typography>
         <Grid container spacing={0} justify="center">
-          {this.state.images.map((data) => {
+          {images.map((data) => {
             return (
               <Grid item xs={12} md={6} lg={4} key={data.id} className={classes.gridItem}>
-                <Card className={classes.card} onClick={this.handleOnClick} about={data.category.toLowerCase()}>
+                <Card className={classes.card} about={data.category.toLowerCase()}>
                   <CardMedia
                     className={classes.media}
                     image={data.thumbUrl}
-                    title={data.category}
+                    data-url={data.url}
+                    title={data.name}
+                    onClick={this.handleOpen}
                   />
-                  {/* <CardContent className={classes.cardContent}>
-                    <Typography gutterBottom variant="title" align="center">
-                      {data.name}
-                    </Typography>
-                  </CardContent> */}
                 </Card>
               </Grid>
             )
           })}
         </Grid>
+        <Modal
+          aria-labelledby={match.params.category}
+          aria-describedby='images'
+          open={openModal}
+        >
+          <div style={getModalStyle()} className={classes.paper} onClick={this.handleClose}>
+            <div className={classes.imageContainer}>
+              <img
+                src={imageUrl}
+                alt={imageName}
+                className={classes.image} />
+            </div>
+          </div>
+        </Modal>
       </div>
     )
   }

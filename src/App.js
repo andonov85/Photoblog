@@ -8,9 +8,11 @@ import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
 import grey from '@material-ui/core/colors/grey';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
+import Hidden from '@material-ui/core/Hidden';
 
 import TopNavBar from './components/navbar/TopNavBar';
 import NavBar from './components/navbar/NavBar';
+import DrawerMenu from './components/navbar/DrawerMenu';
 
 import Main from './components/main/Main';
 import About from './components/about/About';
@@ -76,7 +78,7 @@ class App extends Component {
   responseGoogle = (res) => {
     setUser(res.profileObj).then((user) => {
       this.setState({
-        user: user
+        user: user,
       });
     });
   }
@@ -122,7 +124,12 @@ class App extends Component {
                 </TopNavBar>
               </Grid>
               <Grid item xs={2} sm={12}>
-                <NavBar />
+                <Hidden only={['xs']}>
+                  <NavBar />
+                </Hidden>
+                <Hidden only={['sm', 'md', 'lg', 'xl']}>
+                  <DrawerMenu />
+                </Hidden>
               </Grid>
               <Grid item xs={12}>
                 <Switch>
