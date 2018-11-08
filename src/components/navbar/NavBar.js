@@ -17,13 +17,17 @@ const styles = theme => ({
   },
   fixed: {
     top: -45,
-    transition: 'top .4s ease-in-out',
   },
   fixedOpen: {
     position: 'fixed',
     width: '100%',
+    opacity: .7,
     zIndex: 1,
-    top: 0
+    '&:hover': {
+      opacity: 1,
+    },
+    transition: 'all .4s ease-in-out',
+    top: 0,
   },
   appbar: {
     boxShadow: 'none',
@@ -42,7 +46,8 @@ class NavBar extends React.Component {
   constructor(props) {
     super(props);
     this.rootEl = React.createRef();
-    this.beforeScrolling = {};
+    this.barEl = React.createRef();
+    this.initialPosition = {};
 
     this.state = {
       isFixed: false,
@@ -52,13 +57,18 @@ class NavBar extends React.Component {
 
   handleScroll() {
     const rootEl = this.rootEl.current;
-    const rootRect = rootEl.getBoundingClientRect();
+    const barEl = this.barEl.current;
 
-    if (rootRect.bottom + 50 < this.beforeScrolling.top) {
+    const rootRect = rootEl.getBoundingClientRect();
+    const hasFixedOpenClass = barEl.classList.contains(this.props.classes.fixedOpen);
+    
+    if (!hasFixedOpenClass && rootRect.bottom <= 0) {
+      // barEl.classList.add(this.props.classes.fixedOpen);
       this.setState({
         isFixed: true
       });
-    } else if (rootRect.bottom >= this.beforeScrolling.top) {
+    } else if (hasFixedOpenClass && rootRect.bottom >= this.initialPosition.top) {
+      // barEl.classList.remove(this.props.classes.fixedOpen);
       this.setState({
         isFixed: false
       });
@@ -67,8 +77,8 @@ class NavBar extends React.Component {
 
   componentDidMount() {
     const rootEl = this.rootEl.current;
-    this.beforeScrolling = rootEl.getBoundingClientRect();
-
+    this.initialPosition = rootEl.getBoundingClientRect();
+    
     window.addEventListener('scroll', this.handleScroll);
   }
 
@@ -82,7 +92,8 @@ class NavBar extends React.Component {
 
     return (
       <div className={classes.root} ref={this.rootEl}>
-        <div className={classnames(classes.fixed, { [classes.fixedOpen]: isFixed })}>
+        <div className={classnames(classes.fixed, { [classes.fixedOpen]: isFixed })} ref={this.barEl}>
+        {/* <div className={classes.fixed} ref={this.barEl}> */}
           <AppBar position="static" className={classes.appbar}>
             <Toolbar className={classes.toolbar}>
               <NavLink to="/main" buttonName="Home" />
