@@ -10,19 +10,18 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       color: 'white',
     },
-    '&:hover': {
-      backgroundColor: 'white',
-      border: '1px #dbdbdb solid',
-      borderRadius: '10px',
-      color: 'black'
-    },
+    borderRadius: '0px',
     padding: 0,
-    fontSize: 20,
-    textTransform: 'none',
-    transition: 'unset',
+    fontSize: 14,
+    textTransform: 'uppercase',
+    color: 'grey',
     minWidth: 63,
     fontFamily: 'Pompiere, cursive',
-    borderRadius: 0
+    transition: 'transform .3s ease-in-out',
+    '&:hover': {
+      backgroundColor: 'rgb(242, 242, 242, 0)',
+      transform: 'scale(1.4)',
+    },
   },
 });
 

@@ -14,7 +14,7 @@ const styles = {
     justifyContent: 'center',
     alignItems: 'center',
     minWidth: 200,
-    backgroundColor: '#c1c1c1',
+    backgroundColor: 'grey',
   },  
   menuButton: {
     minWidth: 60

@@ -8,6 +8,7 @@ import Paper from '@material-ui/core/Paper';
 import Grow from '@material-ui/core/Grow';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
+import Fade from '@material-ui/core/Fade';
 
 import makeCancelablePromise from '../helperFunctions/makeCancelablePromise';
 
@@ -64,7 +65,8 @@ class Gallery extends React.Component {
     super(props);
     this.state = {
       categoriesData: [],
-      checked: false
+      checked: false,
+      fade: false
     };
   }
 
@@ -82,7 +84,8 @@ class Gallery extends React.Component {
       .then((categories) => {
         this.setState({
           categoriesData: categories,
-          checked: true
+          checked: true,
+          fade: true
         });
       })
       .catch((reason) => console.log('isCanceled', reason.isCanceled));
@@ -94,31 +97,33 @@ class Gallery extends React.Component {
 
   render() {
     const { classes } = this.props;
-    const { checked } = this.state;
+    const { checked, fade } = this.state;
 
     return (
-      <div className={classes.root}>
-        <Paper className={classes.paper}>
-          <Grid container spacing={8} className={classes.categoriesContainer}>
-            {this.state.categoriesData.map((data, index) => {
-              return (
-                <Grow
-                  key={data.category.toLowerCase()}
-                  in={checked}
-                  style={{ transformOrigin: '0 0 0' }}
-                  {...(checked ? { timeout: (index + 1) * 1000 } : {})}
-                >
-                  <Link to={`/category/${data.category.toLowerCase()}`} style={{ textDecoration: "none" }}>
-                    <Typography className={classes.links} variant="h4" align="center">
-                      {data.category}
-                    </Typography>
-                  </Link>
-                </Grow>
-              )
-            })}
-          </Grid>
-        </Paper>
-      </div>
+      <Fade in={fade} timeout={{ enter: 400, exit: 0 }}>
+        <div className={classes.root}>
+          <Paper className={classes.paper}>
+            <Grid container spacing={8} className={classes.categoriesContainer}>
+              {this.state.categoriesData.map((data, index) => {
+                return (
+                  <Grow
+                    key={data.category.toLowerCase()}
+                    in={checked}
+                    style={{ transformOrigin: '0 0 0' }}
+                    {...(checked ? { timeout: (index + 1) * 1000 } : {})}
+                  >
+                    <Link to={`/category/${data.category.toLowerCase()}`} style={{ textDecoration: "none" }}>
+                      <Typography className={classes.links} variant="h4" align="center">
+                        {data.category}
+                      </Typography>
+                    </Link>
+                  </Grow>
+                )
+              })}
+            </Grid>
+          </Paper>
+        </div>
+      </Fade>
     )
   }
 }

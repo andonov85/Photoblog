@@ -17,6 +17,7 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Comment from '@material-ui/icons/Comment';
 import Divider from '@material-ui/core/Divider';
+import Fade from '@material-ui/core/Fade';
 
 import WriteComment from './WriteComment';
 import CommentSection from './CommentSection';
@@ -28,7 +29,8 @@ const styles = theme => ({
     borderRadius: 0
   },
   titleCard: {
-    fontSize: '1.3rem'
+    fontSize: '1.2rem',
+    textTransform: 'capitalize'
   },
   media: {
     paddingTop: '56.25%', // 16:9
@@ -83,10 +85,12 @@ class Post extends React.Component {
       commentsCounter: 0,
       chat: false,
       likes: 0,
-      changeLikeColor: false
+      changeLikeColor: false,
+      fade: false
     };
     this.handleCommentClick = this.handleCommentClick.bind(this);
     this.addToLiked = this.addToLiked.bind(this);
+    this.mediaOnLoad = this.mediaOnLoad.bind(this);
   }
 
   componentDidMount() {
@@ -216,69 +220,79 @@ class Post extends React.Component {
     }));
   };
 
+  mediaOnLoad() {
+
+    this.setState({
+      fade: true
+    });
+  }
+
   render() {
     const { classes, post, postId, user } = this.props;
-    const { commentsCounter, chat, changeLikeColor, likes } = this.state;
+    const { commentsCounter, chat, changeLikeColor, likes, fade } = this.state;
 
     post.date = new Date(post.date).toDateString();
 
     return (
-      <Card className={classes.card}>
-        <CardHeader
-          avatar={
-            <Avatar src={post.avatarUrl}
-              aria-label="Logo" className={classnames(classes.avatar, classes.bigAvatar)}>
-            </Avatar>
-          }
-          title={post.title}
-          titleTypographyProps={{className: classes.titleCard}}
-          subheader={post.date}
-        />
-        <a type="button" target="_blank" rel="noopener noreferrer"
-          href={post.linkUrl}>
-          <CardMedia
-            className={classes.media}
-            image={post.imageUrl}
-            title={post.title}
-          />
-        </a>
-        <CardContent>
-          <Typography className={classes.content} component="p" variant="body1" gutterBottom={true} align="justify">
-            {post.content}
-          </Typography>
-          <Typography component="p" align="left" variant="caption">
-            Source: 
-            <a type="text/html" target="_blank" rel="noopener noreferrer"
-              href={post.homepageUrl}>
-              {post.homepageUrl}
-            </a>
-          </Typography>
-        </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
-          <IconButton aria-label="Add to favorites" onClick={this.addToLiked}>
-            {changeLikeColor ?
-              <FavoriteIcon className={classes.favourite} /> : <FavoriteIcon className={classes.unfavourite} />}
-            <Typography>{likes}</Typography>
-          </IconButton>
-          <IconButton
-            onClick={this.handleCommentClick}
-            aria-expanded={chat}
-            aria-label="Comment">
-            <Comment />
-            <Typography>{commentsCounter}</Typography>
-          </IconButton>
-        </CardActions>
-        <Collapse in={chat} timeout="auto" unmountOnExit>
-          <Divider />
-          <CardContent>
-            <CommentSection postId={postId} user={user} />
-            {user ?
-              <WriteComment postId={postId} user={user} /> :
-              <Typography>Sign in to write a comment.</Typography>
+      <Fade in={fade} timeout={{ enter: 400, exit: 0 }}>
+        <Card className={classes.card}>
+          <CardHeader
+            avatar={
+              <Avatar src={post.avatarUrl}
+                aria-label="Logo" className={classnames(classes.avatar, classes.bigAvatar)}>
+              </Avatar>
             }
+            title={post.title}
+            titleTypographyProps={{ className: classes.titleCard }}
+            subheader={post.date}
+          />
+          <a type="button" target="_blank" rel="noopener noreferrer"
+            href={post.linkUrl}>
+            <CardMedia
+              className={classes.media}
+              image={post.imageUrl}
+              title={post.title}
+            />
+            <img src={post.imageUrl} alt={post.title} onLoad={this.mediaOnLoad} style={{ display: 'none' }} />
+          </a>
+          <CardContent>
+            <Typography className={classes.content} component="p" variant="body1" gutterBottom={true} align="justify">
+              {post.content}
+            </Typography>
+            <Typography component="p" align="left" variant="caption">
+              Source:
+            <a type="text/html" target="_blank" rel="noopener noreferrer"
+                href={post.homepageUrl}>
+                {post.homepageUrl}
+              </a>
+            </Typography>
           </CardContent>
-        </Collapse>
-      </Card>
+          <CardActions className={classes.actions} disableActionSpacing>
+            <IconButton aria-label="Add to favorites" onClick={this.addToLiked}>
+              {changeLikeColor ?
+                <FavoriteIcon className={classes.favourite} /> : <FavoriteIcon className={classes.unfavourite} />}
+              <Typography>{likes}</Typography>
+            </IconButton>
+            <IconButton
+              onClick={this.handleCommentClick}
+              aria-expanded={chat}
+              aria-label="Comment">
+              <Comment />
+              <Typography>{commentsCounter}</Typography>
+            </IconButton>
+          </CardActions>
+          <Collapse in={chat} timeout="auto" unmountOnExit>
+            <Divider />
+            <CardContent>
+              <CommentSection postId={postId} user={user} />
+              {user ?
+                <WriteComment postId={postId} user={user} /> :
+                <Typography>Sign in to write a comment.</Typography>
+              }
+            </CardContent>
+          </Collapse>
+        </Card>
+      </Fade>
     );
   }
 }
