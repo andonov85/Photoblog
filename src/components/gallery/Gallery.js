@@ -109,7 +109,7 @@ class Gallery extends React.Component {
                   {...(checked ? { timeout: (index + 1) * 1000 } : {})}
                 >
                   <Link to={`/category/${data.category.toLowerCase()}`} style={{ textDecoration: "none" }}>
-                    <Typography className={classes.links} variant="display1" align="center">
+                    <Typography className={classes.links} variant="h4" align="center">
                       {data.category}
                     </Typography>
                   </Link>

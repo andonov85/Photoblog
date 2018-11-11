@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
-import Typography from '@material-ui/core/Typography'
-import Divider from '@material-ui/core/Divider';
+import Typography from '@material-ui/core/Typography';
 
 import LazyLoad from 'react-lazy-load';
 
@@ -20,13 +19,19 @@ const styles = theme => ({
   },
   grid: {
     [theme.breakpoints.down('sm')]: {
-      flexDirection: 'column-reverse'
+      flexDirection: 'column-reverse',
     }
   },
-  searchBar: {
-    alignItems: 'baseline',
+  titleContainer: {
+    alignItems: 'center',
   },
   textField: {
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: theme.spacing.unit * 4,
+    },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: theme.spacing.unit,
+    },
     marginLeft: theme.spacing.unit,
     marginRight: theme.spacing.unit,
   },
@@ -40,7 +45,10 @@ const styles = theme => ({
   articleContainer: {
     marginLeft: '25%',
     [theme.breakpoints.down('md')]: {
-      marginLeft: '15%',
+      marginLeft: '13%',
+    },
+    [theme.breakpoints.down('sm')]: {
+      marginLeft: '7%',
     },
     [theme.breakpoints.down('xs')]: {
       marginLeft: '0%',
@@ -48,6 +56,9 @@ const styles = theme => ({
   },
   posts: {
     marginLeft: '30%',
+    [theme.breakpoints.down('lg')]: {
+      marginLeft: '25%',
+    },
     [theme.breakpoints.down('md')]: {
       marginLeft: '15%',
     },
@@ -120,27 +131,15 @@ class Blog extends React.Component {
 
     return (
       <div className={classes.root}>
-        <Grid container spacing={0} className={classes.searchBar}>
+        <Grid container spacing={0} className={classes.titleContainer}>
           <Grid item xs={12} md={2} className={classes.articleContainer}>
-            <Typography variant="title" gutterBottom={true} align="left" className={classes.articlesTitle}>
+            <Typography variant="h6" gutterBottom={false} align="left" className={classes.articlesTitle}>
               LATEST ARTICLES
             </Typography>
           </Grid>
-          <Grid item xs={12} md={6}>
-            <TextField
-              className={classes.textField}
-              onChange={this.handleOnSearchChange}
-              id="outlined-search"
-              label="Search..."
-              type="search"
-              margin="normal"
-              variant="outlined"
-            />
-          </Grid>
-          <Divider />
         </Grid>
         <Grid container spacing={0} className={classes.grid}>
-          <Grid item sm={12} md={9}>
+          <Grid item sm={12} md={8}>
             <div className={classes.posts}>
               <Grid container spacing={0}>
                 {posts.map((post) => {
@@ -157,13 +156,18 @@ class Blog extends React.Component {
               </Grid>
             </div>
           </Grid>
-          <Grid item sm={12} md={3}>
+          <Grid item sm={12} md={4}>
             <Grid container spacing={0} className={classes.grid}>
-              <Grid item sm={3} md={3}>
-
-              </Grid>
-              <Grid item sm={3} md={3}>
-
+              <Grid item sm={12} md={12}>
+                <TextField
+                  className={classes.textField}
+                  onChange={this.handleOnSearchChange}
+                  id="outlined-search"
+                  label="Search..."
+                  type="search"
+                  margin="normal"
+                  variant="outlined"
+                />
               </Grid>
             </Grid>
           </Grid>

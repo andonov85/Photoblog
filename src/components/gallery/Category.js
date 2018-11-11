@@ -144,7 +144,7 @@ class Category extends React.Component {
     const { classes, match } = this.props;
     return (
       <div className={classes.root}>
-        <Typography className={classes.category} gutterBottom variant="display1" align="center">
+        <Typography className={classes.category} gutterBottom variant="h4" align="center">
           {match.params.category}
         </Typography>
         <Grid container spacing={0} justify="center">

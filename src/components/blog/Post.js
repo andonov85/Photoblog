@@ -27,6 +27,9 @@ const styles = theme => ({
     borderBottom: '1px #dbdbdb solid',
     borderRadius: 0
   },
+  titleCard: {
+    fontSize: '1.3rem'
+  },
   media: {
     paddingTop: '56.25%', // 16:9
   },
@@ -38,7 +41,7 @@ const styles = theme => ({
     height: 50,
   },
   content: {
-    height: 80,
+    // height: 80,
     display: '-webkit-box',
     overflow: 'hidden',
     boxOrient: 'vertical',
@@ -224,10 +227,11 @@ class Post extends React.Component {
         <CardHeader
           avatar={
             <Avatar src={post.avatarUrl}
-              aria-label="Recipe" className={classnames(classes.avatar, classes.bigAvatar)}>
+              aria-label="Logo" className={classnames(classes.avatar, classes.bigAvatar)}>
             </Avatar>
           }
           title={post.title}
+          titleTypographyProps={{className: classes.titleCard}}
           subheader={post.date}
         />
         <a type="button" target="_blank" rel="noopener noreferrer"
@@ -239,11 +243,12 @@ class Post extends React.Component {
           />
         </a>
         <CardContent>
-          <Typography className={classes.content} component="p">
+          <Typography className={classes.content} component="p" variant="body1" gutterBottom={true} align="justify">
             {post.content}
           </Typography>
           <Typography component="p" align="left" variant="caption">
-            Main page: <a type="button" target="_blank" rel="noopener noreferrer"
+            Source: 
+            <a type="text/html" target="_blank" rel="noopener noreferrer"
               href={post.homepageUrl}>
               {post.homepageUrl}
             </a>

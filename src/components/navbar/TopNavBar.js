@@ -65,7 +65,7 @@ class TopNavBar extends React.Component {
       <div className={classes.root} >
         <AppBar position="static" className={classes.appbar}>
           <Toolbar>
-              <Typography variant="display1" align="center" className={classes.logo}>
+              <Typography variant="h4" align="center" className={classes.logo}>
                 AA Photography
               </Typography>
               <UserContext.Consumer>

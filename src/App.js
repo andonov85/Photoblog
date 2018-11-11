@@ -29,6 +29,10 @@ const theme = createMuiTheme({
   palette: {
     primary: grey,
   },
+  typography: {
+    useNextVariants: true,
+    fontFamily: 'Noto Sans, sans-serif'
+  },
 });
 
 const styles = theme => ({
