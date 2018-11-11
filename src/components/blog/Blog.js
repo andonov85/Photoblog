@@ -5,6 +5,7 @@ import { withStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import TextField from '@material-ui/core/TextField';
 import Typography from '@material-ui/core/Typography';
+import Slide from '@material-ui/core/Slide';
 
 import LazyLoad from 'react-lazy-load';
 
@@ -145,7 +146,7 @@ class Blog extends React.Component {
                 {posts.map((post) => {
                   return (
                     <Grid item xs={12} key={post.objectID}>
-                      <LazyLoad className={classes.lazyLoad} offsetVertical={1000} onContentVisible={this.handleOnContentVisible}>
+                      <LazyLoad className={classes.lazyLoad} offsetVertical={100} onContentVisible={this.handleOnContentVisible}>
                         <UserContext.Consumer>
                           {user => <Post postId={post.objectID} post={post} user={user} />}
                         </UserContext.Consumer>
@@ -159,15 +160,17 @@ class Blog extends React.Component {
           <Grid item sm={12} md={4}>
             <Grid container spacing={0} className={classes.grid}>
               <Grid item sm={12} md={12}>
-                <TextField
-                  className={classes.textField}
-                  onChange={this.handleOnSearchChange}
-                  id="outlined-search"
-                  label="Search..."
-                  type="search"
-                  margin="normal"
-                  variant="outlined"
-                />
+                <Slide timeout={500} direction="left" in={true} mountOnEnter unmountOnExit>
+                  <TextField
+                    className={classes.textField}
+                    onChange={this.handleOnSearchChange}
+                    id="outlined-search"
+                    label="Search..."
+                    type="search"
+                    margin="normal"
+                    variant="outlined"
+                  />
+                </Slide>
               </Grid>
             </Grid>
           </Grid>

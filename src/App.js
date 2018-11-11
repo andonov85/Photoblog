@@ -19,6 +19,7 @@ import About from './components/about/About';
 import Gallery from './components/gallery/Gallery';
 import Category from './components/gallery/Category';
 import Blog from './components/blog/Blog';
+import Error404 from './components/Errors/Error404'
 // import Footer from './components/footer/Footer'
 
 import { setUser } from './components/blog/uploadSource';
@@ -143,7 +144,7 @@ class App extends Component {
                   <Route path="/gallery/" component={Gallery} />
                   <Route path="/category/:category" component={Category} />
                   <Route path="/blog" component={Blog} />
-                  <Route render={() => <div>Not Found</div>} />
+                  <Route render={() => <Error404 />} />
                 </Switch>
               </Grid>
               <Grid item xs={12}>

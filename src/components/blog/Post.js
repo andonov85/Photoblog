@@ -18,6 +18,7 @@ import FavoriteIcon from '@material-ui/icons/Favorite';
 import Comment from '@material-ui/icons/Comment';
 import Divider from '@material-ui/core/Divider';
 import Fade from '@material-ui/core/Fade';
+import Slide from '@material-ui/core/Slide';
 
 import WriteComment from './WriteComment';
 import CommentSection from './CommentSection';
@@ -43,7 +44,6 @@ const styles = theme => ({
     height: 50,
   },
   content: {
-    // height: 80,
     display: '-webkit-box',
     overflow: 'hidden',
     boxOrient: 'vertical',
@@ -234,7 +234,7 @@ class Post extends React.Component {
     post.date = new Date(post.date).toDateString();
 
     return (
-      <Fade in={fade} timeout={{ enter: 400, exit: 0 }}>
+      <Slide timeout={500} direction="right" in={true} mountOnEnter unmountOnExit>
         <Card className={classes.card}>
           <CardHeader
             avatar={
@@ -248,11 +248,13 @@ class Post extends React.Component {
           />
           <a type="button" target="_blank" rel="noopener noreferrer"
             href={post.linkUrl}>
-            <CardMedia
-              className={classes.media}
-              image={post.imageUrl}
-              title={post.title}
-            />
+            <Fade in={fade} timeout={{ enter: 400, exit: 0 }}>
+              <CardMedia
+                className={classes.media}
+                image={post.imageUrl}
+                title={post.title}
+              />
+            </Fade>
             <img src={post.imageUrl} alt={post.title} onLoad={this.mediaOnLoad} style={{ display: 'none' }} />
           </a>
           <CardContent>
@@ -292,7 +294,7 @@ class Post extends React.Component {
             </CardContent>
           </Collapse>
         </Card>
-      </Fade>
+      </Slide>
     );
   }
 }

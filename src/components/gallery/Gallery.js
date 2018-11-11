@@ -9,6 +9,7 @@ import Grow from '@material-ui/core/Grow';
 import Grid from '@material-ui/core/Grid';
 import { Typography } from '@material-ui/core';
 import Fade from '@material-ui/core/Fade';
+import Slide from '@material-ui/core/Slide';
 
 import makeCancelablePromise from '../helperFunctions/makeCancelablePromise';
 
@@ -100,30 +101,32 @@ class Gallery extends React.Component {
     const { checked, fade } = this.state;
 
     return (
-      <Fade in={fade} timeout={{ enter: 400, exit: 0 }}>
+      <Slide timeout={500} direction="up" in={fade} mountOnEnter unmountOnExit>
         <div className={classes.root}>
-          <Paper className={classes.paper}>
-            <Grid container spacing={8} className={classes.categoriesContainer}>
-              {this.state.categoriesData.map((data, index) => {
-                return (
-                  <Grow
-                    key={data.category.toLowerCase()}
-                    in={checked}
-                    style={{ transformOrigin: '0 0 0' }}
-                    {...(checked ? { timeout: (index + 1) * 1000 } : {})}
-                  >
-                    <Link to={`/category/${data.category.toLowerCase()}`} style={{ textDecoration: "none" }}>
-                      <Typography className={classes.links} variant="h4" align="center">
-                        {data.category}
-                      </Typography>
-                    </Link>
-                  </Grow>
-                )
-              })}
-            </Grid>
-          </Paper>
+          <Fade in={fade} timeout={{ enter: 400, exit: 0 }}>
+            <Paper className={classes.paper}>
+              <Grid container spacing={8} className={classes.categoriesContainer}>
+                {this.state.categoriesData.map((data, index) => {
+                  return (
+                    <Grow
+                      key={data.category.toLowerCase()}
+                      in={checked}
+                      style={{ transformOrigin: '0 0 0' }}
+                      {...(checked ? { timeout: (index + 1) * 500 } : {})}
+                    >
+                      <Link to={`/category/${data.category.toLowerCase()}`} style={{ textDecoration: "none" }}>
+                        <Typography className={classes.links} variant="h4" align="center">
+                          {data.category}
+                        </Typography>
+                      </Link>
+                    </Grow>
+                  )
+                })}
+              </Grid>
+            </Paper>
+          </Fade>
         </div>
-      </Fade>
+      </Slide>
     )
   }
 }

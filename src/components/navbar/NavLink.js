@@ -10,17 +10,13 @@ const styles = theme => ({
     [theme.breakpoints.down('xs')]: {
       color: 'white',
     },
-    borderRadius: '0px',
-    padding: 0,
-    fontSize: 14,
-    textTransform: 'uppercase',
+    fontSize: 15,
     color: 'grey',
-    minWidth: 63,
     fontFamily: 'Pompiere, cursive',
     transition: 'transform .3s ease-in-out',
     '&:hover': {
       backgroundColor: 'rgb(242, 242, 242, 0)',
-      transform: 'scale(1.4)',
+      transform: 'scale(1.5)',
     },
   },
 });
