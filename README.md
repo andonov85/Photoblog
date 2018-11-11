@@ -1,4 +1,4 @@
-Latest sample on https://codesandbox.io/s/github/andonov85/Photoblog
+Sample on https://codesandbox.io/s/github/andonov85/Photoblog
 Or you can visit https://andonandonov.com
 
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
