@@ -7,7 +7,7 @@ import Zoom from '@material-ui/core/Zoom';
 
 const styles = theme => ({
   root: {
-    marginTop: 150
+    flexGrow: 1
   },
 });
 
@@ -17,16 +17,20 @@ class Error404 extends React.Component {
 
     return (
       <div className={classes.root}>
-          <Typography paragraph={true} variant="h1" align="center" color="primary">
-            <Zoom in={true} timeout={500}>
-              <i className="material-icons" style={{ fontSize: '150px' }}>
+        <Zoom in={true} timeout={500}>
+          <React.Fragment>
+            <Typography paragraph={true} align="center" color="primary">
+              <i className="material-icons" style={{ fontSize: '6rem' }}>
                 error_outline
               </i>
-            </Zoom>
-            Error404:
+            </Typography>
+            <Typography paragraph={true} align="center" color="primary" style={{ fontSize: '2rem' }}>
+              Error404
           </Typography>
-          <Typography paragraph={true} variant="h2" align="center" color="primary">
-            Page not found
+          </React.Fragment>
+        </Zoom>
+        <Typography paragraph={true} align="center" color="primary" style={{ fontSize: '1rem' }}>
+          Page not found !
         </Typography>
       </div>
     );

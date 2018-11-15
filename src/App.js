@@ -5,10 +5,12 @@ import { GoogleLogin, GoogleLogout } from 'react-google-login';
 
 import { withStyles } from '@material-ui/core/styles';
 import { MuiThemeProvider, createMuiTheme } from '@material-ui/core/styles';
-import blueGrey from '@material-ui/core/colors/blueGrey';
 import Grid from '@material-ui/core/Grid';
 import Avatar from '@material-ui/core/Avatar';
 import Hidden from '@material-ui/core/Hidden';
+
+import grey from '@material-ui/core/colors/grey';
+import blueGrey from '@material-ui/core/colors/blueGrey';
 
 import TopNavBar from './components/navbar/TopNavBar';
 import NavBar from './components/navbar/NavBar';
@@ -28,7 +30,8 @@ export const UserContext = React.createContext();
 
 const theme = createMuiTheme({
   palette: {
-    primary: blueGrey,
+    primary: grey,
+    secondary: blueGrey
   },
   typography: {
     useNextVariants: true,
@@ -121,7 +124,7 @@ class App extends Component {
                       uxMode={'popup'}
                       buttonText="Google login"
                       onSuccess={this.responseGoogle}
-                      onFailure={this.responseGoogle}
+                      onFailure={() => console.log(`Failure: Can't retrieve googleUser!`)}
                       isSignedIn={true}
                     >
                     </GoogleLogin>
