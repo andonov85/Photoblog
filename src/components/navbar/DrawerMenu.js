@@ -38,8 +38,9 @@ class DrawerMenu extends React.Component {
     const fullList = (
       <List className={classes.fullList}>
         <NavLink to="/main" buttonName="Home" />
-        <NavLink to="/blog" buttonName="Blog" />
         <NavLink to="/gallery" buttonName="Gallery" />
+        <NavLink to="/blog" buttonName="Blog" />
+        <NavLink to="/newsfeed" buttonName="News Feed" />
         <NavLink to="/about" buttonName="About" />
       </List>
     );

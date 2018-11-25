@@ -63,12 +63,10 @@ class NavBar extends React.Component {
     const hasFixedOpenClass = barEl.classList.contains(this.props.classes.fixedOpen);
     
     if (!hasFixedOpenClass && rootRect.bottom <= 0) {
-      // barEl.classList.add(this.props.classes.fixedOpen);
       this.setState({
         isFixed: true
       });
     } else if (hasFixedOpenClass && rootRect.bottom >= this.initialPosition.top) {
-      // barEl.classList.remove(this.props.classes.fixedOpen);
       this.setState({
         isFixed: false
       });
@@ -93,12 +91,12 @@ class NavBar extends React.Component {
     return (
       <div className={classes.root} ref={this.rootEl}>
         <div className={classnames(classes.fixed, { [classes.fixedOpen]: isFixed })} ref={this.barEl}>
-        {/* <div className={classes.fixed} ref={this.barEl}> */}
           <AppBar position="static" className={classes.appbar}>
             <Toolbar className={classes.toolbar}>
               <NavLink to="/main" buttonName="Home" />
-              <NavLink to="/blog" buttonName="Blog" />
               <NavLink to="/gallery" buttonName="Gallery" />
+              <NavLink to="/blog" buttonName="Blog" />
+              <NavLink to="/newsfeed" buttonName="News Feed" />
               <NavLink to="/about" buttonName="About" />
             </Toolbar>
           </AppBar>

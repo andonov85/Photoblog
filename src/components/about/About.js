@@ -14,16 +14,22 @@ const styles = (theme) => ({
     height: '75vh'
   },
   paper: {
+    display: 'flex',
+    alignContent: 'flex-around',
     width: 500,
-    height: '100%',
+    height: '90%',
     marginTop: '2%',
-    backgroundColor: '#ebfaf9',
-    padding: 30
+    padding: 30,
+    borderRadius: 6
   },
   bigAvatar: {
-    width: 100,
-    height: 100,
+    width: 90,
+    height: 90,
   },
+  content: {
+    padding: 20,
+
+  }
 });
 
 function About(props) {
@@ -33,14 +39,14 @@ function About(props) {
     <Fade in={true} timeout={{ enter: 400, exit: 0 }}>
       <div className={classes.root}>
         <Paper className={classes.paper}>
-          <Typography variant="h6" align='center'>
-            Hello :) Under construction yet
-          </Typography>
           <Slide timeout={500} direction="down" in={true} mountOnEnter unmountOnExit>
             <Avatar src={"https://lh6.googleusercontent.com/-wM6v0CfGZuc/AAAAAAAAAAI/AAAAAAAADeE/jK_FHbyfNdE/s96-c/photo.jpg"}
               aria-label="Avatar" className={classes.bigAvatar}>
             </Avatar>
           </Slide>
+          <Typography className={classes.content} variant="h6" color='primary'>
+            Hello, it's under construction yet. :)
+          </Typography>
         </Paper>
       </div>
     </Fade>

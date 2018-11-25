@@ -8,12 +8,18 @@ import CardHeader from '@material-ui/core/CardHeader';
 import CardContent from '@material-ui/core/CardContent';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
-import Divider from '@material-ui/core/Divider';
+import Paper from '@material-ui/core/Paper';
 
 const styles = theme => ({
   card: {
     borderRadius: 'unset',
     boxShadow: 'none',
+    borderLeft: '1px solid lightgrey'
+  },
+  paper: {
+    padding: 15,
+    backgroundColor: '#f7f7f7',
+    boxShadow: 'unset'
   },
   header: {
     padding: 0
@@ -28,22 +34,21 @@ class SubComment extends React.Component {
     const { classes, subcomment } = this.props;
 
     return (
-      <div className={classes.root}>
-        <Card className={classes.card}>
-          <CardHeader
-            className={classes.header}
-            avatar={
-              <Avatar alt={subcomment.userName} src={subcomment.imageUrl} className={classes.avatar} />
-            }
-            title={subcomment.userName}
-            subheader={subcomment.date}
-          />
-          <CardContent>
+      <Card className={classes.card}>
+        <CardHeader
+          className={classes.header}
+          avatar={
+            <Avatar alt={subcomment.userName} src={subcomment.imageUrl} className={classes.avatar} />
+          }
+          title={subcomment.userName}
+          subheader={subcomment.date}
+        />
+        <CardContent>
+          <Paper className={classes.paper}>
             <Typography component="p">{subcomment.content}</Typography>
-          </CardContent>
-        </Card>
-        <Divider/>
-      </div>
+          </Paper>
+        </CardContent>
+      </Card>
     )
   }
 }

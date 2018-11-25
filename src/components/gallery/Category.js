@@ -36,7 +36,7 @@ const styles = theme => ({
       opacity: 0.8,
     },
     maxWidth: 400,
-    borderRadius: 0,
+    borderRadius: 6,
   },
   cardContent: {
     backgroundColor: '#f5f5f5'

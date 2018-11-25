@@ -14,10 +14,10 @@ import IconButton from '@material-ui/core/IconButton';
 import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import Divider from '@material-ui/core/Divider';
 import TextField from '@material-ui/core/TextField';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
 
 import SubComment from './SubComment';
 import { uploadComment } from './uploadSource'
@@ -30,21 +30,19 @@ const styles = theme => ({
   header: {
     padding: 0
   },
-  avatar: {
-    margin: 10,
-  },
   subcomments: {
     paddingLeft: 50
   },
-  actions: {
-    display: 'flex',
+  paper: {
+    padding: 15,
+    backgroundColor: '#f7f7f7',
+    boxShadow: 'unset'
   },
   expand: {
     transform: 'rotate(0deg)',
     transition: theme.transitions.create('transform', {
       duration: theme.transitions.duration.shortest,
     }),
-    marginLeft: 'auto',
     [theme.breakpoints.up('sm')]: {
       marginRight: -8,
     },
@@ -72,7 +70,6 @@ class Comment extends React.Component {
     super(props);
     this.state = {
       commentField: '',
-      commentsNumber: '',
       expanded: false,
     };
     this.handleExpandClick = this.handleExpandClick.bind(this);
@@ -107,23 +104,32 @@ class Comment extends React.Component {
 
   render() {
     const { classes, comment, user, subcomments } = this.props;
-    const { commentsNumber, expanded } = this.state;
+    const { expanded } = this.state;
+
+    const filteredSubcomments = subcomments.filter((el) => el.commentId === comment.commentId);
 
     return (
       <Card className={classes.card}>
         <CardHeader
           avatar={
-            <Avatar alt={comment.userName} src={comment.imageUrl} className={classes.avatar} />
+            <Avatar alt={comment.userName} src={comment.imageUrl} />
           }
           title={comment.userName}
+          titleTypographyProps={{ variant: "body2" }}
           subheader={comment.date}
+          subheaderTypographyProps={{ variant: "body2" }}
           className={classes.header}
         />
         <CardContent>
-          <Typography component="p">{comment.content}</Typography>
+          <Paper className={classes.paper}>
+            <Typography component="p" >{comment.content}</Typography>
+          </Paper>
         </CardContent>
-        <CardActions className={classes.actions} disableActionSpacing>
-          <Typography>{commentsNumber}</Typography>
+        {/* <Divider /> */}
+        <CardActions style={{ justifyContent: 'flex-end', marginTop: -10 }} disableActionSpacing>
+          <Typography variant="caption">
+            Answers: {filteredSubcomments.length}
+          </Typography>
           <IconButton
             className={classnames(classes.expand, {
               [classes.expandOpen]: expanded,
@@ -135,40 +141,36 @@ class Comment extends React.Component {
             <ExpandMoreIcon />
           </IconButton>
         </CardActions>
-        <Divider />
         <Collapse in={expanded} timeout="auto" unmountOnExit>
           <CardContent>
             <div className={classes.subcomments}>
-              {subcomments.filter((el) => el.commentId === comment.commentId).map((subcomment) => {
+              {filteredSubcomments.map((subcomment) => {
                 return (
                   <SubComment key={subcomment.subcommentId} subcomment={subcomment} />
                 )
               })
               }
-              <Grid container spacing={8} alignItems="flex-end">
-                <Grid item>
+              <Grid container spacing={8} alignItems="flex-start">
+                <Grid item style={{ flexGrow: 1 }}>
                   {user ?
-                    <Avatar alt={user.userName} src={user.imageUrl} className={classes.avatar} />
-                    : null
-                  }
-                </Grid>
-                <Grid item >
-                  {user ?
-                    <div>
+                    <React.Fragment>
                       <TextField
-                        id="outlined-dense"
+                        id="outlined-multiline-static"
+                        fullWidth={true}
                         label="Write a response:"
                         className={classnames(classes.textField, classes.dense)}
-                        margin="dense"
+                        margin="normal"
+                        multiline
+                        rows="4"
                         variant="outlined"
                         value={this.state.commentField}
                         onChange={event => this.setState({ commentField: event.target.value })}
                       />
                       <Button variant="outlined" color="primary" className={classes.button} onClick={this.sendSubcomment}>
-                        Answer
-							    </Button>
-                    </div> :
-                    <Typography>Sign in to write a comment.</Typography>
+                        Publish
+							        </Button>
+                    </React.Fragment> :
+                    <Typography variant="caption">Sign in to write a comment.</Typography>
                   }
                 </Grid>
               </Grid>

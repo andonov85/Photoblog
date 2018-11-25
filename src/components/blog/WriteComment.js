@@ -24,9 +24,6 @@ const styles = theme => ({
 	header: {
 		padding: '0px 0px -5px 0px'
 	},
-	button: {
-		margin: theme.spacing.unit,
-	},
 	textField: {
 		marginTop: -5
 	}
@@ -64,7 +61,7 @@ class WriteComment extends React.Component {
 	render() {
 		const { classes, user } = this.props;
 		return (
-			<div>
+			<React.Fragment>
 				<Card className={classes.card}>
 					<CardHeader
 						className={classes.header}
@@ -86,10 +83,10 @@ class WriteComment extends React.Component {
 					value={this.state.commentField}
 					onChange={event => this.setState({ commentField: event.target.value })}
 				/>
-				<Button variant="outlined" color="primary" className={classes.button} onClick={this.publishComment}>
+				<Button variant="outlined" color="primary" onClick={this.publishComment}>
 					Publish
-							</Button>
-			</div>
+				</Button>
+			</React.Fragment>
 		);
 	}
 }

@@ -21,7 +21,8 @@ import About from './components/about/About';
 import Gallery from './components/gallery/Gallery';
 import Category from './components/gallery/Category';
 import Blog from './components/blog/Blog';
-import Error404 from './components/Errors/Error404'
+import NewsFeed from './components/newsfeed/NewsFeed';
+import Error404 from './components/Errors/Error404';
 // import Footer from './components/footer/Footer'
 
 import { setUser } from './components/blog/uploadSource';
@@ -53,7 +54,8 @@ const styles = theme => ({
   },
   GoogleLogin: {
     position: 'absolute',
-    marginLeft: '81%',
+    top: 15,
+    marginLeft: '28%',
     border: 'white',
     backgroundColor: 'white',
     color: 'grey',
@@ -65,11 +67,18 @@ const styles = theme => ({
     '&:hover': {
       border: '1px #dbdbdb solid'
     },
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '74%',
+    }
   },
   GoogleLogout: {
     position: 'absolute',
-    marginLeft: '81%',
+    marginLeft: '28%',
     fontSize: 16,
+    top: 15,
+    [theme.breakpoints.down('xs')]: {
+      marginLeft: '84%',
+    }
   },
 });
 
@@ -147,6 +156,7 @@ class App extends Component {
                   <Route path="/gallery/" component={Gallery} />
                   <Route path="/category/:category" component={Category} />
                   <Route path="/blog" component={Blog} />
+                  <Route path="/newsfeed" component={NewsFeed} />
                   <Route render={() => <Error404 />} />
                 </Switch>
               </Grid>

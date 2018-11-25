@@ -41,10 +41,16 @@ const styles = theme => ({
       padding: '25px 0px 0px 20px',
       fontSize: 16
     },
-    color: 'grey',
+    color: 'black',
   },
   articleContainer: {
     marginLeft: '25%',
+    [theme.breakpoints.down('xl')]: {
+      marginLeft: '25.7%',
+    },
+    [theme.breakpoints.down('lg')]: {
+      marginLeft: '22.5%',
+    },
     [theme.breakpoints.down('md')]: {
       marginLeft: '13%',
     },
@@ -52,7 +58,7 @@ const styles = theme => ({
       marginLeft: '7%',
     },
     [theme.breakpoints.down('xs')]: {
-      marginLeft: '0%',
+      marginLeft: '-3%',
     },
   },
   posts: {
@@ -90,11 +96,6 @@ class Blog extends React.Component {
       posts: [],
     };
     this.handleOnSearchChange = this.handleOnSearchChange.bind(this);
-    this.handleOnContentVisible = this.handleOnContentVisible.bind(this);
-  }
-
-  handleOnContentVisible() {
-
   }
 
   AlgoliaResults = makeCancelablePromise(Algolia(''));
@@ -146,7 +147,7 @@ class Blog extends React.Component {
                 {posts.map((post) => {
                   return (
                     <Grid item xs={12} key={post.objectID}>
-                      <LazyLoad className={classes.lazyLoad} offsetVertical={100} onContentVisible={this.handleOnContentVisible}>
+                      <LazyLoad className={classes.lazyLoad} offsetVertical={100}>
                         <UserContext.Consumer>
                           {user => <Post postId={post.objectID} post={post} user={user} />}
                         </UserContext.Consumer>

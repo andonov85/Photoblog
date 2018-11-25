@@ -16,7 +16,6 @@ import Avatar from '@material-ui/core/Avatar';
 import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import Comment from '@material-ui/icons/Comment';
-import Divider from '@material-ui/core/Divider';
 import Fade from '@material-ui/core/Fade';
 import Slide from '@material-ui/core/Slide';
 
@@ -25,13 +24,20 @@ import CommentSection from './CommentSection';
 
 const styles = theme => ({
   card: {
-    boxShadow: 'none',
-    borderBottom: '1px #dbdbdb solid',
-    borderRadius: 0
+    // boxShadow: 'none',
+    // borderBottom: '1px #dbdbdb solid',
+    // borderRadius: 0,
+    margin: '3% 0 3% 0',
+    [theme.breakpoints.down('xs')]: {
+      borderTop: '1px #dbdbdb solid',
+      boxShadow: 'none',
+      margin: 0
+    },
   },
   titleCard: {
-    fontSize: '1.2rem',
-    textTransform: 'capitalize'
+    fontSize: '1.2em',
+    textTransform: 'capitalize',
+    fontWeight: 'bold'
   },
   media: {
     paddingTop: '56.25%', // 16:9
@@ -48,10 +54,12 @@ const styles = theme => ({
     overflow: 'hidden',
     boxOrient: 'vertical',
     textOverflow: 'ellipsis',
-    lineClamp: 4
+    lineClamp: 4,
+    marginBottom: 16
   },
   actions: {
     display: 'flex',
+    marginTop: -25
   },
   expand: {
     transform: 'rotate(0deg)',
@@ -273,23 +281,22 @@ class Post extends React.Component {
             <IconButton aria-label="Add to favorites" onClick={this.addToLiked}>
               {changeLikeColor ?
                 <FavoriteIcon className={classes.favourite} /> : <FavoriteIcon className={classes.unfavourite} />}
-              <Typography>{likes}</Typography>
             </IconButton>
+            <Typography style={{marginLeft: -6}}>{likes}</Typography>
             <IconButton
               onClick={this.handleCommentClick}
               aria-expanded={chat}
               aria-label="Comment">
               <Comment />
-              <Typography>{commentsCounter}</Typography>
             </IconButton>
+            <Typography style={{marginLeft: -7}}>{commentsCounter}</Typography>
           </CardActions>
           <Collapse in={chat} timeout="auto" unmountOnExit>
-            <Divider />
             <CardContent>
               <CommentSection postId={postId} user={user} />
               {user ?
                 <WriteComment postId={postId} user={user} /> :
-                <Typography>Sign in to write a comment.</Typography>
+                <Typography variant="caption">Sign in to write a comment.</Typography>
               }
             </CardContent>
           </Collapse>
