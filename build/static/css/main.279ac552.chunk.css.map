@@ -1,1 +1,0 @@
-{"version":3,"sources":["C:/Users/Cucumber/Documents/GitHub/Photoblog/src/C:/Users/Cucumber/Documents/GitHub/Photoblog/src/index.css"],"names":[],"mappings":"AAAA,OACE,YAAc,CACf,AAED,KACE,SAAY,AACZ,qBAAwB,CACzB","file":"main.279ac552.chunk.css","sourcesContent":["*:focus {\r\n  outline: none;\r\n}\r\n\r\nbody {\r\n  margin: 0px;\r\n  background-color: white;\r\n}\r\n"]}
