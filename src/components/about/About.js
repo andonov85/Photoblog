@@ -45,7 +45,8 @@ function About(props) {
             </Avatar>
           </Slide>
           <Typography className={classes.content} variant="h6" color='primary'>
-            Hello, it's under construction yet. :)
+            <a href="mailto:andon.andonov85@gmail.com" target="_top">andon.andonov85@gmail.com</a><br>
+            <a href="tel:+359889388439">+359 889 38 84 39</a>
           </Typography>
         </Paper>
       </div>
