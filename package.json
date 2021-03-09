@@ -7,7 +7,7 @@
     "@material-ui/icons": "^2.0.3",
     "@types/algoliasearch": "^3.27.8",
     "algoliasearch": "^3.30.0",
-    "axios": "^0.18.0",
+    "axios": "^0.21.1",
     "cors": "^2.8.5",
     "firebase": "^5.4.1",
     "react": "^16.5.2",
