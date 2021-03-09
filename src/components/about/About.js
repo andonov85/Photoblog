@@ -14,8 +14,6 @@ const styles = (theme) => ({
     height: '75vh'
   },
   paper: {
-    display: 'flex',
-    alignContent: 'flex-around',
     width: 500,
     height: '90%',
     marginTop: '2%',
@@ -23,12 +21,13 @@ const styles = (theme) => ({
     borderRadius: 6
   },
   bigAvatar: {
+    margin: 'auto',
     width: 90,
     height: 90,
   },
-  content: {
-    padding: 20,
-
+  email: {
+    textAlign: 'center',
+    padding: 10,
   }
 });
 
@@ -44,13 +43,20 @@ function About(props) {
               aria-label="Avatar" className={classes.bigAvatar}>
             </Avatar>
           </Slide>
-          <Typography className={classes.content} variant="h6" color='primary'>
-            <a href="mailto:andon.andonov85@gmail.com" target="_top">andon.andonov85@gmail.com</a><br>
-            <a href="tel:+359889388439">+359 889 38 84 39</a>
-          </Typography>
+          <Slide timeout={500} direction="left" in={true} mountOnEnter unmountOnExit>
+            <Typography className={classes.email} variant="h6" color='primary'>
+              Have a question or want to work together?
+            </Typography>
+          </Slide>
+          <Slide timeout={500} direction="right" in={true} mountOnEnter unmountOnExit>
+            <Typography className={classes.email} variant="h6" color='secondary'>
+              <a href="mailto:andon.andonov85@gmail.com" target="_top">andon.andonov85@gmail.com</a><br>
+              <a href="tel:+359889388439">+359 889 38 84 39</a>
+            </Typography>
+          </Slide>
         </Paper>
-      </div>
-    </Fade>
+      </div >
+    </Fade >
   );
 }
 
