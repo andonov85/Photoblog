@@ -50,7 +50,8 @@ function About(props) {
           </Slide>
           <Slide timeout={500} direction="right" in={true} mountOnEnter unmountOnExit>
             <Typography className={classes.email} variant="h6" color='secondary'>
-              andon.andono85@gmail.com
+              <a href="mailto:andon.andonov85@gmail.com" target="_top">andon.andonov85@gmail.com</a><br>
+              <a href="tel:+359889388439">+359 889 38 84 39</a>
             </Typography>
           </Slide>
         </Paper>
